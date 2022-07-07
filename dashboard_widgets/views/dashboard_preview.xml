@@ -1,0 +1,26 @@
+<odoo>
+    <record id="view_is_dashboard_preview_form" model="ir.ui.view">
+        <field name="name">view_is_dashboard_preview_form</field>
+        <field name="model">is.dashboard.widget</field>
+        <field name="sequence" eval="1"/>
+        <field name="inherit_id" ref="view_is_dashboard_form"/>
+        <field name="arch" type="xml">
+            <group name="general" position="after">
+                <group name="preview">
+                    <field name="preview_ids" mode="kanban" nolabel="1" class="widget_preview"/>
+                    <field name="preview_id" mode="kanban" invisible="1"/>
+                </group>
+            </group>
+        </field>
+    </record>
+
+    <record id="dashboard_kanban_preview_view" model="ir.ui.view">
+        <field name="name">view_dashboard_widget_kanban</field>
+        <field name="model">is.dashboard.widget.preview</field>
+        <field name="mode">primary</field>
+        <field name="inherit_id" ref="dashboard_kanban_view_abstract"/>
+        <field name="arch" type="xml">
+            <data/>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="approval_attach_assign_form">
+            <field name="name">approval_attach_assign_form.form</field>
+            <field name="model">approval_attach_assign</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Approval Attachment Assignation">
+                  <group name="top" string="Approval Document Selector">
+                    <group name="left">
+                        <field name="approval_document_ids" placeholder="Select the files to approve." widget="many2many_tags" domain="[('res_model', '=', 'tci'), ('res_id', '=', tci_id)]" options="{'no_create': True}"/>
+                    </group>
+                    <group name="right">
+                        <field name="tci_id" invisible="1"/>
+                    </group>
+                  </group>
+                    <footer>
+                        <button class="oe_highlight" type="object" name="update_attachments" string="OK" />
+                        <button class="oe_highlight"  special="cancel" name="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="approval_attach_assign_action" model="ir.actions.act_window">
+            <field name="name">Approval Attachment Assignation</field>
+            <field name="res_model">approval_attach_assign</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="approval_attach_assign_form"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

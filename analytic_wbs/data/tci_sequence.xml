@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Sequences for LEMs number -->
+
+        <record id="seq_wt_number" model="ir.sequence">
+            <field name="name">TCI</field>
+            <field name="code">tci.sequence</field>
+            <field name="prefix">TCI%(y)s-</field>
+            <field name="padding">7</field>
+            <field name="implementation">no_gap</field>
+        </record>
+
+        <record id="seq_tci_cr" model="ir.sequence">
+            <field name="name">Change Request Number</field>
+            <field name="code">tci_cr_number</field>
+            <field name="prefix">CR%(y)s-</field>
+            <field name="padding">7</field>
+        </record>
+
+        <record id="seq_tci_wt" model="ir.sequence">
+            <field name="name">Work Ticket Number</field>
+            <field name="code">tci_wt_number</field>
+            <field name="prefix">WT%(y)s-</field>
+            <field name="padding">7</field>
+        </record>
+
+        <record id="seq_tci_act" model="ir.sequence">
+            <field name="name">Actuals Number</field>
+            <field name="code">tci_act_number</field>
+            <field name="prefix">ACT%(y)s-</field>
+            <field name="padding">7</field>
+        </record>
+
+        <record id="seq_tci_inv" model="ir.sequence">
+            <field name="name">External Invoice Number</field>
+            <field name="code">tci_inv_number</field>
+            <field name="prefix">EINV%(y)s-</field>
+            <field name="padding">7</field>
+        </record>
+
+        <record id="seq_tci_ocommit" model="ir.sequence">
+            <field name="name">Open Commitment Number</field>
+            <field name="code">tci_ocommit_number</field>
+            <field name="prefix">OPO%(y)s-</field>
+            <field name="padding">7</field>
+        </record>
+
+
+    </data>
+</odoo>

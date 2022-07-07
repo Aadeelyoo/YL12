@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        # **************** wbs Project Related Views ****************
+
+        <record model="ir.actions.act_window" id="account_analytic_wbs_project_line_action">
+            <field name="context">{'search_default_group_date': 1, 'search_default_group_journal': 1, 'default_account_project_id': active_id}</field>
+            <field name="domain">[('account_project_id','=', active_id)]</field>
+            <field name="name">Costs &amp; Revenues</field>
+            <field name="res_model">account.analytic_wbs.progress_line</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="view_id" ref="view_account_analytic_wbs_progress_line_tree"/>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+              <p>
+                No activity yet on this project account.
+              </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_out_pc_tci_all_project_wbs">
+            <field name="name">Outstanding TCI</field>
+            <field name="res_model">tci</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="view_id" ref="view_tci_tree"/>
+            <field name="view_type">form</field>
+            <field name="domain">[
+                ('tci_type', 'in', ('act','ocommit','inv','wt','cr','maccr')),
+                ('is_outstanding', '=', 1), ('analytic_project_ids', '=', active_id)]
+            </field>
+
+            <field name="context">{
+                'search_default_outstanding':1,
+                'search_default_group_type':1,
+                }
+            </field>
+
+            <field name="help" type="html">
+              <p>
+                No outstanding items recorded.
+              </p>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_wbs_project_form" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.prject.form</field>
+            <field name="model">account.analytic_wbs.project</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <form string="wbs Project">
+                    <sheet string="wbs Project">
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="action"
+                                    name="%(account_analytic_wbs_project_line_action)d"
+                                    icon="fa-usd"  string="Claiming" widget="statinfo"/>
+                            <button class="oe_stat_button" type="object"
+                                    name="action_display_task"
+                                    icon="fa-usd"  string="Tasks" widget="statinfo"/>
+                            <button class="oe_stat_button" type="action"
+                                    name="%(analytic_wbs.action_out_pc_tci_all_project_wbs)d"
+                                    icon="fa-usd"  string="TCIs" widget="statinfo"/>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" class="oe_inline" placeholder="e.g. Project wbs Name"/>
+                            </h1>
+                            <label for="descr_short"/>
+                            <field name="descr_short" class="oe_inline" placeholder="wbs Description"/>
+                        </div>
+                        <group>
+                            <group string="Project / Analytic Link">
+                                <field name="project_id"/>
+                                <field name="account_id" domain="[('account_type', '=', 'active')]" options="{'no_create': True}"/>
+                            </group>
+                            <group string="Configuration">
+                                <field name="date"/>
+                                <field name="project_account_type"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Tasks">
+                                <div class="oe_button_box" name="button_box_other">
+                                </div>
+                                <group string="Other Tasks">
+                                    <field name="task_ids_other" nolabel="1">
+                                        <tree string="Forecast Transactions" edit="1" create="1" delete="1">
+                                            <field name="name"/>
+                                            <field name="employee_id" invisible="1"/>
+                                            <field name="po_id" invisible="1"/>
+                                            <field name="vendor_id" invisible="1"/>
+                                            <field name="etc_amount_calc_type"/>
+                                            <field name="incurred_amount_compute" sum="Total Incurred"/>
+                                            <field name="etc_amount" string="Computed ETC"/>
+                                            <field name="forecast_amount" string="Forecast Amount" sum="Total Amount"/>
+                                            <field name="eac" string="EAC" sum="Total EAC" invisible="True"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <div class="oe_button_box" name="button_box_employee">
+                                </div>
+                                <group string="Employee Tasks">
+                                    <field name="task_ids_employee" nolabel="1">
+                                        <tree string="Forecast Transactions" edit="1" create="1" delete="1">
+                                            <field name="employee_id"/>
+                                            <field name="name"/>
+                                            <field name="po_id" invisible="1"/>
+                                            <field name="vendor_id" invisible="1"/>
+                                            <field name="etc_amount_calc_type"/>
+                                            <field name="incurred_amount_compute" sum="Total Incurred"/>
+                                            <field name="etc_amount" string="Computed ETC" invisible="1"/>
+                                            <field name="forecast_amount" string="Forecast Amount" sum="Total Amount"/>
+                                            <field name="eac" string="EAC" sum="Total EAC" invisible="True"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                                <div class="oe_button_box" name="button_box_po">
+                                </div>
+                                <group string="PO Tasks">
+                                    <field name="task_ids_po" nolabel="1">
+                                        <tree string="Forecast Transactions" edit="1" create="1" delete="1">
+                                            <field name="vendor_id" invisible="0"/>
+                                            <field name="po_id" invisible="0"/>
+                                            <field name="name"/>
+                                            <field name="employee_id" invisible="1"/>
+                                            <field name="etc_amount_calc_type"/>
+                                            <field name="po_value"/>
+                                            <field name="cr_out"/>
+                                            <field name="incurred_amount_compute" sum="Total Incurred"/>
+                                            <field name="etc_amount" string="Computed ETC"/>
+                                            <field name="forecast_amount" string="Forecast Amount" sum="Total Amount"/>
+                                            <field name="eac" string="EAC" sum="Total EAC" invisible="True"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+
+                            <page string="Forecast">
+                                <group string="Forecast">
+                                    <!--
+                                    <group>
+                                        <button type="action" name="%(act_project_project_2_project_forecast_transaction_all)d" string="Edit Forecast Transactions" class="oe_highlight oe_view_mode_only"/>
+                                        <button type="action" name="%(act_project_forecast_transaction_detail_all)d" string="Edit Transaction Lines" class="oe_highlight oe_view_mode_only"/>
+                                    </group>
+                                    -->
+                                    <field name="forecast_ids" nolabel="1">
+                                        <tree edit="false" create="false" delete="false" string="Forecast Transactions">
+                                            <field name="analytic_project_id"/>
+                                            <field name="date"/>
+                                            <field name="quantity"/>
+                                            <field name="unit_rate"/>
+                                            <field name="amount"/>
+                                            <field name="po_id"/>
+                                            <field name="task_id"/>
+                                            <field name="partner_id"/>
+                                        </tree>
+                                    </field>
+                                </group>
+
+                            </page>
+                            <page string="Budget">
+                                <group string="Budget">
+                                    <!--
+                                    <group>
+                                        <button type="action" name="%(act_project_project_2_project_forecast_transaction_all)d" string="Edit Forecast Transactions" class="oe_highlight oe_view_mode_only"/>
+                                        <button type="action" name="%(act_project_forecast_transaction_detail_all)d" string="Edit Transaction Lines" class="oe_highlight oe_view_mode_only"/>
+                                    </group>
+                                    -->
+                                    <field name="budget_ids" nolabel="1">
+                                        <tree editable="bottom" string="Budget Transactions Lines">
+                                            <field name="name"/>
+                                            <field name="detail"/>
+                                            <field name="amount" sum="Total Amount"/>
+                                            <field name="contingency" sum="Total Contingency"/>
+                                            <field name="total_amount" sum="Total Amount"/>
+                                            <field name="qty_amount" sum="Total Qty"/>
+                                            <field name="mhr_amount" sum="Total MHR"/>
+                                            <field name="account_project_id"/>
+                                            <field name="line_transaction_id"/>
+                                            <field name="bdgt_transaction_state"/>
+                                            <field name="bdgt_transaction_class"/>
+                                            <field name="task_id"/>
+                                            <field name="employee_id"/>
+                                            <field name="po_id"/>
+                                            <field name="rep_uid" invisible="1"/>
+                                            <field name="rep_name" invisible="1"/>
+                                            <field name="rep_uid_type" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+
+                        </notebook>
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_wbs_project_tree" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.project.tree</field>
+            <field name="model">account.analytic_wbs.project</field>
+            <field name="arch" type="xml">
+
+                <tree string="wbs Projects">
+                    <field name="name"/>
+                    <field name="project_id" invisible="True"/>
+                    <field name="account_id" invisible="True"/>
+                    <field name="descr_short"/>
+                    <!--Budget Fields -->
+                    <field name="posted_baseline_bdgt_amt_balance" sum="Baseline Total"/>
+                    <field name="posted_change_bdgt_amt_balance" sum="Change Total"/>
+                    <field name="posted_bdgt_amt_balance" sum="B Total"/>
+                    <field name="posted_contingency_amt_balance" sum="Contingency Total"/>
+                    <!--
+                    Earned Field
+                    -->
+
+
+                    <field name="actual_balance" sum="Total Actual" widget="monetary"/>
+                    <field name="open_commit_balance" sum="Total Open Commitment" widget="monetary"/>
+                    <field name="commit_balance" sum="Total Commitment" widget="monetary"/>
+                    <field name="cr_out_balance" sum="Total CR Out" widget="monetary"/>
+
+                    <!--
+                    <field name="invoice_balance" sum="Invoiced Total"/>
+                    -->
+                    <!--
+                    <field name="posted_progress_amt_balance" sum="P Total"/>
+                    -->
+                    <!--
+                    <field name="posted_forecast_amt_balance" sum="F Total"/>
+                    -->
+                    <!--Man Hour Fields -->
+                    <!--
+                    <field name="posted_bdgt_mhr_balance" sum="B MHR"/>
+                    <field name="posted_progress_mhr_balance" sum="P MHR"/>
+                    <field name="posted_forecast_mhr_balance" sum="F MHR"/>
+                    -->
+                    <!--Quantity Fields -->
+                    <!--
+                    <field name="posted_bdgt_qty_balance"/>
+                    <field name="posted_progress_qty_balance"/>
+                    <field name="posted_forecast_qty_balance"/>
+                    <field name="uom_id"/>
+                    -->
+                    <!--TCI Info-->
+
+                    <field name="inv_out_balance" sum="Total Inv Out" widget="monetary"/>
+                    <field name="wt_out_balance" sum="Total LEM Out" widget="monetary"/>
+                    <field name="maccr_balance" sum="Total Manual Accrual" widget="monetary"/>
+                    <field name="incur_balance" sum="Total Incurred" widget="monetary"/>
+                    <field name="etc_balance" sum="Total ETC" widget="monetary"/>
+                    <field name="eac" sum="Total EAC" widget="monetary"/>
+                    <field name="contingency_spent" sum="Total Contingency Spent" widget="monetary"/>
+                    <!--
+
+                    <field name="bdgt_var" sum="Total Var" widget="monetary"/>
+                    -->
+
+
+                    <!--Other Information -->
+                    <field name="project_account_type" invisible="True"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="zero_balance" invisible="1"/>
+                    <field name="zero_balance_computed" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_wbs_project_account_search" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.project_account.search</field>
+            <field name="model">account.analytic_wbs.project</field>
+            <field name="arch" type="xml">
+                <search string="wbs Project">
+                    <field name="name"/>
+                    <field name="project_id"/>
+                    <filter string="Active" domain="[('project_account_type','=','active')]" name="active"/>
+
+                    <group expand="0" string="Group By...">
+                        <!--<filter string="Project" domain="[]" context="{'group_by':'project_id'}"/>-->
+                        <!--<filter string="Analytic Account" domain="[]" context="{'group_by':'account_id'}"/>-->
+                    </group>
+
+                </search>
+            </field>
+        </record>
+
+        <record id="act_project_project_2_project_wbs_all" model="ir.actions.act_window">
+            <field name="name">Project wbs</field>
+            <field name="res_model">account.analytic_wbs.project</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{
+                'search_default_project_id': [active_id],
+                'default_project_id': active_id,
+                }
+            </field>
+            <field name="search_view_id" ref="view_account_analytic_wbs_project_account_search"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create project specific wbs linked to the main company wbs
+                </p>
+            </field>
+        </record>
+
+                # **************** Project Control - Project Related Actions ****************
+        <record model="ir.actions.act_window" id="project_account_analytic_wbs_project_action_entries">
+            <field name="name">Projects Analytic Accounts</field>
+            <field name="res_model">account.analytic_wbs.project</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="limit">250</field>
+            <field name="view_id" ref="view_account_analytic_wbs_project_tree"/>
+            <field name="view_type">form</field>
+            <field name="domain">[
+                ('project_id', '=', active_id),
+                ]
+            </field>
+            <field name="context">{
+                'search_default_project_id': [active_id],
+                'search_default_active': 1,
+                'default_project_id': active_id,
+                }
+            </field>
+
+            <field name="help" type="html">
+              <p>
+                No activity yet.
+              </p><p>
+                Add any control accounts to projects to be able to use them
+                inside your projects.
+              </p>
+            </field>
+        </record>
+
+
+
+                # **************** Project Control - Project Tree View ****************
+        <record id="view_project_control_project_tree" model="ir.ui.view">
+            <field name="name">project_control.project.tree</field>
+            <field name="model">project.project</field>
+            <field name="arch" type="xml">
+                <tree string="Projects" create="false" delete="false">
+                    <field name="project_code_id" string="Project AFE"/>
+                    <field name="short_name"/>
+                    <field name="name" string="Project Name" invisible="0"/>
+                    <field name="phase" invisible="0"/>
+                    <field name="user_id" invisible="0"/>
+                    <!--
+                    <field name="posted_bdgt_amt_balance" string="Budget"/>
+
+                    <field name="name" string="Committed"/>
+                    <field name="name" string="Incured"/>
+                    <field name="name" string="Accrued"/>
+                    <field name="name" string="% Completed"/>
+                    <field name="name" string="Budget Earned"/>
+
+                    <field name="posted_forecast_amt_balance" string="Forecast"/>
+                    -->
+                    <!--
+                    <field name="state"/>
+                    -->
+                </tree>
+            </field>
+        </record>
+
+                # **************** Project Control - Project Form View ****************
+
+        <record id="view_project_control_project_form" model="ir.ui.view">
+            <field name="name">project_control.project.form</field>
+            <field name="model">project.project</field>
+            <field name="arch" type="xml">
+                <form string="Project" create="false" delete="false">
+                <header>
+                    <!--
+                    <field name="state" widget="statusbar" readonly="True"/>
+                    -->
+                </header>
+
+                <!--<field name="analytic_account_id" invisible="1" required="0"/>-->
+                <div class="oe_button_box" name="button_box" groups="base.group_user">
+                     <button string="Progress Claiming" class="oe_stat_button" type="action" name="%(act_project_project_2_project_progress_transaction_all)d" icon="fa-tasks">
+                    </button>
+                </div>
+                <div class="oe_title">
+                    <h1>
+                        <field name="name" placeholder="Project Name" readonly="True"/>
+                    </h1>
+                    <group>
+                        <field name="project_code_id" readonly="True"/>
+                        <field name="old_wbs"/>
+                    </group>
+                </div>
+                <notebook>
+                    <page string="Overview" name="overview">
+                        <div class="oe_button_box" name="button_box_overview" groups="base.group_user">
+                             <button string="Project Details" class="oe_stat_button" type="action" name="%(project_account_analytic_wbs_project_action_entries)d" icon="fa-tasks">
+                            </button>
+                        </div>
+
+                        <group string="Overview">
+                            <field name="analytic_wbs_project_ids" nolabel="1" domain="[('project_account_type','=','active')]" context="{'default_project_id': active_id}">
+                                <tree create="false" delete="false" string="Control Accounts Lines">
+                                    <field name="name"/>
+                                    <field name="project_id" invisible="True"/>
+                                    <field name="account_id" invisible="True"/>
+                                    <field name="descr_short"/>
+                                    <!--Budget Fields -->
+                                    <field name="posted_bdgt_amt_balance" sum="B Total"/>
+                                    <field name="posted_bdgt_work_amt_balance" sum="C Total"/>
+                                    <field name="posted_contingency_amt_balance" sum="Contingency Total" invisible="1"/>
+                                    <field name="actual_balance" sum="Total Actual" widget="monetary"/>
+                                    <field name="open_commit_balance" sum="Total Open Commitment" widget="monetary"/>
+                                    <field name="commit_balance" sum="Total Commitment" widget="monetary"/>
+                                    <field name="cr_out_balance" sum="Total CR Out" widget="monetary" invisible="1"/>
+                                    <field name="inv_out_balance" sum="Total Inv Out" widget="monetary" invisible="1"/>
+                                    <field name="wt_out_balance" sum="Total LEM Out" widget="monetary" invisible="1"/>
+                                    <field name="maccr_balance" sum="Total Manual Accrual" widget="monetary" invisible="1"/>
+                                    <field name="incur_balance" sum="Total Incurred" widget="monetary"/>
+                                    <field name="etc_balance" sum="Total ETC" widget="monetary"/>
+                                    <field name="eac" sum="Total EAC" widget="monetary"/>
+                                    <field name="contingency_spent" sum="Total Contingency Spent" widget="monetary"/>
+                                    <!--Other Information -->
+                                    <field name="project_account_type" invisible="True"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </group>
+
+                    </page>
+                    <page string="Budget">
+                        <group string="Budget Transactions">
+                            <group>
+                                <button type="action" name="%(act_project_project_2_project_budget_transaction_all)d" string="Edit Budget Transactions" class="oe_highlight oe_view_mode_only"/>
+                                <button type="action" name="%(account_analytic_wbs_budget_line_action)d" string="Edit Transaction Lines" class="oe_highlight oe_view_mode_only"/>
+                            </group>
+                            <field name="budget_transaction_ids" nolabel="1" context="{'default_project_id': active_id}">
+                                <tree edit="false" create="true" delete="false" string="Budget Transactions">
+                                    <field name="date"/>
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="transaction_amt_balance" sum="Total"/>
+                                    <field name="transaction_mhr_balance" sum="Man Hours"/>
+                                    <field name="partner_id"/>
+                                    <field name="user_id"/>
+                                    <field name="state" readonly="True"/>
+                                    <field name="transaction_class" readonly="True"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                        <page string="Purchase">
+                            <group string="Commitments">
+                                <div class="oe_button_box" name="button_box_purchassing" groups="base.group_user">
+                                    <button string="Purchasse Orders" class="oe_stat_button" type="object" name="action_view_project_po" icon="fa-tasks">
+                                    </button>
+                                    <button string="Actuals" class="oe_stat_button" type="object" name="action_view_project_act" icon="fa-tasks">
+                                    </button>
+                                    <button string="Open Commitments" class="oe_stat_button" type="object" name="action_view_project_ocommit" icon="fa-tasks">
+                                    </button>
+                                    <button string="Change Orders" class="oe_stat_button" type="object" name="action_view_project_cr" icon="fa-tasks">
+                                    </button>
+                                </div>
+                            </group>
+                            <group string="Accruals">
+                                <div class="oe_button_box" name="button_box_lems" groups="base.group_user">
+                                    <button string="LEMs" class="oe_stat_button" type="object" name="action_view_project_wt" icon="fa-list">
+                                    </button>
+                                    <button string="Invoices" class="oe_stat_button" type="object" name="action_view_project_inv" icon="fa-list">
+                                    </button>
+                                    <button string="Manual Accruals" class="oe_stat_button" type="object" name="action_view_project_maccr" icon="fa-list">
+                                    </button>
+
+                                </div>
+                            </group>
+
+                        </page>
+                        <page string="Change Requests">
+                            <group string="Change Requests">
+                                <!--
+                                <div class="oe_button_box" name="button_box_purchassing" groups="base.group_user">
+                                </div>
+                                -->
+                                <field name="tci_ids" domain="[('tci_type', '=', 'cr')]">
+                                </field>
+                            </group>
+
+                        </page>
+                        <page string="Invoices">
+
+                        </page>
+                        <!--
+                        <page string="SOW">
+                            <group string="Scope of Work">
+                                <group>
+                                </group>
+                                <field name="sow_transaction_ids" nolabel="1" context="{'default_project_id': active_id}">
+                                    <tree edit="false" create="true" delete="false" string="Progress Transactions">
+                                        <field name="date"/>
+                                        <field name="name"/>
+                                        <field name="description"/>
+                                        <field name="partner_id"/>
+                                        <field name="user_id"/>
+                                        <field name="state" readonly="True"/>
+                                    </tree>
+                                </field>
+
+                            </group>
+                        </page>
+                        -->
+                        <!--
+                        <page string="Schedule">
+                            <group string="Schedule">
+                            </group>
+                        </page>
+
+                        <page string="Progress">
+                            <group string="Progress Transactions">
+                                <group>
+                                    <button type="action" name="%(act_project_project_2_project_progress_transaction_all)d" string="Edit Progress Transactions" class="oe_highlight oe_view_mode_only"/>
+                                    <button type="action" name="%(act_project_progress_transaction_detail_all)d" string="Edit Transaction Lines" class="oe_highlight oe_view_mode_only"/>
+                                </group>
+                                <field name="analytic_wbs_line_transaction_ids" nolabel="1" context="{'default_project_id': active_id}">
+                                    <tree edit="false" create="true" delete="false" string="Progress Transactions">
+                                        <field name="date"/>
+                                        <field name="name"/>
+                                        <field name="description"/>
+                                        <field name="partner_id"/>
+                                        <field name="user_id"/>
+                                        <field name="state" readonly="True"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        -->
+                        <page string="Forecast">
+                            <group string="Forecast">
+                                <group>
+                                    <button type="action" name="%(act_project_project_2_project_forecast_transaction_all)d" string="Edit Forecast Transactions" class="oe_highlight oe_view_mode_only"/>
+                                    <button type="action" name="%(act_project_forecast_transaction_detail_all)d" string="Edit Transaction Lines" class="oe_highlight oe_view_mode_only"/>
+                                </group>
+                                <field name="forecast_transaction_ids" nolabel="1" context="{'default_project_id': active_id}">
+                                    <tree edit="false" create="true" delete="false" string="Forecast Transactions">
+                                        <field name="date"/>
+                                        <field name="name"/>
+                                        <field name="description"/>
+                                        <field name="partner_id"/>
+                                        <field name="user_id"/>
+                                        <!--
+                                        <field name="state" readonly="True"/>
+                                        -->
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <!--
+                        <page string="Purchassing">
+                            <group string="Pruchassing">
+                                <div class="oe_button_box" name="button_box_purchassing" groups="base.group_user">
+                                    <button type="object"  name="action_view_project_po"
+                                        class="oe_stat_button"
+                                        icon="fa-file-text-o">
+                                        <field name="po_count" widget="statinfo" string="P.O."/>
+                                        <field name='purchase_order_ids' invisible="1"/>
+                                    </button>
+                                    <button type="object"  name="action_view_project_workticket"
+                                        class="oe_stat_button"
+                                        icon="fa-file-text-o">
+                                        <field name="workticket_count" widget="statinfo" string="LEMs"/>
+                                        <field name='workticket_ids' invisible="1"/>
+                                    </button>
+                                </div>
+                                <group>
+                                </group>
+                                <field name="purchase_order_ids" nolabel="1" context="{'default_project_id': active_id}">
+                                    <tree edit="false" create="true" delete="false" string="Progress Transactions">
+                                        <field name="project_id"/>
+                                        <field name="name"/>
+                                        <field name="partner_id"/>
+                                        <field name="amount_untaxed" sum="Total Untaxed amount" string="Untaxed" widget="monetary"/>
+                                        <field name="amount_total" sum="Total amount" widget="monetary"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="state"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                        -->
+                        <!--
+                        <page string="Reports">
+                            <group string="********** Insert Reports info Here **************">
+                            </group>
+                        </page>
+                        -->
+                        <!--
+                        <page string="Settings">
+                            <group string="Project Settings">
+                            </group>
+
+                            <notebook>
+                                <page string="Multi Units">
+                                    <group string="Multi Units">
+                                        <group>
+
+                                            <field name="multiunit_ids" nolabel="1" context="{'default_project_id': active_id}">
+                                                <tree edit="false" create="true" delete="false" string="Multi Units">
+                                                    <field name="name"/>
+                                                    <field name="short_descr"/>
+                                                    <field name="unit_type_id"/>
+                                                    <field name="project_id" invisible="1"/>
+                                                </tree>
+                                            </field>
+
+                                        </group>
+                                    </group>
+                                </page>
+                            </notebook>
+                        </page>
+                        -->
+                    </notebook>
+
+                </form>
+            </field>
+        </record>
+
+
+                # **************** Project Control - Menus and Actions for menu ****************
+        <record id="action_project_control_project" model="ir.actions.act_window">
+            <field name="name">Project Control</field>
+            <field name="res_model">project.project</field>
+            <field name="view_type">form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="action_project_control_project_tree" model="ir.actions.act_window.view">
+            <field name="name">Project Control</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_project_control_project_tree"/>
+            <field name="act_window_id" ref="action_project_control_project" />
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no project created in your company.
+                </p><p>
+                    To create new project, go to the project module.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_project_control_project_form" model="ir.actions.act_window.view">
+            <field name="name">Project Control</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_project_control_project_form"/>
+            <field name="act_window_id" ref="action_project_control_project" />
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no project created in your company.
+                </p><p>
+                    To create new project, go to the project module.
+                </p>
+            </field>
+        </record>
+
+
+
+     </data>
+</openerp>

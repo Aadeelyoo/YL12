@@ -1,0 +1,357 @@
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h2 class="oe_slogan"><strong>Dashboard View</strong></h2>
+            <h3 class="oe_slogan"><strong>Build your own dashboard view for any Odoo object</strong></h3>
+        </div>
+    </div>
+</section>
+<!-- Second block -->
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            Like pivot and graph view, The dashboard view is used to display aggregate data.
+However, the dashboard can embed sub views, which makes it possible to have a
+more complete and interesting look on a given dataset. <br/><br/>
+
+            The dashboard view can display sub views, aggregates for some fields (over a
+domain), or even <strong>formulas</strong> (expressions which involves one or more aggregates).
+For example, here is a very simple dashboard:
+            <div class="oe_picture" style="margin: 12px 0%">
+                <img src="dashboard_view_tag.jpeg" style="width: 875px;"></a>
+            </div>
+<strong>The root element of the Dashboard view is <dashboard>, it does not accept any
+attributes.</strong><br/><br/><br/>
+
+<h4><strong>There are 5 possible type of tags in a dashboard view:</strong></h4>    
+        </div>
+    </div>
+</section>
+<!--Third block -->
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h2 class="oe_slogan" style="text-align: left;"><strong>View</strong></h2>
+        </div>
+        <div class="oe_span12">
+            Declares a sub view.<br/><br/>
+
+            <h4>Admissible attributes are:</h4><br/>
+
+            - <strong>type (mandatory)</strong>
+                The type of the sub view.  For example, <strong>graph</strong> or <strong>pivot</strong>.<br/><br/>
+
+            - <strong>ref (optional)</strong>
+                An xml id for a view. If not given, the default view for the model will
+                be used.<br/><br/>
+
+            - <strong>name (optional)</strong>
+                A string which identifies this element.  It is mostly
+                useful to be used as a target for an xpath.<br/><br/>
+        </div>
+        <div>
+            <strong>E.g.</strong>
+        </div>    
+        <div class="oe_picture" style="margin: 12px 0%">
+            <img src="view_tag.jpeg" style="width: 875px;"></a>
+        </div>
+    </div>
+</section>
+<!--Forth block -->
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h2 class="oe_slogan" style="text-align: left;"><strong>Group</strong></h2>
+        </div>
+        <div class="oe_span12">
+            Defines a column layout. This is actually very similar to the group element
+            in a form view.<br/><br/>
+
+            <h4>Admissible attributes are:</h4><br/>
+
+            - <strong>string (optional)</strong>
+                A description which will be displayed as a group title.<br/><br/>
+
+            - <strong>colspan (optional)</strong>
+                The number of subcolumns in this group tag. By default, 6.<br/><br/>
+
+            - <strong>col (optional)</strong>
+                The number of columns spanned by this group tag (only makes sense inside
+                another group). By default, 6.<br/><br/>        
+        </div>
+        <div>
+            <strong>E.g.</strong>
+        </div>   
+        <div class="oe_picture" style="margin: 12px 0%">
+            <img src="group_tag.jpeg" style="width: 875px;"></a>
+        </div>
+    </div>
+</section>
+<!--Fifth block -->
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h2 class="oe_slogan"style="text-align: left;"><strong>Aggregate</strong></h2>
+        </div>
+        <div class="oe_span12">
+            Declares an aggregate. This is the value of an aggregate for a given field
+            over the current domain.<br/><br/>
+
+            Note that aggregates are supposed to be used inside a group tag (otherwise
+            the style will not be properly applied).<br/><br/>
+
+            <h4>Admissible attributes are:</h4><br/>
+
+            - <strong>field (mandatory)</strong>
+                The field name to use for computing the aggregate. Possible field types
+                are:<br/><br/>
+                <ul>
+                <li><strong>integer</strong> (default group operator is sum)</li>
+                <li><strong>float</strong>  (default group operator is sum)</li>
+                <li><strong>many2one</strong> (default group operator is count distinct)</li>
+                </ul><br/>
+            - <strong>name (mandatory)</strong>
+                A string to identify this aggregate (useful for formulas)<br/><br/>
+
+            - <strong>string (optional)</strong>
+                A short description that will be displayed above the value. If not
+                given, it will fall back to the field string.<br/><br/>
+
+            - <strong>domain (optional)</strong>
+                An additional restriction on the set of records that we want to aggregate.
+                This domain will be combined with the current domain.<br/><br/>
+
+            - <strong>domain_label (optional)</strong>
+                When the user clicks on an aggregate with a domain, it will be added to
+                the search view as a facet.  The string displayed for this facet can
+                be customized with this attribute.<br/><br/>
+
+            - <strong>group_operator (optional)</strong>
+                A valid postgreSQL aggregate function identifier to use when aggregating
+                values (see <a href="https://www.postgresql.org/docs/9.5/static/functions-aggregate.html">https://www.postgresql.org/docs/9.5/static/functions-aggregate.html</a>).
+                If not provided, By default, the group_operator from the field definition is used.
+                Note that no aggregation of field values is achieved if the group_operator value is "".<br/><br/>      
+                <h4><strong>Note:</strong></h4><br/>
+        
+                The special aggregate function <strong>count_distinct</strong> (defined in odoo) can also be used here<br/>
+
+                <div class="oe_picture" style="margin: 12px 0%">
+                    <img src="aggregate_tag_count_distinct_attribute.jpeg" style="width: 875px;"></a>
+                </div>
+            
+            - <strong>col (optional)</strong>
+                The number of columns spanned by this tag (only makes sense inside a
+                group). By default, 1.<br/><br/>
+
+            - <strong>widget (optional)</strong>
+                A widget to format the value (like the widget attribute for fields).
+                For example, monetary.<br/><br/>
+
+            - <strong>help (optional)</strong>
+                A help message to dipslay in a tooltip (equivalent of help for a field in python)<br/><br/>
+        
+            - <strong>measure (optional)</strong>
+                This attribute is the name of a field describing the measure that has to be used
+                in the graph and pivot views when clicking on the aggregate.<br/>
+            
+                The special value __count__ can be used to use the count measure.<br/>
+
+                <div class="oe_picture" style="margin: 12px 0%">
+                    <img src="aggregate_tag_measure_attribute.jpeg" style="width: 875px;"></a>
+                </div>
+            
+            - <strong>clickable (optional)</strong>
+                A boolean indicating if this aggregate should be clickable or not (default to true).
+                Clicking on a clickable aggregate will change the measures used by the subviews
+                and add the value of the domain attribute (if any) to the search view.<br/><br/>
+
+            - <strong>value_label (optional)</strong>
+                A string put on the right of the aggregate value.<br/>
+                For example, it can be useful to indicate the unit of measure
+                of the aggregate value.            
+        </div>
+    </div>
+</section>
+<!--Sixth block -->
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h2 class="oe_slogan"style="text-align: left;"><strong>Formula</strong></h2>
+        </div>
+        <div class="oe_span12">
+            Declares a derived value. Formulas are values computed from aggregates.<br/><br/>
+
+            Note that like aggregates, formulas are supposed to be used inside a group
+            tag (otherwise the style will not be properly applied).<br/><br/>
+
+            <h4>Admissible attributes are:</h4><br/>
+
+            - <strong>value (mandatory)</strong>
+                A string expression that will be evaluated, with the builtin python
+                evaluator (in the web client).  Every aggregate can be used in the
+                context, in the <strong>record</strong> variable.  For example,
+                <strong>record.price_total / record.order_id</strong>.<br/><br/>
+
+            - <strong>name (optional)</strong>
+                A string to identify this formula<br/><br/>
+
+            - <strong>string (optional)</strong>
+                A short description that will be displayed above the formula.<br/><br/>
+
+            - <strong>col (optional)</strong>
+                The number of columns spanned by this tag (only makes sense inside a
+                group). By default, 1.<br/><br/>
+
+            - <strong>widget (optional)</strong>
+                A widget to format the value (like the widget attribute for fields).
+                For example, monetary. By default, it is 'float'.<br/><br/>
+
+            - <strong>help (optional)</strong>
+                A help message to dipslay in a tooltip (equivalent of help for a field in python)<br/><br/>
+
+            - <strong>value_label (optional)</strong>
+                A string put on the right of the formula value.
+                For example, it can be useful to indicate the unit of measure
+                of the formula value.<br/><br/>
+        </div>
+        <div>
+            <strong>E.g.</strong>
+        </div>  
+        <div class="oe_picture" style="margin: 12px 0%">
+            <img src="formula_tag.jpeg" style="width: 875px;"></a>
+        </div><br/><br/>
+    </div>
+</section>
+<!--Seventh block -->
+<section class="oe_container oe_dark">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h2 class="oe_slogan"style="text-align: left;"><strong>Widget</strong></h2>
+        </div>
+        <div class="oe_span12">
+            Declares a specialized widget to be used to display the information. This is
+    a mechanism similar to the widgets in the form view.<br/><br/>
+
+            <h4>Admissible attributes are:</h4><br/>
+
+            - <strong>name (mandatory)</strong>
+                A string to identify which widget should be instantiated. The view will
+                look into the <strong>widget_registry</strong> to get the proper class.<br/><br/>
+
+            - <strong>col (optional)</strong>
+                The number of columns spanned by this tag (only makes sense inside a
+                group). By default, 1.<br/><br/>
+        </div>
+        <div>
+            <strong>E.g.</strong>
+        </div>
+        <div class="oe_picture" style="margin: 12px 0%">
+            <img src="widget_tag.jpeg" style="width: 875px;"></a>
+        </div>    
+    </div>
+</section>
+<!--Eighth block -->
+<section class="oe_container oe_dark" style="border-top: solid 15px #FFFFFF; padding-bottom: 5px;">
+    <div class="oe_spaced" style="width: 1083px; padding-top: 14px; padding-bottom: 21px;">
+        <div>
+            <h2 class="oe_slogan"><strong>Interactive Ready-to-use Business Dashboards</strong></h2>
+            <h3 class="oe_slogan"><strong>When it comes to improving on specific business goals, Gritxi's got you covered.<br/>
+            Browse our ready-to-use dashboards designed to help you achieve and optimize your key business objectives</strong></h3>
+        </div>        
+        <div style="padding-left: 30px;">
+            <a href="https://apps.odoo.com/apps/modules/12.0/crm_lead_dashboard/" style="-webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto; width: 331px; margin: 4px 8px; position: relative; display: inline-block; border-color: #ced4da; min-width: 150px; padding: 8px 8px; border: 1px solid #dee2e6; background-color: white;">
+                <img src="crm_lead_dashboard_icon.png" style="width: 70px; height: 70px; float: left; vertical-align: middle; border-style: none;">
+                <div style="padding-left: 80px; min-width: 0; font-size: 13px;">
+                  <h4 style="font-size: 13px; font-weight: 500; margin-bottom: 5px; margin-top: 0; margin-right: 20px; max-width: 100%; white-space: nowrap; vertical-align: top; line-height: 1;">
+                    <span><strong>CRM Lead Dashboard</strong></span>&nbsp;
+                  </h4>
+                  <p style="margin: 3px 0 3px; color: #999999; min-height: 26px; line-height: 1.1; display: block;">
+                     <span>Monitor business performance using charts, graphs, pivots, aggregated and formulated data</span>
+                  </p>
+                </div>
+            </a>
+            <a href="https://apps.odoo.com/apps/modules/12.0/crm_pipeline_dashboard/" style="-webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto; width: 331px; margin: 4px 8px; position: relative; display: inline-block; border-color: #ced4da; min-width: 150px; padding: 8px 8px; border: 1px solid #dee2e6; background-color: white;">
+                <img src="crm_pipeline_dashboard_icon.png" style="width: 70px; height: 70px; float: left; vertical-align: middle; border-style: none;">
+                <div style="padding-left: 80px; min-width: 0; font-size: 13px;">
+                  <h4 style="font-size: 13px; font-weight: 500; margin-bottom: 5px; margin-top: 0; margin-right: 20px; max-width: 100%; white-space: nowrap; vertical-align: top; line-height: 1;">
+                    <span><strong>CRM Pipeline Dashboard</strong></span>&nbsp;
+                  </h4>
+                  <p style="margin: 3px 0 3px; color: #999999; min-height: 26px; line-height: 1.1; display: block;">
+                     <span>Helps you to gain in the future sales performance using graphs, pivots, aggregated and formulated data</span>
+                  </p>
+                </div>
+            </a>
+            <a href="https://apps.odoo.com/apps/modules/12.0/sale_crm_dashboard/" style="-webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto; width: 331px; margin: 4px 8px; position: relative; display: inline-block; border-color: #ced4da; min-width: 150px; padding: 8px 8px; border: 1px solid #dee2e6; background-color: white;">
+                <img src="sale_crm_dashboard_icon.png" style="width: 70px; height: 70px; float: left; vertical-align: middle; border-style: none;">
+                <div style="padding-left: 80px; min-width: 0; font-size: 13px;">
+                  <h4 style="font-size: 13px; font-weight: 500; margin-bottom: 5px; margin-top: 0; margin-right: 20px; max-width: 100%; white-space: nowrap; vertical-align: top; line-height: 1;">
+                    <span><strong>Sale CRM Pipeline Dashboard</strong></span>&nbsp;
+                  </h4>
+                  <p style="margin: 3px 0 3px; color: #999999; min-height: 26px; line-height: 1.1; display: block;">
+                     <span>Give visibility into the sum of orders and number of quotations linked to closed opportunities</span>
+                  </p>
+                </div>
+            </a>
+            <a href="https://apps.odoo.com/apps/modules/12.0/sale_dashboard/" style="-webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto; width: 331px; margin: 4px 8px; position: relative; display: inline-block; border-color: #ced4da; min-width: 150px; padding: 8px 8px; border: 1px solid #dee2e6; background-color: white;">
+                <img src="sale_dashboard_icon.png" style="width: 70px; height: 70px; float: left; vertical-align: middle; border-style: none;">
+                <div style="padding-left: 80px; min-width: 0; font-size: 13px;">
+                  <h4 style="font-size: 13px; font-weight: 500; margin-bottom: 5px; margin-top: 0; margin-right: 20px; max-width: 100%; white-space: nowrap; vertical-align: top; line-height: 1;">
+                    <span><strong>Sales Dashboard</strong></span>&nbsp;
+                  </h4>
+                  <p style="margin: 3px 0 3px; color: #999999; min-height: 26px; line-height: 1.1; display: block;">
+                     <span>Provides visual representation of sales KPIs using graphs, pivots, aggregated and formulated data</span>
+                  </p>
+                </div>
+            </a>
+            <a href="https://apps.odoo.com/apps/modules/12.0/ecommerce_sale_dashboard/" style="-webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto; width: 331px; margin: 4px 8px; position: relative; display: inline-block; border-color: #ced4da; min-width: 150px; padding: 8px 8px; border: 1px solid #dee2e6; background-color: white;">
+                <img src="ecommerce_sale_dashboard_icon.png" style="width: 70px; height: 70px; float: left; vertical-align: middle; border-style: none;">
+                <div style="padding-left: 80px; min-width: 0; font-size: 13px;">
+                  <h4 style="font-size: 13px; font-weight: 500; margin-bottom: 5px; margin-top: 0; margin-right: 20px; max-width: 100%; white-space: nowrap; vertical-align: top; line-height: 1;">
+                    <span><strong>eCommerce Dashboard</strong></span>&nbsp;
+                  </h4>
+                  <p style="margin: 3px 0 3px; color: #999999; min-height: 26px; line-height: 1.1; display: block;">
+                     <span>Provides top level view of web store performance using graphs, pivots, aggregated and formulated data</span>
+                  </p>
+                </div>
+            </a>
+            <a href="https://apps.odoo.com/apps/modules/12.0/stock_dashboard/" style="-webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto; width: 331px; margin: 4px 8px; position: relative; display: inline-block; border-color: #ced4da; min-width: 150px; padding: 8px 8px; border: 1px solid #dee2e6; background-color: white;">
+                <img src="stock_dashboard_icon.png" style="width: 70px; height: 70px; float: left; vertical-align: middle; border-style: none;">
+                <div style="padding-left: 80px; min-width: 0; font-size: 13px;">
+                  <h4 style="font-size: 13px; font-weight: 500; margin-bottom: 5px; margin-top: 0; margin-right: 20px; max-width: 100%; white-space: nowrap; vertical-align: top; line-height: 1;">
+                    <span><strong>Warehouse Dashboard</strong></span>&nbsp;
+                  </h4>
+                  <p style="margin: 3px 0 3px; color: #999999; min-height: 26px; line-height: 1.1; display: block;">
+                     <span>To increase operational efficiency of warehouse, get a analytics snapshot using graphs and aggregated data</span>
+                  </p>
+                </div>
+            </a>
+            <a href="https://apps.odoo.com/apps/modules/12.0/stock_account_dashboard/" style="-webkit-box-flex: 1; -webkit-flex: 1 1 auto; flex: 1 1 auto; width: 331px; margin: 4px 8px; position: relative; display: inline-block; border-color: #ced4da; min-width: 150px; padding: 8px 8px; border: 1px solid #dee2e6; background-color: white;">
+                <img src="stock_accounting_dashboard_icon.png" style="width: 70px; height: 70px; float: left; vertical-align: middle; border-style: none;">
+                <div style="padding-left: 80px; min-width: 0; font-size: 13px;">
+                  <h4 style="font-size: 13px; font-weight: 500; margin-bottom: 5px; margin-top: 0; margin-right: 20px; max-width: 100%; white-space: nowrap; vertical-align: top; line-height: 1;">
+                    <span><strong>Warehouse Accounting Dashboard</strong></span>&nbsp;
+                  </h4>
+                  <p style="margin: 3px 0 3px; color: #999999; min-height: 26px; line-height: 1.1; display: block;">
+                     <span>Provide insights into managing inventory and accounting for it through graphs and aggregated data</span>
+                  </p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+<!-- Nineth block -->
+<section class="oe_container oe_dark" style="border-top: solid 15px #FFFFFF;">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+            <h2 class="oe_slogan"><strong>Contact / Support</strong></h2>
+            <h3 class="oe_slogan"><strong>Need help or want extra features?</strong></h3>
+        </div>
+        <div class="oe_picture" style="text-align: center;">
+            <a href="http://gritxi.com"><img src="logo.jpg"></a>
+        </div>
+	   <div class="oe_span12" style="text-align: center;">
+		<h5><strong>Need help with the configuration or want this module to have more functionalities?
+		Contact us through e-mail at <a href="mailto:contact@gritxi.com">contact@gritxi.com</a></strong></h5>
+        </div>
+    </div>
+</section>

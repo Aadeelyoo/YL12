@@ -1,0 +1,113 @@
+<odoo>
+    <data>
+
+        <!--Agreement Semi Form View -->
+        <record id="adobe_agreement_semi_form_view" model="ir.ui.view">
+            <field name="name">adobe.agreement.semi.form.view</field>
+            <field name="model">adobe.agreement</field>
+            <field name="arch" type="xml">
+                <form string="Adobe Agreements" create="false" edit="false" delete="false">
+                    <header>
+                        <button name="refresh_agreement" icon="fa-refresh"
+                                class="oe_highlight" type="object" string="Refresh"/>
+                        <button name="cancel_agreement"
+                                confirm="Are you sure do you want to cancel this agreement?"
+                                attrs="{'invisible':[('eligible_cancellation','=',False)]}"
+                                icon="fa-ban" class="oe_highlight btn-danger"
+                                type="object" string="Cancel Agreement" />
+
+                    </header>
+                    <field name="eligible_cancellation" invisible="1"/>
+                    <sheet>
+                        <group>
+                            <field name="agreement_event_ids" nolabel="1" options="{'reload_on_button': True}">
+                                <tree create="false" edit="false" delete="false">
+                                    <field name="agreement_id" invisible="1"/>
+                                    <field name="event_id" invisible="1"/>
+                                    <field name="date"/>
+                                    <field name="description"/>
+                                    <field name="event_type"/>
+                                    <field name="comment"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--Agreement Form View -->
+        <record id="adobe_agreement_form_view" model="ir.ui.view">
+            <field name="name">adobe.agreement.form.view</field>
+            <field name="model">adobe.agreement</field>
+            <field name="arch" type="xml">
+                <form string="Adobe Agreements" create="false" edit="false" delete="false">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="agreement_id"/>
+                                <field name="res_model"/>
+                                <field name="res_id"/>
+                                <field name="res_model"/>
+                                <field name="destination_field" />
+                                <field name="agreement_status"/>
+                                <field name="unsigned_agreement" filename="name"/>
+                                <field name="signed_agreement" filename="name"/>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="agreement_event_ids" nolabel="1">
+                                <tree create="false" edit="false" delete="false" editable="bottom">
+                                    <field name="agreement_id" invisible="1"/>
+                                    <field name="event_id" invisible="1"/>
+                                    <field name="date"/>
+                                    <field name="description"/>
+                                    <field name="event_type"/>
+                                    <field name="comment"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Agreement Tree View -->
+        <record id="adobe_agreement_tree_view" model="ir.ui.view">
+            <field name="name">adobe.agreement.tree.view</field>
+            <field name="model">adobe.agreement</field>
+            <field name="arch" type="xml">
+                <tree create="0" delete="0">
+                    <field name="name"/>
+                    <field name="agreement_id" invisible="1"/>
+                    <field name="res_model"/>
+                    <field name="res_id"/>
+                    <field name="destination_field"/>
+                    <field name="agreement_status"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Action-->
+        <record id="adobe_agreement_action" model="ir.actions.act_window">
+            <field name="name">Adobe Agreement</field>
+            <field name="res_model">adobe.agreement</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create first wht document!
+                </p>
+            </field>
+        </record>
+
+        <!-- MENU ITEMS -->
+        <menuitem id="menu_adobe_config" name="Adobe"
+            parent="base.menu_custom"
+            sequence="11"/>
+        <menuitem id="menu_adobe_agreements"
+            parent="approval_mixin.menu_adobe_config"
+            action="adobe_agreement_action"
+            sequence="1"/>
+    </data>
+</odoo>

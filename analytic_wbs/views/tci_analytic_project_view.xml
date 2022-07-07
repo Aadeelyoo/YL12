@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        # **************** wbs Task Cost Item Lines ****************
+
+        <record id="view_tci_analytic_project_search_form" model="ir.ui.view">
+            <field name="name">tci.analytic.project.search.form</field>
+            <field name="model">tci.analytic.project</field>
+            <field name="arch" type="xml">
+                <search string="Cost Item Detail">
+                    <field name="name"/>
+                    <field name="tci_id"/>
+                    <field name="partner_id"/>
+                    <field name="employee_id"/>
+                    <field name="project_id"/>
+                    <field name="tci_type"/>
+                    <!--
+                    <filter string="Active wbs" name="active_wbs" domain="[('wbs_state', '=', 'active')]"/>
+                    <filter string="Active Project wbs" name="active_project_wbs" domain="[('project_wbs_state', '=', 'active')]"/>
+                    -->
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <!--
+                        <filter string="Cost Item" name="tci" context="{'group_by':'tci_id'}"/>
+                        <filter string="Project" name="project" context="{'group_by':'project_id'}"/>
+                        <filter string="wbs State" name="wbs_state" context="{'group_by':'wbs_state'}"/>
+                        <filter string="Project wbs State" name="project_wbs_state" context="{'group_by':'project_wbs_state'}"/>
+                        -->
+                        <filter string="Date" name="group_date" context="{'group_by':'tci_date'}"/>
+                        <filter string="Project" name="project" context="{'group_by':'project_id'}"/>
+                        <filter string="Employee" name="group_employee" context="{'group_by':'employee_id'}"/>
+                        <filter string="Type" name="group_type" context="{'group_by':'tci_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_tci_analytic_project_tree" model="ir.ui.view">
+            <field name="name">tci.detail.tree</field>
+            <field name="model">tci.analytic.project</field>
+            <field name="arch" type="xml">
+                <tree string="Tci Lines">
+                    <field name="name"/>
+                    <field name="po_id" invisible="1"/>
+                    <field name="po_internal_ref" invisible="1"/>
+                    <field name="partner_id"/>
+                    <field name="employee" invisible="1"/>
+                    <field name="tci_id"/>
+                    <field name="tci_reference"/>
+                    <field name="tci_date"/>
+                    <field name="tci_description"/>
+                    <field name="task_id" invisible="1"/>
+                    <field name="analytic_project_id"/>
+                    <field name="base"/>
+                    <field name="base_allocation"/>
+                    <field name="amount" sum="Total Amount"/>
+                    <field name="calc_tci_line_percent"/>
+                    <field name="project_id"/>
+                    <field name="project_code_id"/>
+                    <field name="state"/>
+                    <field name="tci_type"/>
+                    <field name="tci_create_date"/>
+
+                    <field name="rep_uid" invisible="0"/>
+                    <field name="rep_name" invisible="0"/>
+                    <field name="rep_uid_type" invisible="0"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_tci_analytic_project_graph" model="ir.ui.view">
+            <field name="name">tci.analytic.project.graph</field>
+            <field name="model">tci.analytic.project</field>
+            <field name="arch" type="xml">
+                <graph string="wbs Entries">
+                    <field name="partner_id" type="row"/>
+                    <field name="po_internal_ref" type="row"/>
+                    <!--
+                    <field name="project_id" type="row"/>
+                    -->
+                    <field name="state" type="row"/>
+                    <field name="analytic_project_id" type="row"/>
+                    <field name="amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_tci_analytic_project_pivot" model="ir.ui.view">
+            <field name="name">tci.analytic.project.pivot</field>
+            <field name="model">tci.analytic.project</field>
+            <field name="arch" type="xml">
+                <pivot string="wbs Entries" >
+                    <field name="partner_id" type="row"/>
+                    <field name="po_internal_ref" type="row"/>
+                    <!--
+                    <field name="project_id" type="row"/>
+                    -->
+                    <field name="state" type="row"/>
+                    <field name="analytic_project_id" type="row"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+                # **************** Project Control - Cost Item Views and Actions ****************
+        <record model="ir.actions.act_window" id="tci_analytic_project_action">
+            <field name="name">TCI Lines</field>
+            <field name="res_model">tci.analytic.project</field>
+            <field name="view_mode">tree,graph,pivot</field>
+            <field name="view_id" ref="view_tci_analytic_project_tree"/>
+            <field name="view_type">form</field>
+            <field name="limit">250</field>
+            <field name="help" type="html">
+              <p>
+                No budget entries recorded yet.
+              </p>
+            </field>
+        </record>
+
+
+                # **************** Project Control - Cost Item Views and Actions for Data Export ****************
+
+        <record id="view_tci_analytic_project_export_tree" model="ir.ui.view">
+            <field name="name">tci_export_tree</field>
+            <field name="model">tci.analytic.project</field>
+            <field name="arch" type="xml">
+                <tree string="Tci Lines">
+                    <field name="name"/>
+                    <field name="po_id" invisible="1"/>
+                    <field name="po_internal_ref" invisible="1"/>
+                    <field name="partner_id"/>
+                    <field name="employee" invisible="1"/>
+                    <field name="tci_id"/>
+                    <field name="tci_reference"/>
+                    <field name="tci_date"/>
+                    <field name="task_id" invisible="1"/>
+                    <field name="analytic_project_id"/>
+                    <field name="project_id"/>
+                    <field name="project_code_id"/>
+                    <field name="state"/>
+                    <field name="tci_type"/>
+                    <field name="rep_uid" invisible="0"/>
+                    <field name="rep_name" invisible="0"/>
+                    <field name="rep_uid_type" invisible="0"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_tci_analytic_project_graph_outstanding" model="ir.ui.view">
+            <field name="name">tci.analytic.project.graph.outstanding</field>
+            <field name="model">tci.analytic.project</field>
+            <field name="arch" type="xml">
+                <graph string="Outstanding Entries" stacked="True" type="bar">
+                    <field name="tci_date" interval="month" type="col"/>
+                    <field name="tci_type" type="row"/>
+                    <field name="amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_tci_analytic_project_pivot_outstanding" model="ir.ui.view">
+            <field name="name">tci.analytic.project.pivot.outstanding</field>
+            <field name="model">tci.analytic.project</field>
+            <field name="arch" type="xml">
+                <pivot string="wbs Entries" >
+                    <field name="tci_date" interval="month" type="col"/>
+                    <field name="partner_id" type="row"/>
+                    <field name="tci_type" type="row"/>
+                    <field name="analytic_project_id" type="row"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="tci_analytic_project_export_action">
+            <field name="name">TCI Lines Outstanding</field>
+            <field name="res_model">tci.analytic.project</field>
+            <field name="view_mode">tree,graph,pivot</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_tci_analytic_project_export_tree')}),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('view_tci_analytic_project_graph_outstanding')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_tci_analytic_project_pivot_outstanding')})]"/>
+            <field name="domain">[
+                ('state', 'not in', ('void', 'invoiced', 'completed')),
+                ]
+            </field>
+        </record>
+
+     </data>
+</openerp>

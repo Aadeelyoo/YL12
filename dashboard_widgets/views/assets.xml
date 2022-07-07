@@ -1,0 +1,15 @@
+<odoo>
+    <template id="assets_backend" name="widget assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/dashboard_widgets/static/src/lib/chartjs/Chart.min.js"/>
+            <link rel="stylesheet" href="/dashboard_widgets/static/src/lib/chartjs/Chart.min.css"/>
+            <script type="text/javascript" src="/dashboard_widgets/static/src/lib/chartjs/chartjs-plugin-datalabels.min.js"/>
+            <script type="text/javascript" src="/dashboard_widgets/static/src/lib/chartjs/chartjs-plugin-colorschemes.min.js"/>
+            <script type="text/javascript" src="/dashboard_widgets/static/src/lib/chartjs/chartjs-plugin-empty-overlay.min.js"/>
+            <script type="text/javascript" src="/dashboard_widgets/static/src/js/chartjs.js"/>
+            <script type="text/javascript" src="/dashboard_widgets/static/src/js/widget_dashboard_view.js"/>
+            <script type="text/javascript" src="/dashboard_widgets/static/src/js/dashboard_widgets_html.js"/>
+            <link rel="stylesheet" href="/dashboard_widgets/static/src/less/widgets.less"/>
+        </xpath>
+    </template>
+</odoo>

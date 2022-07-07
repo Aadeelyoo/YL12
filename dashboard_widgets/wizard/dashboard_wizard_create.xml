@@ -1,0 +1,42 @@
+<odoo>
+
+
+    <record id="view_dashboard_wizard_create_form" model="ir.ui.view">
+        <field name="name">Create Dashboard</field>
+        <field name="model">is.dashboard.widget.wizard.create</field>
+        <field name="arch" type="xml">
+            <form string="Create Dashboard">
+                <group>
+                    <field name="dashboard_title"/>
+                    <field name="menu_name"/>
+                    <field name="menu_id"/>
+                    <field name="tag_id"/>
+                </group>
+                <group style="min-height: 300px;" groups="base.group_no_one">
+                    <field name="domain" widget="domain" options="{'model': 'domain_model'}" string="Filter Dashboard" attrs="{'invisible': [('tag_id', '!=', False)]}" />
+                    <field name="domain_model" invisible="1"/>
+                </group>
+                <group groups="base.group_no_one">
+                    <field name="auto_generate_default_context"/>
+                    <field name="manual_context"/>
+                    <field name="context" attrs="{'invisible': [('auto_generate_default_context', '=', False)]}"/>
+                </group>
+                <footer>
+                    <button name="action_create" string="Create And Open Dashboard" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_dashboard_wizard_create" model="ir.actions.act_window">
+        <field name="name">Create Dashboard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">is.dashboard.widget.wizard.create</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_dashboard_create" parent="menu_dashboard" name="Create Dashboard" action="action_dashboard_wizard_create" sequence="10"/>
+</odoo>

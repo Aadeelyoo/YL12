@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="res_config_settings_analytic_wbs_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.analytic.wbs</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="51"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Analytic_wbs" string="Analytic WBS" data-key="analytic_wbs" group="base.group_no_one">
+                    <h2>Products</h2>
+                    <div name="wbs_product" class="row mt16 o_settings_container" title="Use default product on purchase orders">
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="model_analytic_wbs_default_product"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="model_analytic_wbs_default_product"/>
+                                <div class="text-muted">
+                                    Use default product on all Purchase (You will be able to change the product description only)
+                                </div>
+                                <div class="content-group" name="msg_model_analytic_wbs_default_product" />
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="model_analytic_wbs_default_product"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="model_analytic_wbs_default_product_tci"/>
+                                <div class="text-muted">
+                                    Use default product on all TCI (You will be able to change the product description only)
+                                </div>
+                                <div class="content-group" name="msg_model_analytic_wbs_default_product_tci" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <h2>TCI</h2>
+                    <div name="tci_tax" class="row mt16 o_settings_container" title="Use tax on TCI">
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="model_tci_no_default_product_taxe"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="model_tci_no_default_product_taxe"/>
+                                <div class="text-muted">
+                                    Do not use Taxes on TCI Lines
+                                </div>
+                                <div class="content-group" name="msg_model_tci_no_default_product_taxe" />
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_left_pane">
+                                <field name="model_tci_no_product_taxe"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="model_tci_no_product_taxe"/>
+                                <div class="text-muted">
+                                    Use default product on all TCI (You will be able to change the product description only)
+                                </div>
+                                <div class="content-group" name="msg_model_tci_no_product_taxe" />
+                            </div>
+                        </div>
+
+                    </div>
+                    <h2>Analytic WBS</h2>
+                    <div name="tci_wbs" class="row mt16 o_settings_container" title="WBS Analytics">
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <button string="Generate Missing wbs analytics" type="object" name="update_wbs_analytics" class="btn-primary" />
+                            <button string="Update Actuals TCI POs" type="object" name="update_map_pos" class="btn-primary" />
+                        </div>
+                    </div>
+
+                    <h2>Project WBS</h2>
+                    <div name="project_wbs" class="row mt16 o_settings_container" title="Project WBS">
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <button string="Generate Project WBS" type="object" name="generate_project_wbs" class="btn-primary" />
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="analytic_wbs_config_settings_action" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'analytic_wbs'}</field>
+    </record>
+
+    <menuitem id="analytic_wbs_config_settings_menu_action" name="Settings" parent="analytic_wbs.menu_cc_configuration"
+        action="analytic_wbs_config_settings_action" sequence="0"/>
+</odoo>

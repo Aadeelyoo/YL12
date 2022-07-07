@@ -1,0 +1,81 @@
+<odoo>
+    <template id="tci_batch_template_table">
+        <div style="float:left; width: 100%;">
+            <table width="100%" style="margin-bottom:20px;margin-left: 30px;margin-right: 30px">
+                <thead>
+                    <tr>
+                        <th>Vendor Ref</th>
+                        <th>Document internal Name</th>
+                        <th>Document Date</th>
+                        <th>State</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="tci_ids" t-as="doc">
+                        <tr>
+                            <td>
+                                <span t-esc="doc.reference"></span>
+                            </td>
+                            <td>
+                                <span t-esc="doc.name"></span>
+                            </td>
+                            <td>
+                                <t t-if="doc.create_date">
+                                    <span t-esc="context_timestamp(doc.create_date).strftime('%Y-%m-%d')"></span>
+                                </t>
+                            </td>
+                            <td>
+                                <span t-esc="doc.state"></span>
+                            </td>
+                            <td>
+                                <span t-esc="doc.untaxed_amount" t-options="{'widget': 'monetary', 'display_currency': user.company_id.currency_id}"></span>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+                <tfoot style="font-weight: bold;">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <span t-esc="o.total_amount" t-options="{'widget': 'monetary', 'display_currency': user.company_id.currency_id}"></span>
+                    </td>
+
+                </tfoot>
+            </table>
+        </div>
+    </template>
+
+    <template id="tci_batch_project_analytic_template_table">
+        <div style="float:left; width: 100%;">
+            <table width="100%" style="margin-bottom:20px;margin-left: 30px;margin-right: 30px">
+                <tr>
+                    <th>Purchasse Order</th>
+                    <th>Project</th>
+                    <th>Project WBS</th>
+                    <th>Total Amount</th>
+                </tr>
+                <t t-foreach="project_analytic_ids" t-as="doc">
+                    <tr>
+                        <td>
+                            <span t-esc="doc.po_id.internal_ref"></span>
+                        </td>
+                        <td>
+                            <span t-esc="doc.project_id.name"></span>
+                        </td>
+                        <td>
+                            <span t-esc="doc.analytic_project_id.name"></span>
+                        </td>
+
+                        <td>
+                            <span t-esc="doc.amount" t-options="{'widget': 'monetary', 'display_currency': user.company_id.currency_id}"></span>
+                        </td>
+                    </tr>
+                </t>
+            </table>
+        </div>
+    </template>
+
+</odoo>

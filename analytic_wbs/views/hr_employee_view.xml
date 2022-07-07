@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- ACTUAL TCI LINE DETAILS -->
+        <record id="view_tci_act_employee_tree" model="ir.ui.view">
+            <field name="name">tci_act_employee_tree</field>
+            <field name="model">tci.line</field>
+            <field name="arch" type="xml">
+                <tree string="Tci Lines">
+                    <field name="name"/>
+                    <field name="employee_id" invisible="0"/>
+                    <field name="tci_id"/>
+                    <field name="tci_date"/>
+                    <field name="task_id" invisible="1"/>
+                    <field name="analytic_project_id"/>
+                    <field name="quantity"/>
+                    <field name="untaxed_amount"/>
+                    <field name="project_ids" widget="many2one_tag"/>
+                    <field name="state"/>
+                    <field name="tci_type"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_tci_act_employee_graph" model="ir.ui.view">
+            <field name="name">tci_act_employee_graph</field>
+            <field name="model">tci.line</field>
+            <field name="arch" type="xml">
+                <graph string="Employee Entries" stacked="True" type="bar">
+                    <field name="tci_date" interval="month" type="col"/>
+                    <field name="employee_id" type="row"/>
+                    <field name="analytic_project_id" type="row"/>
+                    <field name="quantity" type="measure"/>
+                    <field name="untaxed_amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_tci_act_employee_pivot" model="ir.ui.view">
+            <field name="name">tci_act_employee_pivot</field>
+            <field name="model">tci.line</field>
+            <field name="arch" type="xml">
+                <pivot string="wbs Entries" >
+                    <field name="tci_date" interval="year" type="col"/>
+                    <field name="tci_date" interval="quarter" type="col"/>
+                    <field name="tci_date" interval="month" type="col"/>
+                    <field name="analytic_project_id" type="row"/>
+                    <field name="employee_id" type="row"/>
+                    <field name="quantity" type="measure"/>
+                    <field name="untaxed_amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <!-- ANALYTIC PROJECTS -->
+        <record id="view_tci_analytic_project_employee_tree" model="ir.ui.view">
+            <field name="name">tci_analytic_employee_tree</field>
+            <field name="model">tci.analytic.project</field>
+            <field name="arch" type="xml">
+                <tree string="Tci Lines">
+                    <field name="name"/>
+                    <field name="po_id" invisible="1"/>
+                    <field name="po_internal_ref" invisible="1"/>
+                    <field name="partner_id"/>
+                    <field name="employee" invisible="0"/>
+                    <field name="tci_id"/>
+                    <field name="tci_reference"/>
+                    <field name="tci_date"/>
+                    <field name="task_id" invisible="1"/>
+                    <field name="analytic_project_id"/>
+                    <field name="project_id"/>
+                    <field name="project_code_id"/>
+                    <field name="state"/>
+                    <field name="tci_type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_tci_analytic_project_employee_graph" model="ir.ui.view">
+            <field name="name">tci_analytic_employee_graph</field>
+            <field name="model">tci.analytic.project</field>
+            <field name="arch" type="xml">
+                <graph string="Employee Entries" stacked="True" type="bar">
+                    <field name="tci_date" interval="month" type="col"/>
+                    <field name="tci_type" type="row"/>
+                    <field name="amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_tci_analytic_project_employee_pivot" model="ir.ui.view">
+            <field name="name">tci_analytic_employee_pivot</field>
+            <field name="model">tci.analytic.project</field>
+            <field name="arch" type="xml">
+                <pivot string="wbs Entries" >
+                    <field name="tci_date" interval="year" type="col"/>
+                    <field name="tci_date" interval="quarter" type="col"/>
+                    <field name="tci_date" interval="month" type="col"/>
+                    <field name="tci_type" type="col"/>
+                    <field name="employee_id" type="row"/>
+                    <field name="analytic_project_id" type="row"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_employee_analytic_incurred">
+            <field name="name">Incurred</field>
+            <field name="res_model">tci.analytic.project</field>
+            <field name="view_mode">graph,pivot,tree</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('view_tci_analytic_project_employee_graph')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_tci_analytic_project_employee_pivot')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_tci_analytic_project_employee_tree')})]"/>
+            <field name="search_view_id" ref="analytic_wbs.view_tci_analytic_project_search_form"/>
+            <field name="domain">[('employee_id', '=', active_id), ('tci_type', 'in', ('act','maccr'))]</field>
+            <field name="context">{
+                'search_default_group_date': 1,
+                'search_default_employee_id': [active_id],
+                'default_employee_id': active_id
+                }
+            </field>
+            <field name="help" type="html">
+              <p>
+                Click ont the 'Create' button to create a new task for this employee.
+              </p>
+            </field>
+        </record>
+
+        <record id="view_pc_employee_analytic_form" model="ir.ui.view">
+            <field name="name">pc_employee_analytic_form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='toggle_active']" position="before">
+                    <button type="action" name="%(act_employee_analytic_incurred)d"
+                        class="oe_stat_button"
+                        icon="fa-list" >
+                        <field name="task_forecast_quantity" widget="statinfo" string="Incurred Cost"/>
+                        <field name="tci_analytic_project_ids" invisible="1"/>
+                    </button>
+                </xpath>
+
+                <xpath expr="//notebook/page[last()]" position="before">
+                    <page string="TEST">
+                        <group>
+                            <button name="test_run_sql" type="object" string="TEST SQL" class="oe_highlight"/>
+                        </group>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+        # Actions for all Employees
+        <record model="ir.actions.act_window" id="act_all_employee_analytic_incurred">
+            <field name="name">All Employees Incurred</field>
+            <field name="res_model">tci.analytic.project</field>
+            <field name="view_mode">graph,pivot,tree</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('view_tci_analytic_project_employee_graph')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_tci_analytic_project_employee_pivot')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_tci_analytic_project_employee_tree')})]"/>
+            <field name="search_view_id" ref="analytic_wbs.view_tci_analytic_project_search_form"/>
+            <field name="domain">[('employee_id', '!=', False), ('tci_type', 'in', ('act','maccr'))]</field>
+            <field name="context">{
+                'search_default_group_date': 0,
+                'search_default_group_employee': 1,
+                }
+            </field>
+        </record>
+
+        # Actions for all Employees Incurred
+        <record model="ir.actions.act_window" id="act_tci_line_all_employee_act">
+            <field name="name">All Employees Actuals</field>
+            <field name="res_model">tci.line</field>
+            <field name="view_mode">graph,pivot,tree</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('view_tci_act_employee_graph')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_tci_act_employee_pivot')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_tci_act_employee_tree')})]"/>
+            <field name="domain">[('employee_id', '!=', False), ('tci_type', 'in', ('act','maccr'))]</field>
+        </record>
+
+        <!--
+        <record id="open_view_all_task_forecast_employee_list" model="ir.actions.act_window">
+            <field name="name">All Forecast</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,grid,pivot</field>
+            <field name="search_view_id" ref="analytic_wbs.view_task_forecast_search_form"/>
+            <field name="domain">[('employee_id', '!=', False), ('forecast_type', '=', 'forecast')]</field>
+            <field name="context">{'default_forecast_type': 'forecast',}
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="open_view_all_task_employee_list">
+            <field name="name">Employee Tasks</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="search_view_id" ref="project.view_task_search_form"/>
+            <field name="domain">[('employee_id', '!=', False)]</field>
+            <field name="context">{}
+            </field>
+            <field name="help" type="html">
+              <p>
+                Click ont the 'Create' button to create a new task for this employee.
+              </p>
+            </field>
+        </record>
+        -->
+
+        <menuitem id="menu_employee_pc_main"
+            name="Project Control"
+            parent="hr.menu_hr_root"
+            sequence="75"/>
+
+        <menuitem id="menu_employee_open_view_all_tci"
+                  name="All Incurred"
+                  action="act_tci_line_all_employee_act"
+                  parent="menu_employee_pc_main"
+                  sequence="5"/>
+
+     </data>
+</openerp>

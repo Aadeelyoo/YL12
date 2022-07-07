@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+<div t-name="EmptyComponent"/>
+
+<div t-name="Loading" class="o_loading"/>
+
+<t t-name="Widget.tooltip">
+    <div class="oe_tooltip_string" t-if="widget.string" role="tooltip">
+        <t t-esc="widget.string"/> <t t-if="debug and widget.nolabel">(nolabel)</t>
+    </div>
+    <p t-if="widget.attrs.help" class="oe_tooltip_help" role="tooltip">
+        <t t-esc="widget.attrs.help"/>
+    </p>
+    <ul t-if="debug" class="oe_tooltip_technical" role="tooltip">
+        <li data-item="name">
+            <span class="oe_tooltip_technical_title">Name:</span>
+            <t t-esc="widget.__node.attrs.name"/>
+        </li>
+        <li data-item="string" t-if="widget.string">
+            <span class="oe_tooltip_technical_title">String:</span>
+            <t t-esc="widget.string"/>
+        </li>
+        <li data-item="field" t-if="widget.__node.attrs.field">
+            <span class="oe_tooltip_technical_title">Field:</span>
+            <t t-esc="widget.__node.attrs.field"/>
+        </li>
+        <li data-item="value" t-if="widget.__node.attrs.value">
+            <span class="oe_tooltip_technical_title">Value:</span>
+            <t t-esc="widget.__node.attrs.value"/>
+        </li>        
+        <li data-item="domain" t-if="widget.__node.attrs.domain">
+            <span class="oe_tooltip_technical_title">Domain:</span>
+            <t t-esc="widget.__node.attrs.domain"/>
+        </li>
+        <li data-item="domain_label" t-if="widget.__node.attrs.domain_label">
+            <span class="oe_tooltip_technical_title">Domain Label:</span>
+            <t t-esc="widget.__node.attrs.domain_label"/>
+        </li>        
+        <li data-item="group_operator" t-if="widget.__node.attrs.group_operator">
+            <span class="oe_tooltip_technical_title">Group Operator:</span>
+            <t t-esc="widget.__node.attrs.group_operator"/>
+        </li>        
+        <li data-item="widget" t-if="widget.attrs.widget">
+            <span class="oe_tooltip_technical_title">Widget:</span>
+            <t t-esc="widget.attrs.widget"/>
+        </li>
+        <li data-item="value_label" t-if="widget.__node.attrs.value_label">
+            <span class="oe_tooltip_technical_title">Value Label:</span>
+            <t t-esc="widget.__node.attrs.value_label"/>
+        </li>        
+        <li data-item="modifiers" t-if="widget.__node.attrs.modifiers and !_.isEmpty(widget.__node.attrs.modifiers)">
+            <span class="oe_tooltip_technical_title">Modifiers:</span>
+            <t t-esc="JSON.stringify(widget.__node.attrs.modifiers)"/>
+        </li>
+        <li data-item="measure" t-if="widget.__node.attrs.measure">
+            <span class="oe_tooltip_technical_title">Measure:</span>
+            <t t-esc="widget.__node.attrs.measure"/>
+        </li>                               
+        <li data-item="help" t-if="widget.attrs.help">
+            <span class="oe_tooltip_technical_title">Help:</span>
+            <t t-esc="widget.attrs.help"/>
+        </li>        
+        <li data-item="col" t-if="widget.__node.attrs.col">
+            <span class="oe_tooltip_technical_title">Column:</span>
+            <t t-esc="widget.__node.attrs.col"/>
+        </li>
+        <li data-item="clickable" t-if="widget.__node.attrs.clickable">
+            <span class="oe_tooltip_technical_title">Clickable:</span>
+            <t t-esc="widget.__node.attrs.clickable"/>
+        </li>                                
+    </ul>
+</t>
+
+</templates>

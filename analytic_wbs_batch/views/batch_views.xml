@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        # **************** Tci Batch Sequence ****************
+
+        <record id="seq_tci_batch_num" model="ir.sequence">
+            <field name="name">Tci Batch Number</field>
+            <field name="code">tci.batch.number</field>
+            <field name="prefix">BPR-%(y)s-</field>
+            <field name="padding">4</field>
+        </record>
+
+        # **************** TCI Batch Views ****************
+
+        <record id="view_tci_batch_search_form" model="ir.ui.view">
+            <field name="name">tci.batch.search.form</field>
+            <field name="model">tci.batch</field>
+            <field name="arch" type="xml">
+                <search string="TCI Batch">
+                    <field name="name"/>
+                    <field name="po_id"/>
+                    <field name="partner_id" string="Company"/>
+                    <field name="company_id"/>
+                    <field name="state"/>
+                    <field name="external_ref"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Vendor" name="partner_id" context="{'group_by':'partner_id'}"/>
+                        <filter string="Purchasse Order" name="po_id" context="{'group_by':'po_id'}"/>
+                        <filter string="Status" name="state" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_tci_batch_tree" model="ir.ui.view">
+            <field name="name">TCI Batch Tree</field>
+            <field name="model">tci.batch</field>
+            <field name="arch" type="xml">
+                <tree string="Tci Lines">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="batch_type_id"/>
+                    <field name="description"/>
+                    <field name="batch_type_id"/>
+                    <field name="state"/>
+                    <field name="tci_count"/>
+                    <field name="external_ref"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="create_date" readonly="True"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_tci_batch_form" model="ir.ui.view">
+            <field name="name">TCI Batch Form</field>
+            <field name="model">tci.batch</field>
+            <field name="arch" type="xml">
+                <form string="TCI Batch">
+                    <header>
+                        <button name="send_batch_report_by_email" type="object" string="Send by email" class="oe_highlight oe_view_mode_only"  states="posted"/>
+                        <button name="batch_validate" type="object" string="Validate" class="oe_highlight oe_view_mode_only"  states="draft"/>
+                        <button name="batch_submitted" type="object"
+                                string="Submit for Approval"
+                                class="oe_highlight oe_view_mode_only"
+                                attrs="{'invisible': [('approval_method', '!=', '2')]}"
+                        />
+                        <button name="action_batch_approve_fiori" type="object"
+                                string="Approved in FIORI"
+                                class="oe_highlight oe_view_mode_only"
+                                attrs="{'invisible': [('approval_method', '!=', '1')]}"
+                        />
+
+                    <button name="action_batch_approve" type="object" string="Approve"
+                            class="oe_highlight btn-success"
+                            attrs="{'invisible': [('current_user_approval_required', '=', False)]}"/>
+                    <button name="action_batch_approve_with_feedback" type="object" string="Approve with Feedback"
+                            class="btn-success"
+                            attrs="{'invisible': [('current_user_approval_required', '=', False)]}"/>
+                    <button name="action_batch_reject_with_feedback" type="object" string="Reject" class="btn-danger"
+                            attrs="{'invisible': [('current_user_approval_required', '=', False)]}"/>
+
+                        <field name="approval_method" invisible="1"/>
+                        <field name="current_user_approval_required" invisible="1"/>
+<!--                        <button name="batch_approved" type="object" string="Approve" class="oe_highlight oe_view_mode_only"  states="submitted" />-->
+<!--                        <button name="batch_reject" type="object" string="Reject" class="oe_view_mode_only"  states="submitted" />-->
+                        <button name="batch_posted" type="object" string="Post" class="oe_highlight oe_view_mode_only"  states="approved" />
+                        <!--
+                        <button name="button_create_batch_report" type="object" string="Print Batch Report" class="oe_highlight oe_view_mode_only"  states="approved"/>
+                        -->
+                        <button name="button_create_temp_batch_report" type="object" string="Update Temporary Batch Report" class="oe_view_mode_only"
+                                attrs="{'invisible': [('state','in', ['draft','approved','posted','submitted'])]}"/>
+                        <button name="batch_draft" type="object" string="Return to Draft" class="oe_view_mode_only"
+                                attrs="{'invisible': [('state','in', ['draft','posted'])]}"/>
+
+                        <field name="state" widget="statusbar" readonly="True"
+                               statusbar_visible="draft,validated,review,approved,posted"/>
+                    </header>
+
+                    <sheet string="TCI Batch">
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" class="oe_inline" placeholder="Batch-2021-xxxxx"/>
+                            </h1>
+                            <label for="description"/>
+                            <field name="description" placeholder="Enter the description of the batch"/>
+                        </div>
+                        <group>
+                            <group string="Details">
+                                <field name="partner_id"/>
+                                <field name="po_id"/>
+                            </group>
+                            <group string="External Reference">
+                                <field name="external_ref" attrs="{'required': [('state', 'in', ('approved','posted'))]}"/>
+                                <field name="external_ref_file_name" invisible="1"/>
+                                <field name="external_ref_file" widget="binary" filename="external_ref_file_name" attrs="{'required': [('state', 'in', ('posted'))]}"/>
+                            </group>
+                            <group>
+                            </group>
+                            <group string="Batch Report Files">
+                                <field name="batch_report_name" invisible="1"/>
+                                <field name="batch_report_document" filename="batch_report_name"
+                                       attrs="{'invisible': [('state','in', ['draft','submitted','validated'])]}"/>
+
+                                <field name="batch_report_document_temp" filename="batch_report_name"
+                                       attrs="{'invisible': [('state','in', ['approved','posted','rejected'])]}"/>
+
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="LEMs">
+                                <div class="oe_button_box" name="button_box_lems">
+                                </div>
+                                <group>
+                                    <field name="tci_ids" widget="many2many"
+                                           context="{
+                                           'default_state':'draft',
+                                           }">
+                                        <tree>
+                                            <field name="name"/>
+                                            <field name="reference"/>
+                                            <field name="po_id"/>
+                                            <field name="partner_id"/>
+                                            <field name="project_ids" widget="many2many_tags"/>
+                                            <field name="untaxed_amount" sum="Total Amount"/>
+                                            <field name="state"/>
+                                            <field name="batch_id" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="total_amount" invisible="1"/>
+                                </group>
+                            </page>
+                            <page string="Attachments">
+                                <div class="oe_button_box" name="button_box_attachment">
+                                </div>
+                                <field name="approval_report_ids" widget="many2many">
+                                    <!--
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="reference"/>
+                                        <field name="po_id"/>
+                                        <field name="partner_id"/>
+                                        <field name="project_ids" widget="many2many_tags"/>
+                                        <field name="untaxed_amount" sum="Total Amount"/>
+                                        <field name="state"/>
+                                        <field name="batch_id" invisible="1"/>
+                                    </tree>
+                                    -->
+                                </field>
+                            </page>
+                            <page string="Analytics">
+                                <div class="oe_button_box" name="button_box_analytics">
+                                </div>
+                                <field name="tci_batch_analytic_project_ids" widget="many2many">
+                                    <tree>
+                                        <field name="batch_id" invisible="1"/>
+                                        <field name="project_id"/>
+                                        <field name="analytic_project_id"/>
+                                        <field name="po_id"/>
+                                        <field name="partner_id"/>
+                                        <field name="po_internal_ref"/>
+                                        <field name="amount" sum="Total Amount"/>
+                                        <field name="currency_id" invisible="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Approvers" >
+                                <group>
+                                    <group string="Status">
+                                        <field name="mail_approval_state"/>
+                                        <field name="mail_approval_start_date"/>
+                                        <field name="mail_approval_end_date"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <field name="mail_approver_ids"
+                                           attrs="{'readonly':[('state', 'in', ('review','approved','posted','rejected'))]}"
+                                           context="{'default_res_id': active_id, 'default_res_model': 'tci.batch'}">
+                                        <tree editable="bottom">
+                                            <field name="sequence" widget="handle"/>
+                                            <field name="res_id" invisible="1"/>
+                                            <field name="res_model" invisible="1"/>
+                                            <field name="user_id"/>
+                                            <field name="approval_type"/>
+                                            <field name="state" readonly="0"/>
+                                            <field name="state_date"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+
+                            <page string="Other Info">
+                                <group string="Other Info">
+                                    <field name="create_uid"/>
+                                    <field name="create_date"/>
+                                </group>
+                            </page>
+
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_pc_tci_batch_act">
+            <field name="name">LEM Batch</field>
+            <field name="res_model">tci.batch</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_tci_batch_tree"/>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+            <field name="help" type="html">
+              <p>
+                No LEM Batch recorded yet.
+              </p>
+            </field>
+        </record>
+
+        <menuitem name="LEM Batches"
+                  id="menu_batch_pc_cc"
+                  parent="analytic_wbs.menu_pc_lems"
+                  groups="analytic_wbs.group_pc_user" sequence="30"/>
+        <menuitem name="All LEM Batches" action="action_pc_tci_batch_act" id="menu_pc_all_batch" parent="menu_batch_pc_cc" sequence="5"/>
+
+     </data>
+</odoo>

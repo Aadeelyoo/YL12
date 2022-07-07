@@ -1,0 +1,111 @@
+<odoo>
+	<template id="analytic_wbs_report_layout_header" name="analytic_wbs_report_layout_header">
+        <div class="header">
+            <div class="row">
+                <div class="col-3 mb4">
+                    <t t-if="company.logo_report">
+                        <img t-att-src="image_data_uri(company.logo_report)" style="max-height: 45px;"/>
+                    </t>
+                    <t t-else="">
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 45px;" alt="Logo"/>
+                    </t>
+                </div>
+                <div class="col-6 text-center" style="margin-top: 24px;">
+                    <b>
+                        Document Review Report
+                    </b>
+                </div>
+                <div class="col-2 text-right" style='font-size: 13px;'>
+                    <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/><br/>
+                    <span style="color:red;font-weight: bold;"><t t-if="o.name" t-esc="o.name"/></span>
+                </div>
+            </div>
+            <div t-if="company.logo or company.report_header" class="row zero_min_height">
+                <div class="col-12">
+                    <div style="border-bottom: 1px solid black;"/>
+                </div>
+            </div>
+        </div>
+	</template>
+
+	<template id="analytic_wbs_report_layout_footer" name="analytic_wbs_report_layout_footer">
+        <div class="footer o_standard_footer">
+            <div class="text-center" style="border-top: 1px solid black;">
+                <ul class="list-inline mb4">
+                    <li t-if="company.phone" class="list-inline-item">Phone: <span t-field="company.phone"/></li>
+                    <li t-if="company.email" class="list-inline-item">Email: <span t-field="company.email"/></li>
+                    <li t-if="company.website" class="list-inline-item">Web: <span t-field="company.website"/></li>
+                </ul>
+                <div t-if="report_type == 'pdf'" class="row text-muted">
+                    <div class="col-3 mb4">
+                        <li class="list-inline-item">By EvoSoft</li>
+                    </div>
+                    <div class="col-9 text-right">
+                        <li class="list-inline-item">Page: <span class="page"/> / <span class="topage"/></li>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+	</template>
+
+	<template id="analytic_wbs_report_layout_footer_2" name="analytic_wbs_report_layout_footer_2">
+        <div class="footer o_standard_footer">
+            <div class="text-center" style="border-top: 1px solid black;">
+                <div t-if="report_type == 'pdf'" class="row text-muted">
+                    <div class="col-3 mb4">
+                        <li class="list-inline-item">
+                            <img src="/analytic_wbs/static/src/img/logo_evosoft.png" style="max-height: 30px;" alt="EvoSoft"/>
+                        </li>
+                    </div>
+                    <div class="col-6">
+                        <!--
+                        <a t-attf-href="/tci/approval_report/#{o.id}">
+                            <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN13', o.barcode, 600, 100)" style="width:300px;height:50px"/>
+                        </a>
+                        -->
+                    </div>
+                    <div class="col-3 text-right">
+                        <li class="list-inline-item">Page: <span class="page"/> / <span class="topage"/></li>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+	</template>
+
+
+    <template id="analytic_wbs_report_layout">
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"/>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+        <div class="article">
+            <t t-call="analytic_wbs.analytic_wbs_report_layout_header"/>
+            <t t-raw="0"/>
+            <t t-call="analytic_wbs.analytic_wbs_report_layout_footer_2"/>
+        </div>
+    </template>
+
+    <template id="analytic_wbs_report_layout_name" name="analytic_wbs_report_layout_name">
+        <t t-call="web.html_container">  
+            <t t-foreach="docs" t-as="o">
+                <div class="header">
+                    <div class="row">
+                        <div class="col-3 mb4">
+                        </div>
+                        <div class="col-6 text-center" style="margin-top: 24px;">
+                        </div>
+                        <div class="col-2 text-right" style='font-size: 13px;'>
+                            <span style="color:red;font-weight: bold;"><t t-if="o.name" t-esc="o.name"/></span>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+
+</odoo>

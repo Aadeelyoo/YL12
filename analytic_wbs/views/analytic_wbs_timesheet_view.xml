@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+# **************** Timesheet Activities - Menus and Actions for menu ****************
+
+        <record id="view_account_analytic_wbs_line_tree" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.line.tree</field>
+            <field name="model">account.analytic.line</field>
+            <field name="arch" type="xml">
+                <tree editable="top" string="Timesheet Entries">
+                    <field name="date"/>
+                    <field name="user_id" required="1" options="{'no_open': True, 'no_create': True}"/>
+                    <field name="account_id" invisible="1"/>
+                    <field name="analytic_wbs_project_id" options="{'no_open': True, 'no_create': True}" required="1"/>
+                    <!--
+                    <field name="project_multiunit_id" options="{'no_open': True, 'no_create': True}"/>
+                    -->
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="unit_amount" sum="Mhr" string="Mhr"/>
+                    <field name="analytic_wbs_infocode_tags" widget="many2many_tags" options="{'no_create': True}"/>
+                    <field name="infocode"/>
+                    <field name="line_comment"/>
+                    <field name="name" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="is_timesheet" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_wbs_line_pivot" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.line.pivot</field>
+            <field name="model">account.analytic.line</field>
+            <field name="arch" type="xml">
+                <pivot string="Timesheet">
+                    <field name="date" type="col"/>
+                    <field name="account_id" type="col"/>
+                    <field name="analytic_wbs_project_id" tyoe="row"/>
+                </pivot>
+            </field>
+        </record>
+
+
+        <record id="view_account_analytic_wbs_line_search" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.line.search</field>
+            <field name="model">account.analytic.line</field>
+            <field name="arch" type="xml">
+                <search string="Timesheet Entries">
+                    <field name="date"/>
+                    <field name="user_id"/>
+                    <filter string="Today" domain="[('date','&lt;=',time.strftime('%Y-%m-%d 23:59:59')),('date','&gt;=',time.strftime('%Y-%m-%d 00:00:00'))]"/>
+                    <filter string="Yesterday"  name="Yesterday" separator="1"
+                        domain="[('date','=', ((context_today()+datetime.timedelta(days=-1)).strftime('%Y-%m-%d')))]"
+                        help="Yesterday" context="{'default_date':((context_today()+datetime.timedelta(days=-1)).strftime('%Y-%m-%d'))}"/>
+                    <filter string="2 Days Ago"  name="2dago" separator="1"
+                        domain="[('date','=', ((context_today()+datetime.timedelta(days=-2)).strftime('%Y-%m-%d')))]"
+                        help="2 Days Ago" context="{'default_date':((context_today()+datetime.timedelta(days=-2)).strftime('%Y-%m-%d'))}"/>
+                    <filter string="3 Days Ago"  name="3dago" separator="1"
+                        domain="[('date','=', ((context_today()+datetime.timedelta(days=-3)).strftime('%Y-%m-%d')))]"
+                        help="3 Days Ago" context="{'default_date':((context_today()+datetime.timedelta(days=-3)).strftime('%Y-%m-%d'))}"/>
+                    <filter string="4 Days Ago"  name="4dago" separator="1"
+                        domain="[('date','=', ((context_today()+datetime.timedelta(days=-4)).strftime('%Y-%m-%d')))]"
+                        help="4 Days Ago" context="{'default_date':((context_today()+datetime.timedelta(days=-4)).strftime('%Y-%m-%d'))}"/>
+                    <filter string="5 Days Ago"  name="5dago" separator="1"
+                        domain="[('date','=', ((context_today()+datetime.timedelta(days=-5)).strftime('%Y-%m-%d')))]"
+                        help="5 Days Ago" context="{'default_date':((context_today()+datetime.timedelta(days=-5)).strftime('%Y-%m-%d'))}"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Employee" domain="[]" context="{'group_by':'user_id'}"/>
+                        <filter string="wbs" domain="[]" context="{'group_by':'analytic_wbs_project_id'}"/>
+                        <filter string="Month" domain="[]" context="{'group_by':'date'}"/>
+                        <filter string="Info Code" domain="[]" context="{'group_by':'infocode'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_timesheet_activities" model="ir.actions.act_window">
+            <field name="name">Timesheet Activities</field>
+            <field name="res_model">account.analytic.line</field>
+            <field name="view_type">form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,pivot</field>
+            <field name="context">{'default_is_timesheet': 1}
+            </field>
+            <field name="search_view_id" ref="view_account_analytic_wbs_line_search"/>
+        </record>
+
+
+        <record id="action_timesheet_activities_tree" model="ir.actions.act_window.view">
+            <field name="name">Timesheet Activities</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_account_analytic_wbs_line_tree"/>
+            <field name="act_window_id" ref="action_timesheet_activities" />
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    No timesheet activities are recorded in your company.
+                </p>
+            </field>
+        </record>
+
+
+
+
+        <menuitem action="action_timesheet_activities"
+                  id="menu_action_timesheet_activities"
+                  parent="hr_attendance.menu_hr_time_tracking"
+                  sequence="5"/>
+
+        <delete model="ir.ui.menu" id="hr_timesheet.menu_hr_working_hours" />
+
+        # **************** wbs Acounts Related Views ****************
+
+
+        <record id="view_account_analytic_line_analytic_wbs_form" model="ir.ui.view">
+            <field name="name">account.analytic.line.analytic_wbs.form</field>
+            <field name="model">account.analytic.line</field>
+            <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='account_id']" position="after">
+                    <field name="analytic_wbs_project_id" options="{'no_open': True, 'no_create': True}" required="1"/>
+                    <field name="analytic_wbs_infocode_tags" widget="many2many_tags" options="{'no_create': True}"/>
+                    <field name="infocode"/>
+                </xpath>
+                <xpath expr="//group[@name='accounting']" position="after">
+                    <group name="other" string="Other">
+                        <!--
+                        <field name="project_multiunit_id"/>
+                        -->
+                        <field name="line_comment"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="view_hr_timesheet_sheet_form_project" model="ir.ui.view">
+            <field name="name">hr.timesheet.sheet.form_project</field>
+            <field name="model">hr_timesheet_sheet.sheet</field>
+            <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='timesheet_ids']" position="replace">
+                        <field context="{'employee_id': employee_id, 'user_id':user_id, 'default_user_id':user_id, 'timesheet_date_from': date_from, 'timesheet_date_to': date_to, 'default_is_timesheet' : 1}" name="timesheet_ids" nolabel="1">
+                            <tree editable="bottom" string="Timesheet Activities">
+                                <field name="date"/>
+                                <field name="account_id" options="{'no_open': True, 'no_create': True}" invisible="1"/>
+                                <field name="analytic_wbs_project_id" options="{'no_open': True, 'no_create': True}" required="1"/>
+                                <!--
+                                <field name="project_multiunit_id" options="{'no_open': True, 'no_create': True}"/>
+                                -->
+                                <field name="name" invisible="1"/>
+                                <field name="unit_amount" widget="float_time" string="Hours" sum="Hours"/>
+                                <field name="line_comment"/>
+                                <field name="analytic_wbs_infocode_tags" widget="many2many_tags" options="{'no_create': True}"/>
+                                <field name="infocode"/>
+                                <field name="user_id" required="1" invisible="1"/>
+                                <field name="is_timesheet" invisible="1"/>
+                            </tree>
+                            <form string="Timesheet Activities">
+                                <group>
+                                    <field name="date"/>
+                                    <field name="analytic_wbs_project_id" options="{'no_open': True, 'no_create': True}" required="1"/>
+                                    <!--
+                                    <field name="project_multiunit_id" options="{'no_open': True, 'no_create': True}"/>
+                                    -->
+                                    <field name="account_id" invisible="1"/>
+                                    <field name="name" invisible="1"/>
+                                    <field name="unit_amount" widget="float_time"/>
+                                    <field name="amount"/>
+                                    <field name="line_comment"/>
+                                    <field name="analytic_wbs_infocode_tags" widget="many2many_tags" options="{'no_create': True}"/>
+                                    <field name="infocode"/>
+                                    <field name="general_account_id"/>
+                                    <field name="user_id" required="1" invisible="1"/>
+                                    <field name="is_timesheet" invisible="1"/>
+                                </group>
+                            </form>
+                        </field>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="act_hr_timesheet_sheet_draft_timesheets" model="ir.actions.act_window">
+            <field name="name">Draft Timesheets</field>
+            <field name="res_model">hr_timesheet_sheet.sheet</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('state', '=', 'draft')]</field>
+            <field name="search_view_id" ref="hr_timesheet_sheet.view_hr_timesheet_sheet_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                new timesheet.
+              </p><p>
+                You must record timesheets every day and confirm at the end
+                of the week. Once the timesheet is confirmed, it should be
+                validated by a manager.
+              </p><p>
+                Timesheets can also be invoiced to customers, depending on the
+                configuration of each project's related contract.
+              </p>
+            </field>
+        </record>
+
+        <menuitem action="act_hr_timesheet_sheet_draft_timesheets" id="menu_act_hr_timesheet_sheet_draft_timesheets" parent="hr_attendance.menu_hr_time_tracking"
+             sequence="4"/>
+
+     </data>
+</openerp>

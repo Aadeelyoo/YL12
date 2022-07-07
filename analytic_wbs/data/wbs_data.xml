@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+          <!-- Resource: uom.uom.category -->
+        <record id="cat_cost_control" model="product.category">
+            <field name="parent_id" ref="product.product_category_all"/>
+            <field name="name">Cost Control</field>
+        </record>
+
+        <!-- Standard default product -->
+        <record id="product_product_cost_control" model="product.product">
+            <field name="name">Cost Control Default</field>
+            <field name="list_price">0.0</field>
+            <field name="standard_price">1.0</field>
+            <field name="type">service</field>
+            <field name="default_code">CC</field>
+            <field name="categ_id" ref="analytic_wbs.cat_cost_control"/>
+            <field name="purchase_ok" eval="True"/>
+        </record>
+
+          <!-- TCI Tags -->
+        <record id="tci_tag_duplicate" model="tci.tag">
+            <field name="color">1</field>
+            <field name="name">Potential Duplicate</field>
+        </record>
+
+    </data>
+</openerp>

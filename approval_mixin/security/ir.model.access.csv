@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mail_approvers_type,access_mail_approvers_type,model_mail_approvers_type,base.group_user,1,1,1,1
+access_mail_default_approvers,access_mail_default_approvers,model_mail_default_approvers,base.group_user,1,1,1,1
+access_mail_approvers,access_mail_approvers,model_mail_approvers,base.group_user,1,1,1,1
+access_adobe_agreement,access.adobe.agreement,model_adobe_agreement,,1,1,1,1
+access_adobe_agreement_events,access.adobe.agreement.events,model_adobe_agreement_events,,1,1,1,1

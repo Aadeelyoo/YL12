@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+            <!-- Sequences for Sow Transaction Number -->
+
+    <record id="seq_sow_transaction_num" model="ir.sequence">
+        <field name="name">Sow Transaction Number</field>
+        <field name="code">sow.transaction.number</field>
+        <field name="prefix">BDG%(y)s-</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="view_wbs_sow_type_tree" model="ir.ui.view">
+        <field name="name">wbs.sow_type.tree</field>
+        <field name="model">wbs.sow_type</field>
+        <field name="arch" type="xml">
+            <tree string="Sow Type">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="description"/>
+                <field name="order"/>
+                <field name="is_active"/>
+            </tree>
+        </field>
+    </record>
+
+    # **************** wbs Sow Transaction Lines ****************
+
+    <record id="view_sow_line_search_form" model="ir.ui.view">
+        <field name="name">sow.detail.search.form</field>
+        <field name="model">wbs.sow_line</field>
+        <field name="arch" type="xml">
+            <search string="Sow Detail">
+                <field name="account_project_id"/>
+                <field name="name" string="Claim"/>
+                <field name="line_id"/>
+                <field name="partner_id" string="Companie"/>
+                <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
+                <filter string="Active wbs" name="active_wbs" domain="[('wbs_state', '=', 'active')]"/>
+                <filter string="Active Project wbs" name="active_project_wbs" domain="[('project_wbs_state', '=', 'active')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="wbs" name="wbs" context="{'group_by':'account_project_id'}"/>
+                    <filter string="Sow" name="sow" context="{'group_by':'line_id'}"/>
+                    <filter string="Project" name="project" context="{'group_by':'project_id'}"/>
+                    <filter string="wbs State" name="wbs_state" context="{'group_by':'wbs_state'}"/>
+                    <filter string="Project wbs State" name="project_wbs_state" context="{'group_by':'project_wbs_state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <!--
+    <record id="view_wbs_sow_line_tree" model="ir.ui.view">
+        <field name="name">sow.transaction.detail.tree</field>
+        <field name="model">wbs.sow_line</field>
+        <field name="arch" type="xml">
+            <tree string="Sow wbs Lines">
+                <field name="date"/>
+                <field name="name"/>
+
+                <field name="account_project_id" options="{'no_create': True, 'no_open': True}" onchange="onchange_account_project(account_project_id)"/>
+                <field name="line_id"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="amount" sum="Total"/>
+                <field name="mhr_amount" sum="Man Hours"/>
+                <field name="qty_amount" sum="Quantity"/>
+
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wbs_sow_line_form" model="ir.ui.view">
+        <field name="name">sow.transaction.detail.form</field>
+        <field name="model">wbs.sow_line</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <form string="Sow Detail">
+                <sheet string="Sow Detail">
+                    <group string="Sow Line Detail">
+                        <group string="Line info">
+                            <field name="date"/>
+                            <field name="line_id"/>
+                            <field name="account_project_id" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="name"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Sow Claim">
+                            <field name="amount"/>
+                            <field name="qty_amount"/>
+                            <field name="mhr_amount"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_wbs_sow_line_graph" model="ir.ui.view">
+        <field name="name">wbs.sow_line.graph</field>
+        <field name="model">wbs.sow_line</field>
+        <field name="arch" type="xml">
+            <graph string="wbs Entries">
+                <field name="account_project_id" type="row"/>
+                <field name="qty_amount" type="measure"/>
+                <field name="amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_wbs_sow_line_pivot" model="ir.ui.view">
+        <field name="name">wbs.sow_line.pivot</field>
+        <field name="model">wbs.sow_line</field>
+        <field name="arch" type="xml">
+            <pivot string="wbs Entries" >
+                <field name="account_project_id" type="row"/>
+                <field name="qty_amount" type="measure"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    -->
+
+            # **************** Project Control - Sow Transactions Views and Actions ****************
+
+
+
+    <record id="act_project_project_2_project_sow_all" model="ir.actions.act_window">
+        <field name="name">Sow</field>
+        <field name="res_model">wbs.sow</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <!--
+        <field name="context">{
+            'search_default_project_id': [active_id],
+            'default_project_id': active_id,
+        }</field>
+        -->
+        <field name="search_view_id" ref="view_sow_search_form"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Here, you can create sow
+            </p>
+            <p>
+                Once your wbs and WBS is created, you can create Sow to modify
+                sow quantities, sow mhr and sow amount.
+            </p>
+            <p>
+                All sow created will have to go thru the approval process before to be
+                incorporated into the approved sow and to show on sow reports.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_wbs_sow_tree" model="ir.ui.view">
+        <field name="name">wbs.sow.tree</field>
+        <field name="model">wbs.sow</field>
+        <field name="arch" type="xml">
+            <tree string="Line">
+                <field name="date"/>
+                <!--
+                <field name="project_id"/>
+                -->
+                <field name="name"/>
+                <field name="description"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="transaction_amt_balance" sum="Amount"/>
+                <field name="transaction_mhr_balance" sum="Man Hours"/>
+                <field name="state"/>
+                <field name="partner_id"/>
+                <field name="parent_id" invisible="0"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wbs_sow_pivot" model="ir.ui.view">
+        <field name="name">wbs.sow.pivot</field>
+        <field name="model">wbs.sow</field>
+        <field name="arch" type="xml">
+            <pivot string="SOW Lines" >
+                <field name="date" type="row"/>
+                <field name="name" type="row"/>
+                <field name="state" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!--
+    <record id="act_project_sow_detail_all" model="ir.actions.act_window">
+        <field name="name">sow detail</field>
+        <field name="res_model">wbs.sow_line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{
+            'search_default_line_id': [active_id],
+            'default_line_id': active_id,
+        }</field>
+        <field name="search_view_id" ref="view_sow_line_search_form"/>
+    </record>
+    -->
+
+
+    <record model="ir.actions.act_window" id="wbs_sow_line_action">
+        <field name="name">Sow Entries</field>
+        <field name="res_model">wbs.sow_line</field>
+        <field name="view_mode">tree,form,graph,pivot</field>
+        <field name="view_id" ref="view_wbs_sow_line_tree"/>
+        <field name="view_type">form</field>
+        <field name="help" type="html">
+          <p>
+            No sow entries recorded yet.
+          </p>
+        </field>
+    </record>
+    -->
+    <record id="wbs_sow_items_action" model="ir.actions.act_window">
+        <field name="name">Sow</field>
+        <field name="res_model">wbs.sow</field>
+        <field name="view_type">form</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+</odoo>

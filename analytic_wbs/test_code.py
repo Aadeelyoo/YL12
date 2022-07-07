@@ -1,0 +1,1 @@
+self.env['res.config.settings'].update_map_pos()

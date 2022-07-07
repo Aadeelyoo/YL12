@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+acl_tci_batch_group_tci_user,tci.batch.group_tci_user,model_tci_batch,analytic_wbs.group_tci_user,1,0,0,0
+acl_tci_batch_group_tci_clerk,tci.batch.group_tci_clerk,model_tci_batch,analytic_wbs.group_tci_clerk,1,1,1,1
+acl_tci_batch_type_group_tci_user,tci.batch_type.group_tci_user,model_tci_batch_type,analytic_wbs.group_tci_user,1,0,0,0
+acl_tci_batch_type_group_tci_clerk,tci.batch_type.group_tci_clerk,model_tci_batch_type,analytic_wbs.group_tci_clerk,1,1,1,1
+acl_tci_batch_analytic_project_sql_group_user,tci_batch_analytic_project_sql.group_user,model_tci_batch_analytic_project_sql,base.group_user,1,1,1,1

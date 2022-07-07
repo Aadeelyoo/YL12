@@ -1,0 +1,68 @@
+<odoo>
+
+    <record id="dashboard_email_tree" model="ir.ui.view">
+        <field name="name">dashboard.email.tree</field>
+        <field name="model">is.dashboard.email</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_dashboard_widget_kanban_inherit_dashboard_widgets_emails" model="ir.ui.view">
+        <field name="name">view_dashboard_widget_kanban_inherit_dashboard_widgets_emails</field>
+        <field name="model">is.dashboard.widget</field>
+        <field name="inherit_id" ref="dashboard_widgets.dashboard_kanban_view"/>
+        <field name="mode">primary</field>
+        <field name="priority">500</field>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('o_dropdown_kanban')]" position="before">
+                <a t-if="!read_only_mode" type="delete" class="fa fa-times pull-right"/>
+            </xpath>
+            <xpath expr="//div[hasclass('o_dropdown_kanban')]" position="replace"/>
+        </field>
+    </record>
+
+    <record id="dashboard_email_form" model="ir.ui.view">
+        <field name="name">dashboard.email.form</field>
+        <field name="model">is.dashboard.email</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button type="object" name="action_send" string="Send Now"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box"/>
+
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                    <group string="Content">
+                        <field name="dashboard_ids" mode="kanban" nolabel="1" context="{'default_project_id': active_id, 'kanban_view_ref': 'dashboard_widgets.view_dashboard_widget_kanban_inherit_dashboard_widgets_emails'}"/>
+                    </group>
+                    <group name="preview" string="Preview">
+                        <field name="preview" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_dashboard_email" model="ir.actions.act_window">
+        <field name="name">Dashboard Emails</field>
+        <field name="res_model">is.dashboard.email</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click create a new dashboard email.
+            </p>
+        </field>
+    </record>
+
+<!--    <menuitem id="menu_dashboard_email" parent="menu_dashboard" name="Dashboard Emails" action="action_dashboard_email" sequence="20"/>-->
+</odoo>

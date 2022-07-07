@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-extend="PivotView.buttons">
+        <t t-jquery='div.btn-group:last' t-operation='after'>
+            <span>
+                <button class="btn btn-primary o_pivot_button_add" id="add_btn" type="button">
+                    Add a Line
+                </button>
+            </span>
+        </t>
+    </t>
+</templates>

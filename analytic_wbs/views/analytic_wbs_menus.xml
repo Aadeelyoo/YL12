@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.actions.act_window" id="account_analytic_wbs_project_action_entries">
+            <field name="name">Projects Analytic Accounts</field>
+            <field name="res_model">account.analytic_wbs.project</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="limit">250</field>
+            <field name="view_id" ref="view_account_analytic_wbs_project_tree"/>
+            <field name="view_type">form</field>
+            <field name="domain">[
+                ('zero_balance', '=', False),
+                ]
+            </field>
+            <field name="context">{
+                'search_default_active': 1,
+                }
+            </field>
+            <field name="help" type="html">
+              <p>
+                No activity yet.
+              </p><p>
+                Add any control accounts to projects to be able to use them
+                inside your projects.
+              </p>
+            </field>
+        </record>
+
+        <record id="action_analytic_wbs_account_form" model="ir.actions.act_window">
+            <field name="name">Chart of Company wbs</field>
+            <field name="res_model">account.analytic_wbs.account</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_account_analytic_wbs_account_search"/>
+            <field name="context">{'search_default_active':1}</field>
+            <field name="view_id" ref="view_account_analytic_wbs_account_list"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add an analytic_wbs account.
+              </p>
+            </field>
+        </record>
+
+        <record id="action_account_analytic_wbs_account_form" model="ir.actions.act_window">
+            <field name="name">Company wbs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.analytic_wbs.account</field>
+            <field name="search_view_id" ref="view_account_analytic_wbs_account_search"/>
+            <field name="context">{'search_default_active':1}</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Project Cost Control Menu Configuration -->
+
+        <record id="action_analytic_wbs_line_transaction_type_form" model="ir.actions.act_window">
+            <field name="name">Progress Transaction Type</field>
+            <field name="res_model">account.analytic_wbs.progress_transaction_type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_account_analytic_wbs_progress_transaction_type_tree"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a a line transaction type.
+              </p>
+            </field>
+        </record>
+
+        <record id="action_analytic_wbs_infocode_form" model="ir.actions.act_window">
+            <field name="name">Infocode Tags</field>
+            <field name="res_model">account.analytic_wbs.infocode_tag</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_account_analytic_wbs_infocode_tag_tree"/>
+            <field name="help" type="html">
+              <p>
+                Click to add a wbs Information Code.
+              </p>
+            </field>
+        </record>
+
+
+        <!-- Top menu item -->
+        <!--
+        <menuitem name="Project Control"
+            id="base.menu_main_pc"
+            groups="analytic.group_analytic_accounting"
+            icon="fa-calendar"
+            web_icon="project,static/description/icon.png"
+            sequence="55"/>
+        -->
+
+        <menuitem id="base.menu_main_pc" name="Project Control"
+	        web_icon="analytic_wbs,static/description/icon.png"
+            icon="fa-calendar"
+            sequence="55"
+	        groups="analytic_wbs.group_pc_user" />
+
+
+        <!-- Main Menus -->
+        <menuitem id="menu_pc_dashboard" name="Project Dashboards" parent="base.menu_main_pc"
+                  groups="analytic_wbs.group_pc_user" sequence="1" web_icon="solevo_eng,static/description/icon.png"/>
+
+        <menuitem action="action_project_control_project" id="menu_project_control_project_id" name="Project List"
+                  parent="menu_pc_dashboard" sequence="10"/>
+
+        <menuitem id="menu_pc_projects" name="Projects" parent="base.menu_main_pc" groups="analytic_wbs.group_pc_user" sequence="20"/>
+
+        <menuitem name="Commitments"
+                  id="menu_pc_comm"
+                  parent="base.menu_main_pc"
+                  groups="analytic_wbs.group_pc_user" sequence="21"/>
+        <menuitem action="action_pc_tci_act" id="menu_pc_all_tci_act" name="All Actuals" parent="menu_pc_comm" sequence="1"/>
+        <menuitem action="action_pc_tci_open_commit" id="menu_pc_all_tci_open_commit" name="All Open Commitments" parent="menu_pc_comm" sequence="4"/>
+        <menuitem action="action_pc_tci_all_commit" id="menu_pc_all_tci_all_commit" name="All Commited Cost" parent="menu_pc_comm" sequence="10"/>
+        <menuitem name="Unassigned Actuals"
+                  id="menu_unassigned_pc_cc_act"
+                  parent="menu_pc_comm" groups="analytic_wbs.group_pc_user" sequence="15"/>
+        <menuitem action="action_unassigned_pc_tci_act" id="menu_pc_unassigned_tci_act" name="All Unassigned Actuals" parent="menu_unassigned_pc_cc_act" sequence="10"/>
+        <menuitem name="Manual Accruals"
+                  id="menu_pc_cc_maccr"
+                  parent="menu_pc_comm" groups="analytic_wbs.group_pc_user" sequence="20"/>
+        <menuitem action="action_pc_tci_maccr" id="menu_pc_tci_maccr" name="All Manual Accruals" parent="menu_pc_cc_maccr" sequence="10"/>
+        <menuitem name="Actuals Line Details"
+                  id="menu_pc_cc_act_line"
+                  parent="menu_pc_comm" groups="analytic_wbs.group_pc_user" sequence="25"/>
+        <menuitem action="action_pc_tci_line" id="menu_pc_tci_act_line" name="All TCI Lines" parent="menu_pc_cc_act_line" sequence="10"/>
+
+        <menuitem name="LEMs"
+                  id="menu_pc_lems"
+                  parent="base.menu_main_pc"
+                  groups="analytic_wbs.group_pc_user" sequence="23"/>
+        <menuitem name="All LEMs"
+                  action="action_pc_tci_wt"
+                  id="menu_tci_tci_wt"
+                  parent="menu_pc_lems" sequence="5"/>
+        <menuitem name="My LEMs" action="action_my_pc_tci_wt" id="menu_pc_my_tci_wt" parent="menu_pc_lems" sequence="10"/>
+
+        <menuitem name="Outstanding LEMs"
+                  id="menu_out_pc_cc_lem"
+                  parent="menu_pc_lems"
+                  groups="analytic_wbs.group_pc_user" sequence="20"/>
+        <menuitem name="All Out. LEMs" action="action_out_pc_tci_wt" id="menu_pc_out_all_tci_wt" parent="menu_out_pc_cc_lem" sequence="5"/>
+        <menuitem name="To Review" action="action_to_review_pc_tci_wt" id="menu_pc_to_review_tci_wt" parent="menu_out_pc_cc_lem" sequence="10"/>
+        <menuitem name="To return to Vendor" action="action_to_vendor_pc_tci_wt" id="menu_pc_to_vendor_tci_wt" parent="menu_out_pc_cc_lem" sequence="15"/>
+        <menuitem name="To invoice" action="action_to_invoice_pc_tci_wt" id="menu_pc_to_invoice_tci_wt" parent="menu_out_pc_cc_lem" sequence="20"/>
+
+        <!--
+        <menuitem name="By "
+                  id="menu_my_pc_cc_lem" parent="menu_pc_lems" groups="analytic_wbs.group_pc_user" sequence="10"/>
+
+        <menuitem name="My Assigned LEMs"
+          id="menu_my_pc_cc_lem" parent="menu_pc_lems" groups="analytic_wbs.group_pc_user" sequence="20"/>
+
+        <menuitem name="My Assigned LEMs"
+          id="menu_my_pc_cc_lem" parent="menu_pc_lems" groups="analytic_wbs.group_pc_user" sequence="30"/>
+
+        <menuitem name="My Assigned LEMs"
+          id="menu_my_pc_cc_lem" parent="menu_pc_lems" groups="analytic_wbs.group_pc_user" sequence="40"/>
+        -->
+        <menuitem name="Change Requests"
+                  id="menu_pc_ext_cr"
+                  parent="base.menu_main_pc"
+                  groups="analytic_wbs.group_pc_user" sequence="24"/>
+        <menuitem name="All Change Requests" action="action_pc_tci_cr" id="menu_tci_tci_cr" parent="menu_pc_ext_cr" groups="analytic_wbs.group_tci_clerk" sequence="5"/>
+        <menuitem name="My Change Requests" action="action_my_pc_tci_cr" id="menu_pc_my_tci_cr" parent="menu_pc_ext_cr" sequence="10"/>
+        <menuitem name="Outstanding Change Requests"
+                  id="menu_out_pc_cc_cr"
+                  parent="menu_pc_ext_cr"
+                  groups="analytic_wbs.group_pc_user" sequence="20"/>
+        <menuitem name="All Out. Change Requests" action="action_out_pc_tci_cr" id="menu_pc_out_all_tci_cr" parent="menu_out_pc_cc_cr" sequence="5"/>
+        <menuitem name="To Review" action="action_to_review_pc_tci_cr" id="menu_pc_to_review_tci_cr" parent="menu_out_pc_cc_cr" sequence="10"/>
+        <menuitem name="To Actualize" action="action_to_actualize_pc_tci_cr" id="menu_pc_to_vendor_tci_cr" parent="menu_out_pc_cc_cr" sequence="15"/>
+        <menuitem name="To Invoice" action="action_to_match_to_invoice_pc_tci_cr" id="menu_pc_to_invoice_tci_cr" parent="menu_out_pc_cc_cr" sequence="20"/>
+
+
+        <menuitem name="Invoices"
+                  id="menu_pc_ext_inv"
+                  parent="base.menu_main_pc"
+                  groups="analytic_wbs.group_pc_user" sequence="24"/>
+        <menuitem name="All External Invoices" action="action_pc_tci_inv" id="menu_tci_tci_inv" parent="menu_pc_ext_inv" groups="analytic_wbs.group_tci_clerk" sequence="5"/>
+        <menuitem name="My Invoices" action="action_my_pc_tci_inv" id="menu_pc_my_tci_inv" parent="menu_pc_ext_inv" sequence="10"/>
+        <menuitem name="Outstanding Invoices"
+                  id="menu_out_pc_cc_inv"
+                  parent="menu_pc_ext_inv"
+                  groups="analytic_wbs.group_pc_user" sequence="20"/>
+        <menuitem name="All Out. Invoices" action="action_out_pc_tci_inv" id="menu_pc_out_all_tci_inv" parent="menu_out_pc_cc_inv" sequence="5"/>
+        <menuitem name="To Review" action="action_to_review_pc_tci_inv" id="menu_pc_to_review_tci_inv" parent="menu_out_pc_cc_inv" sequence="10"/>
+        <menuitem name="To Actualize" action="action_to_actualize_pc_tci_inv" id="menu_pc_to_vendor_tci_inv" parent="menu_out_pc_cc_inv" sequence="15"/>
+        <menuitem name="To Match to LEMs" action="action_to_match_to_lem_pc_tci_inv" id="menu_pc_to_invoice_tci_inv" parent="menu_out_pc_cc_inv" sequence="20"/>
+
+
+        <menuitem id="menu_pc_cost_control" name="Cost Control" parent="base.menu_main_pc" groups="analytic_wbs.group_pc_user" sequence="30"/>
+
+        <menuitem id="menu_pc_cc_purchassing" name="Purchassing" parent="menu_pc_cost_control" groups="analytic_wbs.group_pc_user" sequence="5"/>
+        <menuitem action="action_pc_purchase" id="menu_purchase_po" name="Purchase Orders" parent="menu_pc_cc_purchassing" sequence="5"/>
+
+        <menuitem id="menu_my_pc_cc_tci" name="My Assigned Docs" parent="menu_pc_cost_control" groups="analytic_wbs.group_pc_user" sequence="1"/>
+        <!--
+        <menuitem action="action_my_pc_tci_wt" id="menu_my_tci_tci_wt" name="My LEMs" parent="menu_my_pc_cc_tci" sequence="10"/>
+        <menuitem action="action_my_pc_tci_cr" id="menu_my_tci_tci_cr" name="My Change Requests" parent="menu_my_pc_cc_tci" sequence="15"/>
+        <menuitem action="action_my_pc_tci_inv" id="menu_my_tci_tci_inv" name="My External Invoices" parent="menu_my_pc_cc_tci" sequence="20"/>
+        -->
+
+        <menuitem id="menu_pc_cc_tci" name="Cost Documents" parent="menu_pc_cost_control" groups="analytic_wbs.group_pc_user" sequence="11"/>
+        <menuitem action="action_pc_tci" id="menu_tci_tci" name="All Documents" parent="menu_pc_cc_tci" groups="analytic_wbs.group_tci_clerk" sequence="5"/>
+
+        <!--
+        <menuitem id="menu_pc_cc_tci_lines" name="Line Details" parent="menu_pc_cost_control" groups="analytic_wbs.group_pc_user" sequence="15"/>
+        <menuitem action="action_pc_tci_line" id="menu_tci_tci_line" name="All Details" parent="menu_pc_cc_tci_lines" groups="analytic_wbs.group_tci_clerk" sequence="5"/>
+        -->
+
+        <!-- Project Control Menu -->
+        <menuitem id="menu_pc_project_control" name="Project Control" parent="base.menu_main_pc" groups="analytic_wbs.group_pc_clerk" sequence="40"/>
+
+        <menuitem id="menu_pc_pc_sow" name="SOW" parent="menu_pc_project_control" sequence="10"/>
+        <menuitem action="wbs_sow_action" id="menu_pc_pc_sow_item" name="Scope of Work" parent="menu_pc_pc_sow" sequence="3"/>
+
+        <menuitem action="account_analytic_wbs_forecast_transaction_action" id="menu_pc_pc_sow_lines" name="SOW Transaction Lines" parent="menu_pc_pc_sow" sequence="16"/>
+
+        <menuitem id="menu_pc_pc_budget" name="Budget" parent="menu_pc_project_control" sequence="20"/>
+        <menuitem action="account_analytic_wbs_budget_transaction_action" id="menu_projects_budget_transaction" name="Bdg. Transactions" parent="menu_pc_pc_budget" sequence="1"/>
+        <menuitem action="account_analytic_wbs_budget_line_action" id="menu_projects_budget_line_entries" name="Bdg. Transaction Lines" parent="menu_pc_pc_budget" sequence="5"/>
+
+        <menuitem id="menu_pc_pc_progress" name="Progress" parent="menu_pc_project_control" sequence="30"/>
+        <!--
+        <menuitem action="account_analytic_wbs_progress_transaction_action" id="menu_projects_progress_transaction" name="Bdg. Transactions" parent="menu_pc_pc_progress" sequence="1"/>
+        <menuitem action="account_analytic_wbs_progress_line_action" id="menu_projects_progress_line_entries" name="Bdg. Transaction Lines" parent="menu_pc_pc_progress" sequence="5"/>
+        -->
+
+        <menuitem id="menu_pc_pc_forecast" name="Forecast" parent="menu_pc_project_control" sequence="40"/>
+        <menuitem action="account_analytic_wbs_forecast_transaction_action" id="menu_projects_forecast_transaction" name="Forecast Transactions" parent="menu_pc_pc_forecast" sequence="1"/>
+        <menuitem action="account_analytic_wbs_forecast_line_action" id="menu_projects_forecast_line_entries" name="Forecast Transaction Lines" parent="menu_pc_pc_forecast" sequence="5"/>
+
+
+        <menuitem id="menu_pc_reports" name="Reports" parent="base.menu_main_pc" sequence="50"/>
+        <menuitem id="menu_pc_schedule" name="Schedule" parent="base.menu_main_pc" sequence="60"/>
+
+        <menuitem id="menu_cc_configuration" name="Configuration" parent="base.menu_main_pc" groups="analytic_wbs.group_tci_clerk" sequence="90"/>
+
+        <menuitem id="menu_cc_config_wbs" name="wbs" parent="menu_cc_configuration" groups="analytic_wbs.group_pc_superuser" sequence="1"/>
+        <menuitem action="action_account_analytic_wbs_account_form" id="menu_projects_analytic_wbs" name="Company wbs" parent="menu_cc_config_wbs" sequence="10"/>
+        <menuitem action="action_analytic_wbs_infocode_form" id="menu_wbs_infocodes" name="wbs Infocodes" parent="menu_cc_config_wbs" sequence="30"/>
+        <menuitem action="account_analytic_wbs_project_action_entries" id="menu_projects_analytic_wbs_project_entries" name="Projects wbs" parent="menu_cc_config_wbs" sequence="20"/>
+
+        <menuitem id="menu_cc_config_coa" name="coa" parent="menu_cc_configuration" groups="analytic_wbs.group_tci_clerk" sequence="5"/>
+        <menuitem action="action_tci_control_account" id="menu_projects_analytic_coa" name="Control Accounts" parent="menu_cc_config_coa" sequence="10"/>
+        <!-- Data Export Menus -->
+
+        <menuitem id="menu_pc_data_export" name="Data Export" parent="base.menu_main_pc" groups="analytic_wbs.group_pc_manager" sequence="85"/>
+
+        <menuitem id="menu_pc_de_tci" name="Project Control Docs" parent="menu_pc_data_export" groups="analytic_wbs.group_pc_manager" sequence="5"/>
+        <menuitem action="tci_analytic_project_action" id="menu_tci_account_assignation" name="All WBS Assignation" parent="menu_pc_de_tci" sequence="5"/>
+        <menuitem action="tci_analytic_project_export_action" id="menu_tci_account_assignation_outstanding" name="Outstanding WBS Assignation" parent="menu_pc_de_tci" sequence="10"/>
+
+        <!--
+        <menuitem action="action_analytic_wbs_line_transaction_status_form" id="menu_project_control_config_line_transaction_status" name="Claim Transaction Status" parent="menu_cc_configuration" sequence="40"/>
+        -->
+
+        <!-- Tci Template Menu -->
+        <menuitem id="menu_config_tci_template" 
+            name="TCI" 
+            parent="menu_cc_configuration"  
+            groups="analytic_wbs.group_pc_clerk"
+            sequence="2" 
+            />
+        <menuitem id="menu_tci_template"
+            name=" Template" 
+            action="purchase_tci_template_action"  
+            parent="menu_config_tci_template" 
+            groups="analytic_wbs.group_pc_clerk" 
+            sequence="20"/>
+
+     </data>
+</odoo>

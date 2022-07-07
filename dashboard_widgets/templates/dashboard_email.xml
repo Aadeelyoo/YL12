@@ -1,0 +1,13 @@
+<odoo>
+    <template id="dashboard_email">
+        <t t-set="print" t-value="True"/>
+        <h3 t-esc="dashboard.name"/>
+        <div>
+            <t t-foreach="dashboard.dashboard_ids" t-as="record">
+                <div>
+                    <t t-call="dashboard_widgets.dashboard_widget"/>
+                </div>
+            </t>
+        </div>
+    </template>
+</odoo>

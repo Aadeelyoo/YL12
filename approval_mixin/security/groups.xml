@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Create the configuration menu for user group selection -->
+    <record model="ir.module.category" id="doc_approval_mixin">
+        <field name="name">Approval Mixin</field>
+        <field name="description">User access for the Document Approval Mixin module</field>
+        <field name="sequence">6</field>
+    </record>
+
+    <record id="group_doc_approval_mixin_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="category_id" ref="approval_mixin.doc_approval_mixin"/>
+    </record>
+
+    <record id="group_doc_approval_mixin_approver" model="res.groups">
+        <field name="name">Approver</field>
+        <field name="implied_ids" eval="[(4, ref('approval_mixin.group_doc_approval_mixin_user'))]"/>
+        <field name="category_id" ref="approval_mixin.doc_approval_mixin"/>
+    </record>
+
+    <record id="group_doc_approval_mixin_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="implied_ids" eval="[(4, ref('approval_mixin.group_doc_approval_mixin_approver'))]"/>
+        <field name="category_id" ref="approval_mixin.doc_approval_mixin"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        # **************** Project Control - Work Ticket / LEMs Views and Actions ****************
+
+        <record id="view_wttemplate_search_form" model="ir.ui.view">
+            <field name="name">purchase.wttemplate.search.form</field>
+            <field name="model">purchase.wttemplate</field>
+            <field name="arch" type="xml">
+                <search string="LEMs">
+                    <field name="name"/>
+                    <field name="po_id"/>
+                    <field name="user_id"/>
+                    <!--<filter string="My Transactions" domain="[('user_id','=',uid)]"/>-->
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Purchase Order" name="po" context="{'group_by':'po_id'}"/>
+                        <filter string="Created by" name="User" context="{'group_by':'user_id'}"/>
+                        <!--<filter string="Company" context="{'group_by':'company_id'}"/>-->
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="act_purchase_wttemplate_all" model="ir.actions.act_window">
+            <field name="name">LEMs</field>
+            <field name="res_model">purchase.wttemplate</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="context">{
+                'search_default_active': 1,
+            }</field>
+            <field name="search_view_id" ref="view_wttemplate_search_form"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create LEMs Template
+                </p>
+                <p>
+                    Once your Purchase Order is created, you can create LEMs and assign
+                    each line item to a wbs.
+                </p>
+                <p>
+                    All LEMs created will have to go thru the approval process before to be
+                    incorporated into an invoice.
+                </p>
+            </field>
+        </record>
+
+        <record id="view_purchase_wttemplate_tree" model="ir.ui.view">
+            <field name="name">purchase.wttemplate.tree</field>
+            <field name="model">purchase.wttemplate</field>
+            <field name="arch" type="xml">
+                <tree string="LEM">
+                    <field name="name"/>
+                    <field name="po_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="create_date" readonly="True"/>
+                    <field name="create_uid" readonly="True"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_purchase_wttemplate_form" model="ir.ui.view">
+            <field name="name">purchase.wttemplate.form</field>
+            <field name="model">purchase.wttemplate</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <form string="LEM Template">
+                    <sheet string="LEM Template">
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" class="oe_inline" placeholder="Template name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="po_id" options="{'no_create': True, 'no_open': True}" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="active"/>
+                                <field name="default_template"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="wttemplatedetails" string="Details">
+                                <group name="wttemplatedetails_group_center">
+                                    <field name="wttemplate_line_ids" nolabel="1" context="{'default_wttemplate_id': active_id}">
+                                        <tree create="true" delete="true" string="LEM Details" editable="1">
+                                            <field name="po_id" invisible="1"/>
+                                            <field name="wttemplate_id" invisible="True"/>
+                                            <field name="account_project_id" options="{'no_create': True}"/>
+                                            <field name="description"/>
+                                            <field name="qty"/>
+                                            <field name="uom" options="{'no_create': True}"/>
+                                            <field name="unit_rate"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="purchase_wttemplate_action">
+            <field name="name">Budget Transactions</field>
+            <field name="res_model">purchase.wttemplate</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="view_id" ref="view_purchase_wttemplate_tree"/>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+              <p>
+                No budget transactions recorded yet.
+              </p>
+            </field>
+        </record>
+
+     </data>
+</openerp>

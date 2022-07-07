@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="message_notification_email_inherit" inherit_id="mail.message_notification_email">
+        <xpath expr="//div/p" position="replace">
+
+        </xpath>
+    </template>
+</odoo>
+

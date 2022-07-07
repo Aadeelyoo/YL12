@@ -1,0 +1,16 @@
+<!-- <?xml version="1.0" encoding="utf-8"?> -->
+<odoo>
+    <data>
+        <!-- Report Action -->
+        <report
+            id="tci_batch_report"
+            model="tci.batch"
+            name="analytic_wbs_batch.tci_batch_lem_report_id"
+            file="analytic_wbs_batch.tci_batch_lem_report_id"
+            report_type="qweb-html"
+            string="Batch Cover Sheet"
+            menu="True"
+            paperformat="evosoft_report_template.paperformat_us_letter_sh"/>
+
+    </data>
+</odoo>

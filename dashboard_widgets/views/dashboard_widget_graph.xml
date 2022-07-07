@@ -1,0 +1,116 @@
+<odoo>
+    <record id="view_is_dashboard_form_graph" model="ir.ui.view">
+        <field name="name">view_is_dashboard_form_graph</field>
+        <field name="model">is.dashboard.widget</field>
+        <field name="inherit_id" ref="view_is_dashboard_form"/>
+        <field name="arch" type="xml">
+            <field name="display_mode" position="after">
+                <field name="graph_type" attrs="{'invisible': [('display_mode', '!=', 'graph')], 'readonly': [('locked', '=', True)]}"/>
+            </field>
+            <xpath expr="//field[@name='query_1_config_measure_field_id']/.." position="after">
+                <label string="Group By" for="chart_1_config_aggregate_field_id"/>
+                <div attrs2222="{'invisible': ['|', ('query_1_config_model_id', '=', False),('display_mode', '!=', 'graph')]}" cols="2">
+                    <field name="chart_1_config_aggregate_operator_supported" invisible="1"/>
+                    <field name="chart_1_config_aggregate_field_id" domain="([('model_id', '=', query_1_config_model_id),('store', '=', True)])" attrs="{'required': [('display_mode', '=', 'graph'),('query_1_config_model_id', '!=', False)], 'readonly': [('locked', '=', True)]}" options="{'no_create': True, 'no_open': True}" class="oe_inline"/>
+                    <div style="display: inline" attrs="{'invisible': ['|',('chart_1_config_aggregate_operator_supported', '=', False)]}">
+                        (<field name="chart_1_config_aggregate_operator" attrs="{'readonly': [('locked', '=', True)]}" class="oe_inline"/>)
+                    </div>
+                </div>
+
+                <label string="Second Group By" for="chart_1_config_aggregate2_field_id"/>
+                <div attrs2222="{'invisible': ['|','|',('chart_1_config_aggregate_field_id', '=', False),('display_mode', '!=', 'graph')]}" cols="2">
+                    <field name="chart_1_config_aggregate2_operator_supported" invisible="1"/>
+                    <field name="chart_1_config_aggregate2_field_id" domain="([('model_id', '=', query_1_config_model_id),('store', '=', True)])" attrs="{'readonly': [('locked', '=', True)]}" options="{'no_create': True, 'no_open': True}" class="oe_inline"/>
+                    <div style="display: inline" attrs="{'invisible': [('chart_1_config_aggregate2_operator_supported', '=', False)]}">
+                        (<field name="chart_1_config_aggregate2_operator" attrs="{'readonly': [('locked', '=', True)]}" class="oe_inline" />)
+                    </div>
+                </div>
+
+                <label for="chart_1_config_sort_field_id" string="Order By"/>
+                <div cols="2">
+                    <field name="chart_1_config_sort_field_id" class="oe_inline" domain="([('model_id', '=', query_1_config_model_id),('store', '=', True)])"/>
+                    <div style="display: inline" attrs="{'invisible': [('chart_1_config_sort_field_id', '=', False)]}">
+                        (<field name="chart_1_config_sort_descending"/> <label for="chart_1_config_sort_descending" string="Descending"/>)
+                    </div>
+                </div>
+
+
+            </xpath>
+            <xpath expr="//field[@name='query_2_config_measure_field_id']/.." position="after">
+                <label string="Group By" for="chart_2_config_aggregate_field_id"/>
+                <div>
+                    <field name="chart_2_config_aggregate_field_id" domain="([('model_id', '=', query_2_config_model_id),('store', '=', True)])" attrs="{'required': [('display_mode', '=', 'graph'),('query_2_config_model_id', '!=', False)], 'invisible': ['|', ('query_2_config_model_id', '=', False)], 'readonly': [('locked', '=', True)]}" options="{'no_create': True, 'no_open': True}" class="oe_inline"/>
+                    <field name="chart_2_config_aggregate_operator_supported" invisible="1"/>
+                    <div style="display: inline" attrs="{'invisible': ['|', '|', ('chart_2_config_aggregate_operator_supported', '=', False), ('chart_2_config_aggregate_field_id', '=', False)]}">
+                        (<field name="chart_2_config_aggregate_operator" attrs="{'readonly': [('locked', '=', True)]}" class="oe_inline"/>)
+                    </div>
+                </div>
+
+                <label string="Second Group By" for="chart_2_config_aggregate2_field_id"/>
+                <div>
+                    <field name="chart_2_config_aggregate2_field_id" domain="([('model_id', '=', query_2_config_model_id),('store', '=', True)])" attrs="{'readonly': [('locked', '=', True)]}" options="{'no_create': True, 'no_open': True}" class="oe_inline"/>
+                    <field name="chart_2_config_aggregate2_operator_supported" invisible="1"/>
+                    <div style="display: inline" attrs="{'invisible': [('chart_2_config_aggregate2_operator_supported', '=', False)]}">
+                        (<field name="chart_2_config_aggregate2_operator" attrs="{'readonly': [('locked', '=', True)]}" class="oe_inline"/>)
+                    </div>
+                </div>
+            </xpath>
+            <notebook position="inside">
+                <page name="settings_graph" string="Chart/Graph Display Settings" attrs="{'invisible': [('display_mode', '!=', 'graph')]}">
+                    <group>
+                        <group string="Query">
+                            <field name="chart_1_config_title" string="Chart Title" attrs="{'required': [('query_1_config_model_id', '!=', False)]}"/>
+                            <field name="graph_1_bar_stacked" string="Stack Bar Chart" attrs="{'invisible': [('graph_type', '!=', 'bar')]}"/>
+                            <field name="show_values_on_graph"/>
+                            <field name="chart_1_config_color" string="Chart Color" invisible="1"/>
+                            <field name="chart_1_config_area" string="Shade Area" attrs="{'invisible': [('graph_type', '!=', 'line')]}"/>
+                            <field name="chart_1_config_show_empty_groups" string="Show Empty Groups" invisible="1"/>
+                        </group>
+                        <group string="Goal">
+                            <field name="chart_1_goal_config_title" string="Goal Title" attrs="{'required': ['|', ('query_1_config_enable_goal', '=', True),('query_1_config_model_id', '!=', False)]}"/>
+                            <field name="chart_1_goal_config_color" string="Goal Color"/>
+                            <field name="chart_1_goal_config_area" string="Shade Area" attrs="{'invisible': [('graph_type', '!=', 'line')]}"/>
+                        </group>
+                        <group string="Query 2" invisible="1">
+                            <field name="chart_2_config_title" string="Chart Title" attrs="{'required': [('query_1_config_model_id', '!=', False)]}"/>
+                            <field name="chart_2_config_color" string="Chart Color"/>
+                            <field name="chart_2_config_area" string="Shade Area" attrs="{'invisible': [('graph_type', '!=', 'line')]}"/>
+                            <field name="chart_2_config_show_empty_groups" string="Show Empty Groups" invisible="1"/>
+                        </group>
+                        <group string="Goal 2" invisible="1">
+                            <field name="chart_2_goal_config_title" string="Goal Title" attrs="{'required': ['|', ('query_2_config_enable_goal', '=', True),('query_2_config_model_id', '!=', False)]}"/>
+                            <field name="chart_2_goal_config_color" string="Goal Color"/>
+                            <field name="chart_2_goal_config_area" string="Shade Area" attrs="{'invisible': [('graph_type', '!=', 'line')]}"/>
+                        </group>
+                    </group>
+                    <group string="Raw Chart Data" groups="base.group_no_one">
+                        <field name="dashboard_data" nolabel="1"/>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <record id="dashboard_kanban_view_graph" model="ir.ui.view">
+        <field name="name">view_dashboard_widget_kanban_graph</field>
+        <field name="model">is.dashboard.widget.abstract</field>
+        <field name="inherit_id" ref="dashboard_kanban_view_abstract"/>
+        <field name="priority" eval="95"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="inside">
+                <field name="graph_type"/>
+            </xpath>
+            <xpath expr="//div[@name='dashboard_content']/.." position="after" >
+                <t t-call="widget_type_graph" t-if="record.display_mode.raw_value == 'graph' and record.graph_type.raw_value"/>
+            </xpath>
+            <xpath expr="templates" position="inside">
+                <t t-name="widget_type_graph">
+                    <h3 style="text-align: center"><t t-esc="record.name.raw_value"/></h3>
+                    <div class="o_kanban_graph_section">
+                        <field name="dashboard_data" t-att-graph_type="record.graph_type.raw_value" widget="dashboard_graph_chart_js"/>
+                    </div>
+                </t>
+            </xpath>
+        </field>
+    </record>
+</odoo>

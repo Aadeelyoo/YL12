@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_wbs_purchase_order_form" model="ir.ui.view">
+            <field name="name">purchase.order.wbs.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='button_done']" position="after">
+                    <button type="object" name="create_po_rev" string="Create Change Order" attrs="{'invisible':['|',('po_rev','>',0),('state','in',('draft','sent','to approve','purchase','cancel'))]}" confirm="Please confirm you want to create a new change order."/>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="inside">
+
+                    <button type="object"  name="action_display_commit"
+                        class="oe_stat_button"
+                        icon="fa-file-text-o" attrs="{'invisible':[('state', 'in', ('draft','sent','to approve'))]}">
+                        <field name="commit_count" widget="statinfo" string="Commitment"/>
+                        <field name='commit_ids' invisible="1"/>
+                    </button>
+                    <button type="object"  name="action_display_cr"
+                        class="oe_stat_button"
+                        icon="fa-file-text-o" attrs="{'invisible':[('state', 'in', ('draft','sent','to approve'))]}">
+                        <field name="cr_count" widget="statinfo" string="Change Req."/>
+                        <field name='cr_ids' invisible="1"/>
+                    </button>
+                    <button type="object"  name="action_display_wt"
+                        class="oe_stat_button"
+                        icon="fa-file-text-o" attrs="{'invisible':[('state', 'in', ('draft','sent','to approve'))]}">
+                        <field name="wt_count" widget="statinfo" string="LEMs"/>
+                        <field name='wt_ids' invisible="1"/>
+                    </button>
+                    <button type="object"  name="action_display_inv"
+                        class="oe_stat_button"
+                        icon="fa-file-text-o" attrs="{'invisible':[('state', 'in', ('draft','sent','to approve'))]}">
+                        <field name="inv_count" widget="statinfo" string="Ext Invoices"/>
+                        <field name='inv_ids' invisible="1"/>
+                    </button>
+
+                    <button type="object"  name="action_display_maccr"
+                        class="oe_stat_button"
+                        icon="fa-file-text-o" attrs="{'invisible':[('state', 'in', ('draft','sent','to approve'))]}">
+                        <field name="maccr_count" widget="statinfo" string="Accruals"/>
+                        <field name='maccr_ids' invisible="1"/>
+                    </button>
+                    <button name="action_get_attachment_view"
+                        class="oe_stat_button"
+                        icon="fa-book"
+                        type="object">
+                        <field name="attachment_number" widget="statinfo" string="Documents"/>
+                    </button>
+                </xpath>
+                <xpath expr="//field[@name='date_order']" position="before">
+                    <field name="internal_ref"/>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="before">
+                    <field name="parent_po_id" options="{'no_open': True, 'no_create': True}" attrs="{'invisible':[('po_rev','=',0)]}"/>
+                </xpath>
+                <xpath expr="//field[@name='origin']" position="after">
+                    <!--
+                    <field name="project_id" options="{'no_open': True, 'no_create': True}" required="0"/>
+                    -->
+                    <field name="project_ids" widget="many2many_tags"/>
+                    <field name="po_rev" options="{'no_open': True, 'no_create': True}" invisible="True"/>
+                </xpath>
+                <xpath expr="//field[@name='account_analytic_id']" position="before">
+                    <field name="account_project_id" options="{'no_open': True, 'no_create': True}" required="0" onchange="onchange_account_project(account_project_id)"/>
+                </xpath>
+                <xpath expr="//page[@name='purchase_delivery_invoice']" position="after">
+                    <page string="Tasks">
+                        <group string="Tasks">
+                            <div class="oe_button_box" name="task_button_box">
+                                <button type="object" name="action_display_task"
+                                    class="oe_stat_button"
+                                    icon="fa-file-text-o" >
+                                    <field name="task_count" widget="statinfo" string="Tasks"/>
+                                    <field name="task_ids" invisible="1"/>
+                                </button>
+                                <button type="action" name="%(act_forecast_all_by_po)d"
+                                    class="oe_stat_button"
+                                    icon="fa-usd" >
+                                    <field name="forecast_count" widget="statinfo" string="Forecast"/>
+                                    <field name="forecast_ids" invisible="1"/>
+                                </button>
+                            </div>
+
+                            <group>
+                                <button type="object" name="create_task" string="Create Tasks" class="oe_highlight"/>
+                            </group>
+                            <field name="task_ids" nolabel="1">
+                                <tree edit="false" create="false" delete="false" string="Forecast Transactions">
+                                    <field name="name"/>
+                                    <field name="account_project_id"/>
+                                    <field name="po_id" invisible="1"/>
+                                    <field name="vendor_id"/>
+                                    <field name="etc_amount_calc_type"/>
+                                    <field name="incurred_amount_compute" sum="Total Incurred"/>
+                                    <field name="etc_amount" string="Computed ETC" sum="Total Computed ETC"/>
+                                    <field name="forecast_amount" string="Forecast Amount" sum="Total Forecast"/>
+                                    <field name="eac" sum="Total EAC"/>
+                                    <!--
+                                    <field name="eac"/>
+                                    -->
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+
+                    <page string="Cost Analysis" name="po_analysis">
+                        <group>
+                            <group string="Commitment">
+                                <field name="actual_balance"/>
+                                <field name="open_commit_balance"/>
+                                <separator/>
+                                <field name="commit_balance" string="Total"/>
+                            </group>
+                            <group string="Accruals">
+                                <field name="wt_out_balance"/>
+                                <field name="inv_out_balance"/>
+                                <field name="maccr_balance"/>
+                                <separator/>
+                                <field name="accrual_balance" string="Total"/>
+                            </group>
+                            <group string="Forecast">
+                                <field name="etc_balance"/>
+                                <field name="eac"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Cost Analysis 2" name="po_analysis2">
+                        <group>
+                            <field name="analytics_project_wbs_ids" widget="many2many" domain="[('po_id', '=', active_id)]">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="descr_short"/>
+                                    <field name="etc_balance"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                    <page string="Test pivot" name="po_analysis3">
+                        <group>
+                            <field name="analytics_project_wbs_ids" widget="many2many" domain="[('po_id', '=', active_id)]">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="descr_short"/>
+                                    <field name="etc_balance"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+
+
+
+                    <page string="Configuration" name="po_configuration">
+
+                        <div class="oe_button_box" name="button_box">
+                            <button type="object"  name="action_po_templates" 
+                                class="oe_stat_button"
+                                icon="fa-file-text-o">
+                                <field name="template_count" widget="statinfo" string="TCI Templates"/>
+                                <field name='template_ids' invisible="1"/>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="tci_distribution_list"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_wbs_purchase_order_search_form" model="ir.ui.view">
+            <field name="name">purchase.order.wbs.search.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="parent_po_id" filter_domain="['|', '|', '|',('parent_po_id', 'ilike', self), ('name', 'ilike', self), ('partner_id', 'ilike', self), ('internal_ref', 'ilike', self)]"/>
+                </xpath>
+                <xpath expr="//field[@name='product_id']" position="after">
+                    <!--
+                    <field name="project_id"/>
+                    -->
+                </xpath>
+                <xpath expr="//search/group" position="inside">
+                    <!--
+                    <filter string="Project" name="project" context="{'group_by':'project_id'}"/>
+                    -->
+                    <filter string="Main PO" name="main_po" context="{'group_by':'parent_po_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+
+                # **************** Project Control Purchase - Views, Actions and Menus ****************
+
+        <record id="pc_purchase_order_tree" model="ir.ui.view">
+            <field name="name">purchase.order.pc.tree</field>
+            <field name="model">purchase.order</field>
+            <field name="arch" type="xml">
+                <tree decoration-bf="message_unread==True" decoration-muted="state=='cancel'" decoration-info="state in ('wait','confirmed')" string="Purchase Order">
+                    <field name="parent_po_id" invisible="0"/>
+                    <field name="message_unread" invisible="1"/>
+                    <field name="name" string="Reference"/>
+                    <field name="internal_ref"/>
+                    <field name="partner_id"/>
+                    <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                    <field name="date_planned" invisible="1"/>
+                    <field name="amount_untaxed" sum="Total Untaxed amount" string="Current PO Value" widget="monetary" invisible="1"/>
+                    <field name="amount_total" sum="Total amount" widget="monetary" invisible="1"/>
+
+                    <field name="actual_balance" sum="Total Actual" widget="monetary"/>
+                    <field name="open_commit_balance" sum="Total Commitment" widget="monetary"/>
+                    <field name="commit_balance" sum="Total Commitment" widget="monetary"/>
+                    <field name="cr_out_balance" sum="CR Out" widget="monetary"/>
+
+                    <field name="inv_out_balance" sum="Total Inv Out" widget="monetary"/>
+                    <field name="wt_out_balance" sum="Total LEM Out" widget="monetary"/>
+                    <field name="maccr_balance" sum="Total Manual Accrual" widget="monetary"/>
+                    <field name="incur_balance" sum="Total Incurred" widget="monetary"/>
+                    <field name="etc_balance" sum="Total ETC" widget="monetary"/>
+                    <field name="eac" sum="Total EAC" widget="monetary"/>
+
+                    <field name="currency_id" invisible="1"/>
+                    <field name="state"/>
+                    <field name="invoice_status" invisible="not context.get('show_purchase', False)"/>
+                    <field name="date_order" invisible="0" widget="date"/>
+                    <field name="project_ids" widget="many2many_tags"/>
+                    <field name="project_wbs_ids" widget="many2many_tags"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_pc_purchase" model="ir.actions.act_window">
+            <field name="name">Project Control Purchase</field>
+            <field name="res_model">purchase.order</field>
+            <field name="view_type">form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{
+                'search_default_active': 1,
+                'pcontrol_view': 1,
+            }</field>
+
+        </record>
+
+        <record id="action_pc_purchase_tree" model="ir.actions.act_window.view">
+            <field name="name">Project Control Purchase</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="pc_purchase_order_tree"/>
+            <field name="act_window_id" ref="action_pc_purchase" />
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no purchase requisitions created for this project.
+                </p><p>
+                    Here you can create new purchase requisitions.
+                </p>
+            </field>
+        </record>
+
+        <record id="view_wbs_purchase_invoice_form" model="ir.ui.view">
+            <field name="name">purchase.invoice.wbs.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='analytic_tag_ids']" position="after">
+                    <field name="account_project_id" options="{'no_open': True, 'no_create': True}"/>
+                </xpath>
+                <xpath expr="//notebook/page[last()]" position="before">
+                    <page name="worktickets" string="LEMs">
+                        <group>
+                            <field name="workticket_ids" nolabel="1" widget="many2many" domain="[('state', '=', 'approved')]" options="{'not_delete': True}" context="{'default_invoice_id':active_id}">
+                                <tree decoration-success="state=='approved'">
+                                    <field name="partner_wtnumber"/>
+                                    <field name="description"/>
+                                    <field name="state" invisible="0"/>
+                                    <field name="date"/>
+                                    <field name="untaxed_amount"/>
+                                    <field name="total_tax_amount" invisible="1"/>
+                                    <field name="total_amount" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="invoice_id" invisible="1"/>
+                                    <!--
+                                    <field name="attachment_number" string=" "/>
+                                    <button name="action_get_attachment_view" string="View Attachments" type="object" icon="fa-paperclip"/>
+                                    <field name="untaxed_amount" widget="monetary"/>
+                                    <field name="tax_amount" widget="monetary"/>
+                                    <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="message_unread" invisible="1"/>
+                                    <button name="action_validate" string="Validate" type="object" groups="hr_solexpense.group_hr_solexpense_manager" attrs="{'invisible': [('state', 'not in', ['reported',])]}"/>
+                                    -->
+                               </tree>
+                            </field>
+
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="wt_total_untaxed_amount"/>
+                                <field name="wt_total_tax_amount" invisible="0"/>
+                                <field name="wt_total_amount" class="oe_subtotal_footer_separator" invisible="1"/>
+                            </group>
+
+                        </group>
+
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+     </data>
+</openerp>

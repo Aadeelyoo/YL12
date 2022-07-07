@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>   
+        <!-- Main template -->
+        <template id="solevo_tci_report_id">
+            <t t-call="web.html_container">                    
+                <t t-foreach="docs" t-as="o">
+                    <!-- Layout template -->
+                    <t t-call="analytic_wbs.analytic_wbs_report_layout">
+                        <div class="page" >
+                            <style type="text/css">
+                                .clearfloat {
+                                    clear: both;
+                                    float: none;
+                                    width: 100%;
+                                    height: 1px;
+                                    display: block;
+                                }
+                                .report-wrapper {
+                                    width: 1000px;
+                                    margin: 0px auto;
+                                    font-size: 13px;
+                                }
+                                table {
+                                    width: 100%;
+                                    border-spacing: 0px;
+                                }
+                                table tr td, table tr th {
+                                    text-align: left;
+                                    padding: 5px 0px 0px 5px;
+                                    border-bottom: 1px solid #eee;
+                                    border-right: none;
+                                    border-left: none;
+
+                                }
+                                table tr td:last-child, 
+                                table tr th:last-child {
+                                    border-right: none
+                                }
+                                table tr:last-child td {
+                                    border-bottom: 1px solid #eee;
+                                }
+                                table tr th {
+                                    text-align: left;
+                                }
+                                .report-header {
+                                    width: 100%;
+                                    margin: 0px 0px 10px;
+                                    text-align: left;
+                                }
+                                .report-header p {
+                                    width: 50%;
+                                    float: left;
+                                    margin: 0px 0px 20px;
+                                }
+                                .report-header p .solid {
+                                    font-weight: bold;
+                                }
+                                h2 {
+                                    text-align: center;
+                                    font-size: 35px;
+                                    text-decoration: underline; 
+                                }
+                                .tile {
+                                    display: inline-block;
+                                    width: 100px;
+                                    text-align: center;
+                                    background: #a64f8e;
+                                    color: #fff;
+                                    padding: 2px 5px;
+                                }
+
+                                .header {
+                                    display : none !importnat;
+                                }
+                                .footer {
+                                    display : none !importnat;
+                                }
+
+                                tr { 
+                                    page-break-inside: avoid !important;
+                                }
+
+                                td { 
+                                    page-break-inside: avoid !important;
+                                }
+                            </style>
+                            <div class="report-wrapper" style="page-break-after:always">
+                                <br class="clearfloat" />
+                                <div style="float:left; width: 40%;text-align: left;margin-bottom:10px;">
+                                    <span class="solid" style="text-align:left;font-weight:bold;font-size:25px" >Document Information</span>
+                                    <table style="margin-left: 30px">
+                                        
+                                        <tr>
+                                            <td style="text-align:left">
+                                               <span>Vendor: </span>
+                                            </td>
+                                            <td style="text-align:left">
+                                               <span t-esc="o.partner_id.name"></span>
+                                            </td>                                            
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:left">
+                                               <span>Purchase Order: </span>
+                                            </td>
+                                            <td style="text-align:left">
+                                               <span t-esc="o.po_id.internal_ref"></span>
+                                            </td>                                            
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:left">
+                                               <span>Document Date: </span>
+                                            </td>
+                                            <td style="text-align:left">
+                                               <span t-esc="o.date"></span>
+                                            </td>                                            
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:left">
+                                               <span>Vendor Reference: </span>
+                                            </td>
+                                            <td style="text-align:left">
+                                               <span t-esc="o.reference"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:left">
+                                               <span>Document Status: </span>
+                                            </td>
+                                            <td style="text-align:left">
+                                               <span t-esc="o.state"></span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div style="float:right; width: 50%;text-align: right;margin-bottom:10px;margin-right: 50px;">
+                                    <!-- <a t-attf-href="www.google.com">Google</a> -->
+                                    <a t-attf-href="/tci/approval_report/#{o.id}">
+                                        <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('EAN13', o.barcode, 600, 100)" style="width:300px;height:50px"/>
+                                    </a>
+
+                                </div>
+                                <t t-if="o.state == 'approved'">
+                                    <br class="clearfloat" />
+                                    <div style="float: left;width: 100%;margin-top: 15px;">
+                                        <span class="solid" style="text-align:left;font-weight:bold;font-size:25px" >Account Assignation</span>
+
+                                        <table style="width: 95%;margin-left: 30px">
+                                            <tr>
+                                                <th>
+                                                    <span>Project WBS</span>
+                                                </th>
+                                                <th>
+                                                    <span>Amount</span>
+                                                </th>
+                                                <th>
+                                                    <span>% Allocation</span>
+                                                </th>
+                                            </tr>
+                                            <t t-foreach="o.analytic_project_line_ids" t-as="line">
+                                                <tr>
+                                                    <td>
+                                                        <span t-esc="line.analytic_project_id.name"></span>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="round(line.amount,2)"></span>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="'{0:,.2f}'.format(float(line.calc_tci_line_percent))"></span>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                            <tr>
+                                                <td colspan="1" style="font-weight:bold;text-align:left">
+                                                    Total
+                                                </td>
+
+                                                <td style="font-weight:bold">
+                                                    <span t-esc="round(sum(line.amount for line in o.analytic_project_line_ids),2)"></span>
+                                                </td>
+                                                <td style="font-weight:bold">
+                                                    <span t-esc="round(sum(line.calc_tci_line_percent for line in o.analytic_project_line_ids),2)"></span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </t>
+                                <br class="clearfloat" />
+                                <div style="float: left;width: 100%;margin-top: 15px;">
+                                    <span class="solid" style="text-align:left;font-weight:bold;font-size:25px" >Review Status</span>
+                                    <!-- Call approver_mixin table template -->
+                                    <t t-set="mail_apporvers" t-value="get_approval_ids(o)"/>
+                                    <t t-call="analytic_wbs.mail_approvers_custom_template_table"/>
+                                    <t t-if="o.state == 'approved'">
+                                        <t t-call="analytic_wbs.mail_approvers_invoicing_instruction"/>
+                                    </t>
+                                    <t t-if="o.state == 'rejected'">
+                                        <t t-call="analytic_wbs.mail_approvers_rejected_document"/>
+                                    </t>
+
+                                </div>
+                            </div><!--end of report wrapper-->
+                        </div><!--end of page --> 
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="mail_approvers_invoicing_instruction">
+            <div style="float:left; width: 100%;">
+
+                <table width="100%" style="margin-bottom:20px">
+                    <thead>
+                        <tr>
+                            <th colspan="5" style="text-align:left">
+                                <span>Invoicing Instructions</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody style="text-align: center;">
+                        <tr>
+                            <td>
+                                <span>Please attach the present document as back-up information for your invoicing.</span><br/><br/>
+                                <span>The present document does not constitute a proof of acceptation of the work, rates or quantities described within it's content.</span><br/>
+                                <span>Document issued <b>FOR REFERENCE ONLY</b>.</span><br/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+
+        <template id="mail_approvers_rejected_document">
+            <div style="float:left; width: 100%;">
+
+                <table width="100%" style="margin-bottom:20px">
+                    <thead>
+                        <tr>
+                            <th colspan="5" style="text-align:center">
+                                <span>Rejected Document</span>
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span>The current document has been rejected. For more information, please contact the approver who rejected the document.</span><br/><br/>
+                                <span>If the current document requires modification, please re-submit under a new document number or by adding the</span><br/>
+                                <span>revision number at the end of the document number.</span><br/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+    </data>
+
+</odoo>

@@ -1,0 +1,438 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * analytic_wbs
+# 
+# Translators:
+# Andi Chandler <andi@gowling.com>, 2016
+# James Dove <james@oceancave.com>, 2015
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo 9.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-09-29 10:25+0000\n"
+"PO-Revision-Date: 2016-03-20 23:05+0000\n"
+"Last-Translator: Andi Chandler <andi@gowling.com>\n"
+"Language-Team: English (United Kingdom) (http://www.transifex.com/odoo/odoo-9/language/en_GB/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: analytic_wbs
+#: model:ir.ui.view,arch_db:analytic_wbs.account_analytic_wbs_chart_view
+msgid "(Keep empty to open the current situation)"
+msgstr "(Keep empty to open the current situation)"
+
+#. module: analytic_wbs
+#: model:ir.model,name:analytic_wbs.model_account_analytic_wbs_chart
+msgid "Account wbs Chart"
+msgstr "Account wbs Chart"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_currency_id
+msgid "Account Currency"
+msgstr "Account Currency"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_message_needaction
+msgid "Action Needed"
+msgstr "Action Needed"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_amount
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_progress_line_form
+msgid "Amount"
+msgstr "Amount"
+
+#. module: analytic_wbs
+#: model:ir.model,name:analytic_wbs.model_account_analytic_wbs_account
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_name
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_account_id
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_account_form
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_account_search
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_progress_line_filter
+msgid "wbs Account"
+msgstr "wbs Account"
+
+#. module: analytic_wbs
+#: model:ir.ui.view,arch_db:analytic_wbs.account_analytic_wbs_chart_view
+msgid "wbs Account Charts"
+msgstr "wbs Account Charts"
+
+#. module: analytic_wbs
+#: model:res.groups,name:analytic_wbs.group_analytic_wbs_accounting
+msgid "wbs Accounting"
+msgstr "wbs Accounting"
+
+#. module: analytic_wbs
+#: model:ir.actions.act_window,name:analytic_wbs.action_account_analytic_wbs_account_form
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_account_list
+msgid "Company wbs"
+msgstr "Company wbs"
+
+#. module: analytic_wbs
+#: model:ir.actions.act_window,name:analytic_wbs.account_analytic_wbs_progress_line_action_entries
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_progress_line_graph
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_progress_line_pivot
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_progress_line_tree
+msgid "wbs Entries"
+msgstr "wbs Entries"
+
+#. module: analytic_wbs
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_progress_line_form
+msgid "wbs Entry"
+msgstr "wbs Entry"
+
+#. module: analytic_wbs
+#: model:ir.model,name:analytic_wbs.model_account_analytic_wbs_progress_line
+msgid "wbs Line"
+msgstr "wbs Line"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_line_ids
+msgid "wbs Lines"
+msgstr "wbs Lines"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_tag_name
+msgid "wbs Tag"
+msgstr "wbs Tag"
+
+#. module: analytic_wbs
+#: model:ir.model,name:analytic_wbs.model_account_analytic_wbs_tag
+msgid "wbs Tags"
+msgstr "wbs Tags"
+
+#. module: analytic_wbs
+#: selection:account.analytic_wbs.account,account_type:0
+msgid "wbs View"
+msgstr "wbs View"
+
+#. module: analytic_wbs
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_account_search
+msgid "Associated Partner"
+msgstr "Associated Partner"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_balance
+msgid "Balance"
+msgstr "Balance"
+
+#. module: analytic_wbs
+#: model:ir.ui.view,arch_db:analytic_wbs.account_analytic_wbs_chart_view
+msgid "Cancel"
+msgstr "Cancel"
+
+#. module: analytic_wbs
+#: model:ir.actions.act_window,name:analytic_wbs.action_account_analytic_wbs_chart
+#: model:ir.actions.act_window,name:analytic_wbs.action_analytic_wbs_account_form
+msgid "Chart of Company wbs"
+msgstr "Chart of Company wbs"
+
+#. module: analytic_wbs
+#: model:ir.actions.act_window,help:analytic_wbs.action_analytic_wbs_account_form
+msgid "Click to add an analytic_wbs account."
+msgstr "Click to add an analytic_wbs account."
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_tag_color
+msgid "Color Index"
+msgstr "Colour Index"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_company_id
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_company_id
+msgid "Company"
+msgstr "Company"
+
+#. module: analytic_wbs
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_account_form
+msgid "Cost/Revenue"
+msgstr "Cost/Turnover"
+
+#. module: analytic_wbs
+#: model:ir.actions.act_window,name:analytic_wbs.account_analytic_wbs_progress_line_action
+msgid "Costs & Revenues"
+msgstr "Costs & Revenues"
+
+#. module: analytic_wbs
+#: model:ir.actions.act_window,help:analytic_wbs.account_analytic_wbs_progress_line_action
+#: model:ir.actions.act_window,help:analytic_wbs.account_analytic_wbs_progress_line_action_entries
+msgid ""
+"Costs will be created automatically when you register supplier\n"
+"                invoices, expenses or timesheets."
+msgstr "Costs will be created automatically when you register supplier\n                invoices, expenses or timesheets."
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_create_uid
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_chart_create_uid
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_create_uid
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_tag_create_uid
+msgid "Created by"
+msgstr "Created by"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_create_date
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_chart_create_date
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_create_date
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_tag_create_date
+msgid "Created on"
+msgstr "Created on"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_credit
+msgid "Credit"
+msgstr "Credit"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_currency_id
+msgid "Currency"
+msgstr "Currency"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_partner_id
+msgid "Customer"
+msgstr "Customer"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_date
+msgid "Date"
+msgstr "Date"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,help:analytic_wbs.field_account_analytic_wbs_account_message_last_post
+msgid "Date of the last message posted on the record."
+msgstr "Date of the last message posted on the record."
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_debit
+msgid "Debit"
+msgstr "Debit"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_name
+msgid "Description"
+msgstr "Description"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_display_name
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_chart_display_name
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_display_name
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_tag_display_name
+msgid "Display Name"
+msgstr "Display Name"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_message_follower_ids
+msgid "Followers"
+msgstr "Followers"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_message_channel_ids
+msgid "Followers (Channels)"
+msgstr "Followers (Channels)"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Followers (Partners)"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_chart_from_date
+msgid "From"
+msgstr "From"
+
+#. module: analytic_wbs
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_account_search
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_progress_line_filter
+msgid "Group By..."
+msgstr "Group By..."
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_id
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_chart_id
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_id
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_tag_id
+msgid "ID"
+msgstr "ID"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,help:analytic_wbs.field_account_analytic_wbs_account_message_unread
+msgid "If checked new messages require your attention."
+msgstr "If checked new messages require your attention."
+
+#. module: analytic_wbs
+#: model:ir.model.fields,help:analytic_wbs.field_account_analytic_wbs_account_message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "If checked, new messages require your attention."
+
+#. module: analytic_wbs
+#: model:ir.actions.act_window,help:analytic_wbs.account_analytic_wbs_progress_line_action
+#: model:ir.actions.act_window,help:analytic_wbs.account_analytic_wbs_progress_line_action_entries
+msgid ""
+"In Odoo, sale orders and projects are implemented using\n"
+"                analytic_wbs accounts. You can track costs and revenues to analyse\n"
+"                your margins easily."
+msgstr "In Odoo, sale orders and projects are implemented using\n                analytic_wbs accounts. You can track costs and revenues to analyse\n                your margins easily."
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_message_is_follower
+msgid "Is Follower"
+msgstr "Is Follower"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_message_last_post
+msgid "Last Message Date"
+msgstr "Last Message Date"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account___last_update
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_chart___last_update
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line___last_update
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_tag___last_update
+msgid "Last Modified on"
+msgstr "Last Modified on"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_write_uid
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_chart_write_uid
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_write_uid
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_tag_write_uid
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_write_date
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_chart_write_date
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_write_date
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_tag_write_date
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_message_ids
+msgid "Messages"
+msgstr "Messages"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,help:analytic_wbs.field_account_analytic_wbs_account_message_ids
+msgid "Messages and communication history"
+msgstr "Messages and communication history"
+
+#. module: analytic_wbs
+#: model:ir.actions.act_window,help:analytic_wbs.account_analytic_wbs_progress_line_action
+msgid "No activity yet on this account."
+msgstr "No activity yet on this account."
+
+#. module: analytic_wbs
+#: model:ir.actions.act_window,help:analytic_wbs.account_analytic_wbs_progress_line_action_entries
+msgid "No activity yet."
+msgstr "No activity yet."
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_message_needaction_counter
+msgid "Number of Actions"
+msgstr "Number of Actions"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,help:analytic_wbs.field_account_analytic_wbs_account_message_needaction_counter
+msgid "Number of messages which requires an action"
+msgstr "Number of messages which requires an action"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,help:analytic_wbs.field_account_analytic_wbs_account_message_unread_counter
+msgid "Number of unread messages"
+msgstr "Number of unread messages"
+
+#. module: analytic_wbs
+#: model:ir.ui.view,arch_db:analytic_wbs.account_analytic_wbs_chart_view
+msgid "Open Charts"
+msgstr "Open Charts"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_partner_id
+msgid "Partner"
+msgstr "Partner"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_unit_amount
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_progress_line_tree
+msgid "Quantity"
+msgstr "Quantity"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_code
+msgid "Reference"
+msgstr "Reference"
+
+#. module: analytic_wbs
+#: model:ir.actions.act_window,help:analytic_wbs.account_analytic_wbs_progress_line_action
+#: model:ir.actions.act_window,help:analytic_wbs.account_analytic_wbs_progress_line_action_entries
+msgid ""
+"Revenues will be created automatically when you create customer\n"
+"                invoices. Customer invoices can be created based on sale orders\n"
+"                (fixed price invoices), on timesheets (based on the work done) or\n"
+"                on expenses (e.g. reinvoicing of travel costs)."
+msgstr "Revenues will be created automatically when you create customer\n                invoices. Customer invoices can be created based on sale orders\n                (fixed price invoices), on timesheets (based on the work done) or\n                on expenses (e.g. reinvoicing of travel costs)."
+
+#. module: analytic_wbs
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_progress_line_filter
+msgid "Search wbs Lines"
+msgstr "Search wbs Lines"
+
+#. module: analytic_wbs
+#: model:ir.ui.view,arch_db:analytic_wbs.account_analytic_wbs_chart_view
+msgid "Select the Period for Analysis"
+msgstr "Select the Period for Analysis"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_tag_ids
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_tag_ids
+msgid "Tags"
+msgstr "Labels"
+
+#. module: analytic_wbs
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_progress_line_filter
+msgid "Tasks Month"
+msgstr "Tasks Month"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,help:analytic_wbs.field_account_analytic_wbs_progress_line_currency_id
+msgid "The related account currency if not equal to the company one."
+msgstr "The related account currency if not equal to the company one."
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_chart_to_date
+msgid "To"
+msgstr "To"
+
+#. module: analytic_wbs
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_progress_line_tree
+msgid "Total"
+msgstr "Total"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_account_type
+msgid "Type of Account"
+msgstr "Type of Account"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_message_unread
+msgid "Unread Messages"
+msgstr "Unread Messages"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_account_message_unread_counter
+msgid "Unread Messages Counter"
+msgstr "Unread Messages Counter"
+
+#. module: analytic_wbs
+#: model:ir.model.fields,field_description:analytic_wbs.field_account_analytic_wbs_progress_line_user_id
+msgid "User"
+msgstr "User"
+
+#. module: analytic_wbs
+#: model:ir.ui.view,arch_db:analytic_wbs.view_account_analytic_wbs_account_form
+msgid "e.g. Project XYZ"
+msgstr "e.g. Project XYZ"

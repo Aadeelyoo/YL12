@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="grid.GridArrows">
+        <div>
+            <button class="btn btn-md btn-primary o_button_add_grid" type="button">
+                Add a Line
+            </button>
+            <div t-if="widget._buttons.length" class="btn-group btn-group-md">
+                <button t-foreach="widget._buttons" t-as="btn"
+                        t-attf-class="grid_button_arrow btn btn-md {{ btn['class'] || 'btn-default' }}"
+                        type="button" t-att-data-index="btn_index">
+                    <t t-esc="btn.string"/>
+                </button>
+            </div>
+            <button class="grid_previous_arrow btn btn-md btn-primary hidden"
+                    type="button">
+                <span class="fa fa-arrow-left"/>
+            </button>
+            <button class="btn btn-md btn-primary grid_initial_button hidden" type="button">
+                Today
+            </button>
+            <button class="grid_next_arrow btn btn-md btn-primary hidden"
+                    type="button">
+                <span class="fa fa-arrow-right"/>
+            </button>
+            <div t-if="widget._ranges.length > 1" class="btn-group btn-group-md">
+                <button t-foreach="widget._ranges" t-as="range"
+                        class="grid_range_arrow btn btn-md btn-default"
+                        type="button" t-att-data-name="range.name">
+                    <t t-esc="range.string"/>
+                </button>
+            </div>
+        </div>
+    </t>
+</templates>

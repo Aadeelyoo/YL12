@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="approver_overwite_form">
+            <field name="name">approver_overwite_form.form</field>
+            <field name="model">approvers_overwrite</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Approvers Overwrite">
+                  <field name="msg" readonly="1"/>
+                  <group name="top">
+                    <group name="left">
+                        <field name="po_id"/>
+                        <field name="tci_template_id" placeholder="Select or Create a Template"
+                         attrs="{'required':[('msg','=',False)],'invisible':[('msg','!=',False)]}" 
+                         context="{
+                                    'form_view_ref':'analytic_wbs.view_tci_template_form',
+                                    'default_po_id': po_id,
+                                    'po_id': po_id}"
+                        domain="[('po_id','=',po_id)]"
+                                    />
+                    </group>
+                    <group name="right">
+                        <field name="tci_id" invisible="1"/>
+                        <field name="vendor_id" />
+                    </group>
+                  </group>
+                    <footer>
+                        <button class="oe_highlight" type="object" name="update_approvers" string="Validate" />
+                        <button class="oe_highlight"  special="cancel" name="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="approver_overwite_action" model="ir.actions.act_window">
+            <field name="name">Approvers Overwrite</field>
+            <field name="res_model">approvers_overwrite</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="approver_overwite_form"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

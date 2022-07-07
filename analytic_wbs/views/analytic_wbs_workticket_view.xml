@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+                <!-- Sequences for Work Ticket Number -->
+
+        <record id="seq_workticket_num" model="ir.sequence">
+            <field name="name">LEMs Number</field>
+            <field name="code">purchase.workticket.number</field>
+            <field name="prefix">LEM%(y)s-</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="view_purchase_workticket_type_tree" model="ir.ui.view">
+            <field name="name">purchase.workticket.type.tree</field>
+            <field name="model">purchase.workticket.type</field>
+            <field name="arch" type="xml">
+                <tree string="LEM Type">
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="order"/>
+                    <field name="is_active"/>
+                </tree>
+            </field>
+        </record>
+
+        # **************** wbs Work Ticket Lines ****************
+
+        <record id="view_workticket_line_search_form" model="ir.ui.view">
+            <field name="name">purchase.workticket.line.search.form</field>
+            <field name="model">purchase.workticket.line</field>
+            <field name="arch" type="xml">
+                <search string="LEM Detail">
+                    <field name="account_project_id"/>
+                    <field name="description" string="Description"/>
+                    <field name="workticket_id"/>
+                    <field name="user_id"/>
+                    <field name="partner_id" string="Companie"/>
+                    <field name="company_id"/>
+                    <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
+                    <filter string="Active wbs" name="active_wbs" domain="[('wbs_state', '=', 'active')]"/>
+                    <filter string="Active Project wbs" name="active_project_wbs" domain="[('project_wbs_state', '=', 'active')]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="wbs" name="wbs" context="{'group_by':'account_project_id'}"/>
+                        <filter string="LEM" name="workticket" context="{'group_by':'workticket_id'}"/>
+                        <filter string="Project" name="project" context="{'group_by':'project_id'}"/>
+                        <filter string="Created by" name="User" context="{'group_by':'user_id'}"/>
+                        <filter string="wbs State" name="wbs_state" context="{'group_by':'wbs_state'}"/>
+                        <filter string="Project wbs State" name="project_wbs_state" context="{'group_by':'project_wbs_state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_purchase_workticket_line_tree" model="ir.ui.view">
+            <field name="name">workticket.detail.tree</field>
+            <field name="model">purchase.workticket.line</field>
+            <field name="arch" type="xml">
+                <tree string="LEM Lines">
+                    <field name="date"/>
+                    <field name="description"/>
+                    <!--
+                    <field name="account_project_id" options="{'no_create': True, 'no_open': True}" onchange="onchange_account_project(account_project_id)"/>
+                    <field name="workticket_id"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="company_id"/>
+                    <field name="amount" sum="Total"/>
+                    <field name="mhr" sum="Man Hours"/>
+                    <field name="qty" sum="Quantity"/>
+                    -->
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_purchase_workticket_line_form" model="ir.ui.view">
+            <field name="name">workticket.detail.form</field>
+            <field name="model">purchase.workticket.line</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <form string="LEM Detail">
+                    <sheet string="LEM Detail">
+                        <group string="LEM Line Detail">
+                            <group string="LEM Line info">
+                                <field name="date"/>
+                                <field name="workticket_id"/>
+                                <field name="account_project_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="description"/>
+                                <field name="company_id"/>
+                            </group>
+                            <group string="LEM Detail">
+                                <field name="untaxed_amount"/>
+                                <field name="qty"/>
+                                <field name="mhr"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_purchase_workticket_line_graph" model="ir.ui.view">
+            <field name="name">purchase.workticket.line.graph</field>
+            <field name="model">purchase.workticket.line</field>
+            <field name="arch" type="xml">
+                <graph string="wbs Entries">
+                    <field name="account_project_id" type="row"/>
+                    <field name="qty" type="measure"/>
+                    <field name="untaxed_amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_purchase_workticket_line_pivot" model="ir.ui.view">
+            <field name="name">purchase.workticket.line.pivot</field>
+            <field name="model">purchase.workticket.line</field>
+            <field name="arch" type="xml">
+                <pivot string="wbs Entries" >
+                    <field name="account_project_id" type="row"/>
+                    <field name="qty" type="measure"/>
+                    <field name="untaxed_amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+                # **************** Project Control - Work Ticket Views and Actions ****************
+
+        <record id="view_workticket_search_form" model="ir.ui.view">
+            <field name="name">purchase.workticket.search.form</field>
+            <field name="model">purchase.workticket</field>
+            <field name="arch" type="xml">
+                <search string="LEM">
+                    <field name="wtnumber"/>
+                    <field name="partner_wtnumber"/>
+                    <field name="partner_id"/>
+                    <field name="project_ids"/>
+                    <field name="po_id"/>
+                    <field name="user_id"/>
+                    <field name="company_id"/>
+                    <filter string="My Items" name="my_items" domain="[('user_id', '=', uid)]"/>
+                    <filter string="My Followed Items" name="my_followed_items" domain="[('message_is_follower', '=', True)]"/>
+                    <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" name="Status" context="{'group_by':'state'}"/>
+                        <filter string="Vendor" name="vendor" context="{'group_by':'partner_id'}"/>
+                        <filter string="Purchase Order" name="po" context="{'group_by':'po_id'}"/>
+                        <!--
+                        <filter string="Project" name="project" context="{'group_by':'project_id'}"/>
+                        -->
+                        <filter string="Created by" name="User" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="act_purchase_workticket_all" model="ir.actions.act_window">
+            <field name="name">LEM</field>
+            <field name="res_model">purchase.workticket</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="context">{
+                'search_default_active': 1,
+                'search_default_my_items': 1,
+            }</field>
+            <field name="search_view_id" ref="view_workticket_search_form"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create LEMs
+                </p>
+                <p>
+                    Once your Purchase Order is created, you can create LEMs and assign
+                    each line item to a wbs.
+                </p>
+                <p>
+                    All work ticket created will have to go thru the approval process before to be
+                    incorporated into an invoice.
+                </p>
+            </field>
+        </record>
+
+        <record id="view_purchase_workticket_tree" model="ir.ui.view">
+            <field name="name">purchase.workticket.tree</field>
+            <field name="model">purchase.workticket</field>
+            <field name="arch" type="xml">
+                <tree string="LEM">
+                    <field name="partner_wtnumber"/>
+                    <!--
+                    <field name="project_id" invisible="0" options="{'no_create': True, 'no_open': True}"/>
+                    -->
+                    <field name="project_ids" widget="many2many_tags"/>
+                    <field name="partner_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="po_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="date"/>
+                    <field name="untaxed_amount" sum="Total Untaxed"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="state" readonly="True"/>
+                    <field name="create_date" readonly="True"/>
+                    <field name="create_uid" readonly="True"/>
+                    <field name="wtnumber"/>
+                    <field name="invoice_id"/>
+                    <field name="user_id" options="{'no_create': True, 'no_open': True}"/>
+                    <!--
+                    <field name="approval_ids" widget="many2many_tags"/>
+                    -->
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_purchase_workticket_pivot" model="ir.ui.view">
+            <field name="name">purchase.workticket.pivot</field>
+            <field name="model">purchase.workticket</field>
+            <field name="arch" type="xml">
+                <pivot string="Line Transaction" >
+                    <field name="date" type="row"/>
+                    <field name="description" type="row"/>
+                    <field name="state" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="act_purchase_workticket_detail_all" model="ir.actions.act_window">
+            <field name="name">LEM Detail</field>
+            <field name="res_model">purchase.workticket.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{
+                'search_default_workticket_id': [active_id],
+                'default_workticket_id': active_id,
+            }</field>
+            <field name="search_view_id" ref="view_workticket_line_search_form"/>
+        </record>
+
+        <record id="view_purchase_workticket_form" model="ir.ui.view">
+            <field name="name">purchase.workticket.form</field>
+            <field name="model">purchase.workticket</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <form string="LEMs">
+                <header>
+                    <button name="action_workticket_submit" type="object" string="Submit"
+                            class="oe_highlight oe_view_mode_only"  states="draft" />
+                    <button name="action_workticket_submit" type="object" string="Re-Submit"
+                            class="oe_highlight oe_view_mode_only"  states="pending" />
+                    <button name="action_workticket_pending" type="object" string="Pending"
+                            class="oe_highlight oe_view_mode_only"  states="submitted" />
+                    <button name="action_workticket_approve" type="object" string="Approve"
+                            class="oe_highlight oe_view_mode_only"  states="submitted" />
+                    <button name="action_workticket_reject" type="object" string="Reject"
+                            class="oe_highlight oe_view_mode_only"  states="submitted"/>
+                    <button name="action_workticket_post" type="object" string="Post"
+                            class="oe_highlight oe_view_mode_only"  states="approved" />
+                    <field name="state" widget="statusbar" readonly="True"
+                           statusbar_visible="draft,pending,submitted,approved,posted"/>
+                </header>
+                    <sheet string="LEM">
+                        <div class="oe_button_box" name="button_box">
+                            <button name="%(act_purchase_workticket_detail_all)d"
+                                class="oe_stat_button"
+                                type="action"
+                                icon="fa-signal">
+                                <field name="workticket_line_number" widget="statinfo" string="Line Details"/>
+                            </button>
+                            <button name="action_get_attachment_view"
+                                class="oe_stat_button"
+                                icon="fa-book"
+                                type="object">
+                                <field name="attachment_number" widget="statinfo" string="Documents"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="partner_wtnumber"/>
+                            <h1>
+                                <field name="partner_wtnumber" class="oe_inline" placeholder="Partner Work Ticket #"/>
+                            </h1>
+                            <label for="wtnumber"/>
+                            <field name="wtnumber" placeholder="Auto-Generated Work Ticket #"/>
+                        </div>
+                        <group>
+                            <group string="LEM Informations">
+                                <!--
+                                <field name="project_id" readonly="True" options="{'no_create': True, 'no_open': True}"/>
+                                -->
+                                <field name="partner_id" options="{'no_create': True}"/>
+                                <field name="po_id" options="{'no_create': True}"/>
+                                <field name="date"/>
+                            </group>
+                            <group string="Other Info">
+                                <field name="project_ids" widget="many2many_tags" readonly="1"/>
+                                <field name="user_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="wtdetails" string="Details">
+                                <group name="wtdetails_group_top">
+                                    <group name="wtdetails_group_top_left">
+                                    </group>
+                                    <group name="wtdetails_group_top_right">
+                                        <field name="wttemplate_id" placeholder="Select or Create a Template"
+                                               context="{
+                                               'form_view_ref':'analytic_wbs.view_purchase_wttemplate_form',
+                                               'default_po_id': po_id,
+                                               'po_id': po_id}"/>
+                                    </group>
+                                </group>
+                                <group name="wtdetails_group_center">
+                                    <field name="workticket_line_ids" nolabel="1" context="{'default_workticket_id': active_id}">
+                                        <tree create="true" delete="true" string="Work Ticket Details" editable="1">
+                                            <field name="po_id" invisible="True"/>
+                                            <field name="workticket_id" invisible="True"/>
+                                            <field name="project_id" invisible="1"/>
+                                            <field name="account_project_id" options="{'no_create': True}"/>
+                                            <field name="description"/>
+                                            <field name="qty"/>
+                                            <field name="uom"/>
+                                            <field name="unit_rate"/>
+                                            <field name="untaxed_amount"/>
+                                            <field name="company_id"/>
+                                            <field name="currency_id" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                    <group class="oe_subtotal_footer oe_right">
+                                        <field name="untaxed_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                        <!--
+                                        <field name="tax_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                        <field name="total_amount" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                        -->
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                    <!--
+                    <sheet>
+                        <header string="Document Validation">
+                            <button name="action_doc_log_validation_rate" type="object" string="Validate Rate"
+                                    class="oe_highlight oe_view_mode_only" states="submitted"/>
+                            <button name="action_doc_log_validation_quantity" type="object" string="Validate Quantity"
+                                    class="oe_highlight oe_view_mode_only" states="submitted"/>
+                            <button name="action_doc_log_validation_overall" type="object" string="Validate Overall"
+                                    class="oe_highlight oe_view_mode_only" states="submitted"/>
+                        </header>
+                        <group>
+                            <field name="approval_ids" mode="kanban">
+                                <kanban>
+                                    <field name="color"/>
+                                    <field name="approval_type"/>
+                                    <field name="res_model"/>
+                                    <field name="res_id"/>
+                                    <field name="sign_date"/>
+                                    <field name="digital_signature"/>
+                                    <field name="user_image"/>
+                                    <field name="res_users"/>
+                                    <field name="display_name"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <t t-set="color" t-value="kanban_color(record.color.raw_value)"/>
+                                            <div t-att-class="color + ' oe_kanban_global_click'">
+                                                <div class="o_kanban_image">
+                                                    <img alt="" t-if="record.user_image.raw_value" t-att-src="kanban_image('res.users', 'image', record.res_users.raw_value)"/>
+                                                    <img t-if="record.digital_signature.raw_value" t-att-src="kanban_image('res.users', 'digital_signature', record.res_users.raw_value)" alt="Signature"/>
+                                                </div>
+                                                <div class="oe_kanban_details">
+                                                    <field name="display_name"/>
+                                                    <div t-if="record.sign_date.raw_value"><field name="sign_date"/></div>
+                                                    <div t-if="record.approval_type.raw_value"><field name="approval_type"/></div>
+                                                </div>
+                                                <div class="oe_kanban_footer">
+                                                    <div class="oe_kanban_footer_left">
+                                                    </div>
+                                                    <div class="oe_kanban_footer_right">
+                                                    </div>
+                                                </div>
+                                                <div class="oe_clear"/>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                        </group>
+                    </sheet>
+                    -->
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="purchase_workticket_line_action">
+            <field name="name">Budget Entries</field>
+            <field name="res_model">purchase.workticket.line</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="view_id" ref="view_purchase_workticket_line_tree"/>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+              <p>
+                No budget entries recorded yet.
+              </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="purchase_workticket_action">
+            <field name="name">Budget Transactions</field>
+            <field name="res_model">purchase.workticket</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="view_id" ref="view_purchase_workticket_tree"/>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+              <p>
+                No budget transactions recorded yet.
+              </p>
+            </field>
+        </record>
+
+
+
+
+     </data>
+</openerp>

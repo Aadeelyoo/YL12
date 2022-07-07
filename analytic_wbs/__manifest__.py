@@ -1,0 +1,85 @@
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+
+{
+    'name' : 'Solevo Analytic wbs Accounting',
+    'author': "Solevo inc.",
+    'version': '12,0.1.0.0',
+    'website' : 'https://www.solevo.ca',
+    'category': 'Hidden/Dependency',
+
+    #'depends' : ['base', 'web', 'decimal_precision',
+    #             'mail', 'project',
+    #             'account',
+    #             'purchase',
+    #             'muk_web_theme',
+    #             'analytic',
+    #             'project_code',
+    #             'l10n_ca',
+    #             'solevo-odoo-debrand',
+    #             'solevo_doc_sign',
+    #             'evosoft_report_template',
+    #             'approval_mixin',
+    #             'hr_timesheet',
+    #             ],
+    'depends': ['base', 'web', 'decimal_precision', 'dashboard_view',
+                'mail', 'project',
+                'account',
+                'purchase',
+                'analytic',
+                'project_code',
+                'l10n_ca',
+                #'solevo-odoo-debrand',
+                #'solevo_doc_sign',
+                'evosoft_report_template',
+                'approval_mixin',
+                'hr_timesheet',
+                'compoze_no_auto_subscribe',
+                ],
+    'description': """
+Module for defining analytic_wbs accounting object.
+===============================================
+
+In OpenERP, analytic_wbs accounts are linked to general accounts but are treated
+totally independently. So, you can enter various different analytic_wbs operations
+that have no counterpart in the general financial accounts.
+    """,
+    'data': [
+        'security/groups.xml',
+        'security/ir.model.access.csv',
+        'data/tci_sequence.xml',
+        'views/analytic_wbs_budget_view.xml',
+        'views/analytic_wbs_progress_view.xml',
+        'views/scope_of_work_view.xml',
+        'views/analytic_wbs_forecast_view.xml',
+        'views/analytic_wbs_workticket_view.xml',
+        'views/tci_template_view.xml',
+        'views/tci_control_account_views.xml',
+        'views/tci_view.xml',
+        'views/task_forecast_view.xml',
+        'views/analytic_wbs_purchase_view.xml',
+        'views/analytic_wbs_project_view.xml',
+        'views/analytic_wbs_wttemplate_view.xml',
+        'views/analytic_wbs_view.xml',
+        'views/tci_analytic_project_view.xml',
+        'views/hr_employee_view.xml',
+        'views/analytic_wbs_menus.xml',
+        'views/res_config_setting_view.xml',
+        'data/wbs_data.xml',
+        'data/analytic_wbs_datatest.xml',
+        'report/other_templates.xml',
+        'report/report.xml',
+        'report/module_report.xml',
+        'report/report_header_footer.xml',
+        'report/report_email_template.xml',
+        # xx'wizard/account_analytic_wbs_chart_view.xml',
+        'wizard/approvers_overwrite_view.xml',
+        'wizard/approval_attach_assign_view.xml',
+        'wizard/approval_feedback_view.xml',
+    ],
+    'demo': [
+    ],
+    'installable': True,
+    'auto_install': False,
+
+}

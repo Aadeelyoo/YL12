@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_task_forecast_search_form" model="ir.ui.view">
+            <field name="name">task_forecast.search.form</field>
+            <field name="model">project.task.forecast</field>
+            <field name="arch" type="xml">
+                <search string="Forecast">
+                    <field name="task_id"/>
+                    <field name="date"/>
+                    <field name="po_id"/>
+                    <field name="employee_id"/>
+                    <field name="partner_id"/>
+                    <field name="analytic_project_id"/>
+                    <field name="forecast_type"/>
+                    <!--
+                    <field name="quantity"/>
+                    <field name="unit_rate"/>
+                    <field name="amount"/>
+
+                    <filter string="My Items" name="my_items" domain="[('user_id', '=', uid)]"/>
+                    <filter string="My Followed Items" name="my_followed_items" domain="[('message_is_follower', '=', True)]"/>
+                    <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
+                    <separator/>
+                    <filter string="Sent Back to Vendor" name="is_back_to_vendor" domain="[('is_back_to_vendor', '=', True)]"/>
+                    <filter string="Not Sent Back to Vendor" name="is_not_back_to_vendor" domain="[('is_back_to_vendor', '=', False)]"/>
+                    <separator/>
+                    -->
+                    <group expand="0" string="Group By">
+                        <filter string="Date" name="group_date" context="{'group_by':'date'}"/>
+                        <filter string="Purchase Order" name="group_po" context="{'group_by':'po_id'}"/>
+                        <filter string="Task" name="group_task" context="{'group_by':'task_id'}"/>
+                        <filter string="Project" name="group_project" context="{'group_by':'project_id'}"/>
+                        <filter string="WBS" name="group_wbs" context="{'group_by':'analytic_project_id'}"/>
+                        <filter string="Employee" name="group_employee" context="{'group_by':'employee_id'}"/>
+                        <filter string="Vendor" name="group_partner" context="{'group_by':'partner_id'}"/>
+                        <filter string="Type" name="group_type" context="{'group_by':'forecast_type'}"/>
+                        <!--
+                        <filter string="Purchase Order" name="group_po" context="{'group_by':'po_id'}"/>
+                        <filter string="Project" name="project" domain="[]" context="{'group_by':'project_id_group'}"/>
+                        <filter string="Project" name="project" context="{'group_by':'project_id'}"/>
+
+                        <filter string="Created by" name="User" context="{'group_by':'user_id'}"/>
+                        -->
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_task_forecast_tree" model="ir.ui.view">
+            <field name="name">task_forecast.tree</field>
+            <field name="model">project.task.forecast</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" string="Cost Item">
+                    <field name="partner_id"/>
+                    <field name="po_id"/>
+                    <field name="task_id"/>
+                    <field name="date"/>
+                    <field name="quantity"/>
+                    <field name="unit_rate"/>
+                    <field name="amount" sum="Total"/>
+                    <field name="analytic_project_id"/>
+                    <field name="project_id" invisible="1"/>
+                    <field name="forecast_type" invisible="1"/>
+                    <field name="rep_uid" invisible="0"/>
+                    <field name="rep_name" invisible="0"/>
+                    <field name="rep_uid_type" invisible="0"/>
+                    <button string="Incur Line" type="object"
+                                        name="incur_forecast_line" class="btn-secondary" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_task_forecast_graph" model="ir.ui.view">
+            <field name="name">task.forecast.graph</field>
+            <field name="model">project.task.forecast</field>
+            <field name="arch" type="xml">
+                <graph string="Forecast">
+                    <field name="date" interval="month" type="col"/>
+                    <field name="amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_task_forecast_pivot" model="ir.ui.view">
+            <field name="name">task.forecast.pivot</field>
+            <field name="model">project.task.forecast</field>
+            <field name="arch" type="xml">
+                <pivot string="Forecast" >
+                    <field name="date" interval="month" type="col"/>
+                    <field name="po_id" type="row"/>
+                    <field name="task_id" type="row"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="forecast_view_pivot_by_employee" model="ir.ui.view">
+            <field name="name">project.task.forecast.employee.pivot</field>
+            <field name="model">project.task.forecast</field>
+            <field name="arch" type="xml">
+                <pivot string="Forecast">
+                    <field name="employee_id" type="row"/>
+                    <field name="task_id" type="row"/>
+                    <field name="date" type="col" interval="month"/>
+                    <field name="quantity" type="measure"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="act_forecast_all" model="ir.actions.act_window">
+            <field name="name">Forecast</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,graph,pivot</field>
+            <field name="search_view_id" ref="view_task_forecast_search_form"/>
+            <field name="domain">[('forecast_type', '=', 'forecast')]</field>
+            <field name="context">{
+                'default_forecast_type': 'forecast'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+        <record id="act_forecast_all_by_po" model="ir.actions.act_window">
+            <field name="name">Forecast</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,graph,pivot</field>
+            <field name="search_view_id" ref="view_task_forecast_search_form"/>
+            <field name="domain">[('po_id', '=', active_id), ('forecast_type', '=', 'forecast')]</field>
+            <field name="context">{
+                'default_forecast_type': 'forecast'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+        <record id="act_forecast_all_by_employee" model="ir.actions.act_window">
+            <field name="name">Forecast</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">pivot,graph,tree</field>
+            <field name="search_view_id" ref="view_task_forecast_search_form"/>
+            <field name="domain">[('employee_id', '=', active_id), ('forecast_type', '=', 'forecast')]</field>
+            <field name="context">{
+                'search_default_employee_id': [active_id],
+                'default_employee_id': active_id,
+                'default_forecast_type': 'forecast'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+
+        <record id="action_task_forecast_tree" model="ir.actions.act_window.view">
+            <field name="name">Forecast</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_task_forecast_tree"/>
+            <field name="act_window_id" ref="act_forecast_all" />
+            <field name="sequence">0</field>
+        </record>
+
+        <record id="action_task_forecast_graph" model="ir.actions.act_window.view">
+            <field name="name">Forecast</field>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="view_task_forecast_graph"/>
+            <field name="act_window_id" ref="act_forecast_all" />
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="action_task_forecast_pivot" model="ir.actions.act_window.view">
+            <field name="name">Forecast</field>
+            <field name="view_mode">pivot</field>
+            <field name="view_id" ref="view_task_forecast_pivot"/>
+            <field name="act_window_id" ref="act_forecast_all" />
+            <field name="sequence">2</field>
+        </record>
+
+
+        <!-- Action for planned values -->
+        <record id="act_plan_all" model="ir.actions.act_window">
+            <field name="name">Planned Values</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,graph,pivot</field>
+            <field name="search_view_id" ref="view_task_forecast_search_form"/>
+            <field name="domain">[('forecast_type', '=', 'plan')]</field>
+            <field name="context">{
+                'default_forecast_type': 'plan'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create plannes forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+        <record id="act_plan_all_by_po" model="ir.actions.act_window">
+            <field name="name">Planned Values</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,graph,pivot</field>
+            <field name="search_view_id" ref="view_task_forecast_search_form"/>
+            <field name="domain">[('po_id', '=', active_id), ('forecast_type', '=', 'plan')]</field>
+            <field name="context">{
+                'default_forecast_type': 'plan'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create planned values on all tasks
+                </p>
+            </field>
+        </record>
+
+        <record id="act_plan_all_by_employee" model="ir.actions.act_window">
+            <field name="name">Planned Values</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">pivot,graph,tree</field>
+            <field name="search_view_id" ref="view_task_forecast_search_form"/>
+            <field name="domain">[('employee_id', '=', active_id), ('forecast_type', '=', 'plan')]</field>
+            <field name="context">{
+                'search_default_employee_id': [active_id],
+                'default_employee_id': active_id,
+                'default_forecast_type': 'plan'
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+        <record id="action_task_plan_tree" model="ir.actions.act_window.view">
+            <field name="name">Planned Values</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_task_forecast_tree"/>
+            <field name="act_window_id" ref="act_plan_all" />
+            <field name="sequence">0</field>
+        </record>
+
+        <record id="action_task_plan_graph" model="ir.actions.act_window.view">
+            <field name="name">Planned Values</field>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="view_task_forecast_graph"/>
+            <field name="act_window_id" ref="act_plan_all" />
+            <field name="sequence">1</field>
+        </record>
+
+        <record id="action_task_plan_pivot" model="ir.actions.act_window.view">
+            <field name="name">Plannes Values</field>
+            <field name="view_mode">pivot</field>
+            <field name="view_id" ref="view_task_forecast_pivot"/>
+            <field name="act_window_id" ref="act_plan_all" />
+            <field name="sequence">2</field>
+        </record>
+
+
+     </data>
+</openerp>

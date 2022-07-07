@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+                <!-- Sequences for Cost Item Number -->
+
+        <record id="seq_tci_num" model="ir.sequence">
+            <field name="name">Task Cost Item Number</field>
+            <field name="code">tci.number</field>
+            <field name="prefix">wt%(y)s-</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="view_tci_type_tree" model="ir.ui.view">
+            <field name="name">tci.type.tree</field>
+            <field name="model">tci.type</field>
+            <field name="arch" type="xml">
+                <tree string="Tci Type">
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="order"/>
+                    <field name="is_active"/>
+                </tree>
+            </field>
+        </record>
+
+        # **************** wbs Task Cost Item Lines ****************
+
+        <record id="view_tci_line_search_form" model="ir.ui.view">
+            <field name="name">tci.line.search.form</field>
+            <field name="model">tci.line</field>
+            <field name="arch" type="xml">
+                <search string="Cost Item Detail">
+                    <field name="account_project_id"/>
+                    <field name="description" string="Description"/>
+                    <field name="tci_id"/>
+                    <field name="user_id"/>
+                    <field name="partner_id" string="Companie"/>
+                    <field name="company_id"/>
+                    <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
+                    <filter string="Active wbs" name="active_wbs" domain="[('wbs_state', '=', 'active')]"/>
+                    <filter string="Active Project wbs" name="active_project_wbs" domain="[('project_wbs_state', '=', 'active')]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="wbs" name="wbs" context="{'group_by':'account_project_id'}"/>
+                        <filter string="Cost Item" name="tci" context="{'group_by':'tci_id'}"/>
+                        <filter string="Project" name="project" context="{'group_by':'project_id'}"/>
+                        <filter string="Created by" name="User" context="{'group_by':'user_id'}"/>
+                        <filter string="wbs State" name="wbs_state" context="{'group_by':'wbs_state'}"/>
+                        <filter string="Project wbs State" name="project_wbs_state" context="{'group_by':'project_wbs_state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_tci_line_tree" model="ir.ui.view">
+            <field name="name">tci.detail.tree</field>
+            <field name="model">tci.line</field>
+            <field name="arch" type="xml">
+                <tree string="Tci Lines">
+                    <field name="date"/>
+                    <field name="description"/>
+                    <!--
+                    <field name="account_project_id" options="{'no_create': True, 'no_open': True}" onchange="onchange_account_project(account_project_id)"/>
+                    <field name="tci_id"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="company_id"/>
+                    <field name="amount" sum="Total"/>
+                    <field name="mhr" sum="Man Hours"/>
+                    <field name="qty" sum="Quantity"/>
+                    -->
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_tci_line_form" model="ir.ui.view">
+            <field name="name">tci.detail.form</field>
+            <field name="model">tci.line</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <form string="Cost Item Detail">
+                    <sheet string="Cost Item Detail">
+                        <group string="Cost Item Line Detail">
+                            <group string="Cost Item Line info">
+                                <field name="date"/>
+                                <field name="tci_id"/>
+                                <field name="account_project_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="description"/>
+                                <field name="company_id"/>
+                            </group>
+                            <group string="Cost Item Detail">
+                                <field name="untaxed_amount"/>
+                                <field name="qty"/>
+                                <field name="mhr"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_tci_line_graph" model="ir.ui.view">
+            <field name="name">tci.line.graph</field>
+            <field name="model">tci.line</field>
+            <field name="arch" type="xml">
+                <graph string="wbs Entries">
+                    <field name="account_project_id" type="row"/>
+                    <field name="qty" type="measure"/>
+                    <field name="untaxed_amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_tci_line_pivot" model="ir.ui.view">
+            <field name="name">tci.line.pivot</field>
+            <field name="model">tci.line</field>
+            <field name="arch" type="xml">
+                <pivot string="wbs Entries" >
+                    <field name="account_project_id" type="row"/>
+                    <field name="qty" type="measure"/>
+                    <field name="untaxed_amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+                # **************** Project Control - Cost Item Views and Actions ****************
+
+        <record id="view_tci_search_form" model="ir.ui.view">
+            <field name="name">tci.search.form</field>
+            <field name="model">tci</field>
+            <field name="arch" type="xml">
+                <search string="Cost Item">
+                    <field name="tci_number"/>
+                    <field name="partner_tci_number"/>
+                    <field name="partner_id"/>
+                    <field name="project_ids"/>
+                    <field name="po_id"/>
+                    <field name="user_id"/>
+                    <field name="company_id"/>
+                    <filter string="My Items" name="my_items" domain="[('user_id', '=', uid)]"/>
+                    <filter string="My Followed Items" name="my_followed_items" domain="[('message_is_follower', '=', True)]"/>
+                    <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" name="Status" context="{'group_by':'state'}"/>
+                        <filter string="Vendor" name="vendor" context="{'group_by':'partner_id'}"/>
+                        <filter string="Purchase Order" name="po" context="{'group_by':'po_id'}"/>
+                        <!--
+                        <filter string="Project" name="project" context="{'group_by':'project_id'}"/>
+                        -->
+                        <filter string="Created by" name="User" context="{'group_by':'user_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="act_tci_all" model="ir.actions.act_window">
+            <field name="name">Cost Item</field>
+            <field name="res_model">tci</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="context">{
+                'search_default_active': 1,
+                'search_default_my_items': 1,
+            }</field>
+            <field name="search_view_id" ref="view_tci_search_form"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create Cost Items
+                </p>
+                <p>
+                    Once your Purchase Order is created, you can create cost Items and assign
+                    each line item to a wbs.
+                </p>
+                <p>
+                    All cost Item created will have to go thru the approval process before to be
+                    incorporated into an invoice.
+                </p>
+            </field>
+        </record>
+
+        <record id="view_tci_tree" model="ir.ui.view">
+            <field name="name">tci.tree</field>
+            <field name="model">tci</field>
+            <field name="arch" type="xml">
+                <tree string="Cost Item">
+                    <field name="partner_tci_number"/>
+                    <!--
+                    <field name="project_id" invisible="0" options="{'no_create': True, 'no_open': True}"/>
+                    -->
+                    <field name="project_ids" widget="many2many_tags"/>
+                    <field name="partner_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="po_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="date"/>
+                    <field name="untaxed_amount" sum="Total Untaxed"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="state" readonly="True"/>
+                    <field name="create_date" readonly="True"/>
+                    <field name="create_uid" readonly="True"/>
+                    <field name="tci_number"/>
+                    <field name="invoice_id"/>
+                    <field name="user_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="approval_ids" widget="many2many_tags"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_tci_pivot" model="ir.ui.view">
+            <field name="name">tci.pivot</field>
+            <field name="model">tci</field>
+            <field name="arch" type="xml">
+                <pivot string="Line Transaction" >
+                    <field name="date" type="row"/>
+                    <field name="description" type="row"/>
+                    <field name="state" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="act_tci_detail_all" model="ir.actions.act_window">
+            <field name="name">Cost Item Detail</field>
+            <field name="res_model">tci.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{
+                'search_default_tci_id': [active_id],
+                'default_tci_id': active_id,
+            }</field>
+            <field name="search_view_id" ref="view_tci_line_search_form"/>
+        </record>
+
+        <record id="view_tci_form" model="ir.ui.view">
+            <field name="name">tci.form</field>
+            <field name="model">tci</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <form string="Cost Items">
+                <header>
+                    <button name="action_tci_submit" type="object" string="Submit"
+                            class="oe_highlight oe_view_mode_only"  states="draft" />
+                    <button name="action_tci_submit" type="object" string="Re-Submit"
+                            class="oe_highlight oe_view_mode_only"  states="pending" />
+                    <button name="action_tci_pending" type="object" string="Pending"
+                            class="oe_highlight oe_view_mode_only"  states="submitted" />
+                    <button name="action_tci_approve" type="object" string="Approve"
+                            class="oe_highlight oe_view_mode_only"  states="submitted" />
+                    <button name="action_tci_reject" type="object" string="Reject"
+                            class="oe_highlight oe_view_mode_only"  states="submitted"/>
+                    <button name="action_tci_post" type="object" string="Post"
+                            class="oe_highlight oe_view_mode_only"  states="approved" />
+                    <field name="state" widget="statusbar" readonly="True"
+                           statusbar_visible="draft,pending,submitted,approved,posted"/>
+                </header>
+                    <sheet string="Cost Item">
+                        <div class="oe_button_box" name="button_box">
+                            <button name="%(act_tci_detail_all)d"
+                                class="oe_stat_button"
+                                type="action"
+                                icon="fa-signal">
+                                <field name="tci_line_number" widget="statinfo" string="Line Details"/>
+                            </button>
+                            <button name="action_get_attachment_view"
+                                class="oe_stat_button"
+                                icon="fa-book"
+                                type="object">
+                                <field name="attachment_number" widget="statinfo" string="Documents"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="partner_tci_number"/>
+                            <h1>
+                                <field name="partner_tci_number" class="oe_inline" placeholder="Partner Cost Item #"/>
+                            </h1>
+                            <label for="tci_number"/>
+                            <field name="tci_number" placeholder="Auto-Generated Cost Item #"/>
+                        </div>
+                        <group>
+                            <group string="Cost Item Informations">
+                                <field name="partner_id" options="{'no_create': True}"/>
+                                <field name="po_id" options="{'no_create': True}"/>
+                                <field name="date"/>
+                            </group>
+                            <group string="Other Info">
+                                <field name="task_id"/>
+                                <field name="project_ids" widget="many2many_tags" readonly="1"/>
+                                <field name="user_id"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="wtdetails" string="Details">
+                                <group name="wtdetails_group_top">
+                                    <group name="wtdetails_group_top_left">
+                                    </group>
+                                    <group name="wtdetails_group_top_right">
+                                        <field name="tci_template_id" placeholder="Select or Create a Template"
+                                               context="{
+                                               'form_view_ref':'analytic_wbs.view_purchase_wttemplate_form',
+                                               'default_po_id': po_id,
+                                               'po_id': po_id}"/>
+                                    </group>
+                                </group>
+                                <group name="wtdetails_group_center">
+                                    <field name="tci_line_ids" nolabel="1" context="{'default_tci_id': active_id}">
+                                        <tree create="true" delete="true" string="Cost Item Details" editable="1">
+                                            <field name="po_id" invisible="True"/>
+                                            <field name="tci_id" invisible="True"/>
+                                            <!--
+                                            <field name="project_id" invisible="1"/>
+                                            -->
+                                            <field name="account_project_id" options="{'no_create': True}"/>
+                                            <field name="description"/>
+                                            <field name="qty"/>
+                                            <field name="uom"/>
+                                            <field name="unit_rate"/>
+                                            <field name="untaxed_amount"/>
+                                            <field name="company_id"/>
+                                            <field name="currency_id" invisible="1"/>
+                                        </tree>
+                                    </field>
+                                    <group class="oe_subtotal_footer oe_right">
+                                        <field name="untaxed_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                        <!--
+                                        <field name="tax_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                        <field name="total_amount" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                        -->
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                    <sheet>
+                        <header string="Document Validation">
+                            <button name="action_doc_log_validation_rate" type="object" string="Validate Rate"
+                                    class="oe_highlight oe_view_mode_only" states="submitted"/>
+                            <button name="action_doc_log_validation_quantity" type="object" string="Validate Quantity"
+                                    class="oe_highlight oe_view_mode_only" states="submitted"/>
+                            <button name="action_doc_log_validation_overall" type="object" string="Validate Overall"
+                                    class="oe_highlight oe_view_mode_only" states="submitted"/>
+                        </header>
+                        <group>
+                            <field name="approval_ids" mode="kanban">
+                                <kanban>
+                                    <field name="color"/>
+                                    <field name="approval_type"/>
+                                    <field name="res_model"/>
+                                    <field name="res_id"/>
+                                    <field name="sign_date"/>
+                                    <field name="digital_signature"/>
+                                    <field name="user_image"/>
+                                    <field name="res_users"/>
+                                    <!-- fields in form x2many view to diminish requests -->
+                                    <field name="display_name"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <t t-set="color" t-value="kanban_color(record.color.raw_value)"/>
+                                            <div t-att-class="color + ' oe_kanban_global_click'">
+                                                <div class="o_kanban_image">
+                                                    <img alt="" t-if="record.user_image.raw_value" t-att-src="kanban_image('res.users', 'image', record.res_users.raw_value)"/>
+                                                    <img t-if="record.digital_signature.raw_value" t-att-src="kanban_image('res.users', 'digital_signature', record.res_users.raw_value)" alt="Signature"/>
+                                                </div>
+                                                <div class="oe_kanban_details">
+                                                    <field name="display_name"/>
+                                                    <div t-if="record.sign_date.raw_value"><field name="sign_date"/></div>
+                                                    <div t-if="record.approval_type.raw_value"><field name="approval_type"/></div>
+                                                </div>
+                                                <div class="oe_kanban_footer">
+                                                    <div class="oe_kanban_footer_left">
+                                                        <!-- Left hand footer... -->
+                                                    </div>
+                                                    <div class="oe_kanban_footer_right">
+                                                        <!-- Right hand footer... -->
+                                                    </div>
+                                                </div>
+                                                <div class="oe_clear"/>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_task_tci_form" model="ir.ui.view">
+            <field name="name">task.tci.form</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2" />
+            <field name="groups_id" eval="[(6,0, (ref('analytic_wbs.group_tci_user'),))]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='toggle_active']" position="before">
+                    <button name="display_tci"
+                        class="oe_stat_button"
+                        type="object"
+                        icon="fa-dollar">
+                        <field name="tci_number" widget="statinfo" string="Cost Items"/>
+                    </button>
+                </xpath>
+                <xpath expr="//field[@name='user_id']" position="after">
+                    <field name="sow_id" string="SOW"/>
+                </xpath>
+                <xpath expr="//notebook/page[@name='extra_info']" position="before">
+                    <page name="tci" string="Task Cost">
+                        <group name="tci_details_group_top">
+                            <group name="tci_details_group_top_left">
+                                <field name="state" invisible="1"/>
+                            </group>
+                            <group name="tci_details_group_top_right">
+                            </group>
+                        </group>
+                        <group name="tci_details_group_center">
+                            <field name="tci_ids" nolabel="1" context="{'default_task_id': active_id}">
+                                <tree string="Cost Item Details">
+                                    <field name="po_id" invisible="0"/>
+                                    <field name="task_id" invisible="True"/>
+                                    <!--
+                                    <field name="project_id" invisible="1"/>
+                                    -->
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="untaxed_amount"/>
+
+                                    <field name="state"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <!--
+                                <field name="untaxed_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+
+                                <field name="tax_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name="total_amount" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                -->
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="tci_line_action">
+            <field name="name">TCI Lines</field>
+            <field name="res_model">tci.line</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="view_id" ref="view_tci_line_tree"/>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+              <p>
+                No budget entries recorded yet.
+              </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_pc_tci">
+            <field name="name">TCI</field>
+            <field name="res_model">tci</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="view_id" ref="view_tci_tree"/>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+              <p>
+                No task cost items recorded yet.
+              </p>
+            </field>
+        </record>
+
+
+
+
+
+
+     </data>
+</openerp>

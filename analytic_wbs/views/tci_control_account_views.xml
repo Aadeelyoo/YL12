@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        # **************** Control Account Views ****************
+
+        <record id="view_tci_control_account_search_form" model="ir.ui.view">
+            <field name="name">tci.line.search.form</field>
+            <field name="model">tci.control.account</field>
+            <field name="arch" type="xml">
+                <search string="TCI Detail">
+                    <field name="name"/>
+                    <field name="code"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_tci_control_account_tree" model="ir.ui.view">
+            <field name="name">tci.control.account.tree</field>
+            <field name="model">tci.control.account</field>
+            <field name="arch" type="xml">
+                <tree string="Control Account" editable="bottom">
+                    <field name="name"/>
+                    <field name="code"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_tci_control_account">
+            <field name="name">Control Accounts</field>
+            <field name="res_model">tci.control.account</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_tci_control_account_tree"/>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+     </data>
+</openerp>

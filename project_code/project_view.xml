@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Sequences for project number -->
+
+        <record id="seq_project_sub_number" model="ir.sequence">
+            <field name="name">Project Number</field>
+            <field name="code">project.sub.number</field>
+            <field name="prefix">P%(y)s-</field>
+            <field name="padding">5</field>
+        </record>
+
+
+        <!-- add project code in project form -->
+
+        <record id="edit_project" model="ir.ui.view">
+            <field name="name">project.project.form</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project" />
+            <field name="arch" type="xml">
+                <field name="user_id" position="before">
+                    <group>
+                        <field name="project_code_id" string="Project Code"/>
+                        <field name="short_name" string="Abrev."/>
+                        <field name="phase"/>
+                    </group>
+                </field>
+            </field>
+        </record>
+
+        <!--
+            add project code in project filter
+        -->
+        <record id="view_project_project_filter" model="ir.ui.view">
+            <field name="name">project.project.search</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.view_project_project_filter" />
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="project_code_id" string="Project Code" />
+                    <field name="short_name" string="Abrev."/>
+                </field>
+            </field>
+        </record>
+
+        <!--  
+            add the project code field on project view
+        -->
+        <record id="view_project" model="ir.ui.view">
+            <field name="name">project.project.tree</field>
+            <field name="model">project.project</field>
+            <field name="field_parent">child_ids</field>
+            <field name="inherit_id" ref="project.view_project" />
+            <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <field name="project_code_id" string="Project Code" />
+                    <field name="short_name" string="Abrev."/>
+                    <field name="phase"/>
+                </field>
+            </field>
+        </record>
+        
+        <!--
+            add project code in project kanban
+        -->
+        <record model="ir.ui.view" id="view_project_kanban">
+            <field name="name">project.project.kanban</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.view_project_kanban" />
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="project_code_id"/>
+                </field>
+                <xpath expr="//div[contains(@class, 'o_primary')]" position="inside">
+                    <span><t t-esc="record.project_code_id.value"/></span>
+                </xpath>
+           </field>
+       </record>
+
+    </data>
+</openerp>

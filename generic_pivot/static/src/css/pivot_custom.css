@@ -1,0 +1,30 @@
+table td.o_pivot_col {
+position: relative;
+}
+td.o_pivot_cell_value i {
+    display: inline-block;
+    opacity: 0;
+    position: absolute;
+    left: 5px;
+    top: 8px;
+}
+td.o_pivot_col:focus i, td.o_pivot_cell_search i {
+    opacity: 1;
+}
+td.o_pivot_cell_value div {
+    display: inline-block;
+    width: 100%;
+    outline: none;
+    padding: 2px 5px 2px 25px;
+}
+td.o_pivot_col:hover, td.o_pivot_col:focus, td.o_pivot_cell_search{
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075), 0 0 5px #7c7bad;
+    outline: none;
+}
+td.o_pivot_cell_search .o_variation.o_positive:hover {
+box-shadow:none;
+}
+th.d-md-table-cell.highlight_cell, .highlight_cell, td.o_pivot_header_cell_closed.highlight_cell,
+td.o_pivot_header_cell_opened.highlight_cell{
+    background-color: #7976ce94;
+}

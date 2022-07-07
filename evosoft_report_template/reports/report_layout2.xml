@@ -1,0 +1,35 @@
+<odoo>
+	<template id="evosoft_report_layout3_footer" name="evosoft_report_layout3_footer">
+        <div class="footer o_standard_footer">
+            <div class="text-center" style="border-top: 1px solid black;">
+                <div t-if="report_type == 'pdf'" class="row text-muted">
+                    <div class="col-3 mb4">
+                        <li class="list-inline-item">Generated with EvoSoft</li>
+                    </div>
+                    <div class="col-9 text-right">
+                        <li class="list-inline-item">Page: <span class="page"/> / <span class="topage"/></li>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+	</template>
+
+    <template id="evosoft_report_layout2">
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"/>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+        <div class="article">
+            <t t-call="evosoft_report_template.evosoft_report_layout1_header"/>
+            <t t-raw="0"/>
+            <t t-call="evosoft_report_template.evosoft_report_layout3_footer"/>
+        </div>
+    </template>
+
+</odoo>
+
+
+

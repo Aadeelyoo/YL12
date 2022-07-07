@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+        # **************** wbs Acounts Related Views ****************
+
+        <record model="ir.actions.act_window" id="account_analytic_wbs_progress_line_action">
+            <field name="context">{'search_default_group_date': 1, 'search_default_group_journal': 1}</field>
+            <field name="domain">[('account_project_id.account_id','=', active_id)]</field>
+            <field name="name">Costs &amp; Revenues</field>
+            <field name="res_model">account.analytic_wbs.progress_line</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="view_id" ref="view_account_analytic_wbs_progress_line_tree"/>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+              <p>
+                No activity yet on this account.
+              </p><p>
+                In Odoo, sale orders and projects are implemented using
+                analytic_wbs accounts. You can track costs and revenues to analyse
+                your margins easily.
+              </p><p>
+                Costs will be created automatically when you register supplier
+                invoices, expenses or timesheets.
+              </p><p>
+                Revenues will be created automatically when you create customer
+                invoices. Customer invoices can be created based on sale orders
+                (fixed price invoices), on timesheets (based on the work done) or
+                on expenses (e.g. reinvoicing of travel costs).
+              </p>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_wbs_account_form" model="ir.ui.view">
+            <field name="name">analytic_wbs.analytic_wbs.account.form</field>
+            <field name="model">account.analytic_wbs.account</field>
+            <field name="arch" type="xml">
+                <form string="wbs Account">
+                    <sheet string="wbs Account">
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="action" name="%(account_analytic_wbs_progress_line_action)d"
+                        icon="fa-usd"  string="Cost/Revenue" widget="statinfo"/>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" class="oe_inline" placeholder="e.g. Analytic Account XYZ"/>
+                            </h1>
+                        </div>
+                        <div name="project"/>
+                        <group name="main">
+                            <group>
+                                <field name="descr_short"/>
+                                <field name="comment"/>
+                                <field name="code"/>
+                                <field name="partner_id"/>
+                            </group>
+                            <group>
+                                <field name="tag_ids" widget="many2many_tags"/>
+                                <field name="analytic_wbs_uom"/>
+                                <field name="account_type"/>
+                                <field name="is_active"/>
+                                <field name="is_old_wbs"/>
+                                <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                                <field name="currency_id" options="{'no_create': True}" groups="base.group_multi_currency"/>
+                            </group>
+                        </group>
+                        <notebook>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_wbs_account_list" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.account.list</field>
+            <field name="model">account.analytic_wbs.account</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Company wbs">
+                    <field name="display_name"/>
+                    <field name="descr_short"/>
+                    <field name="code"/>
+                    <field name="partner_id"/>
+                    <field name="account_type" invisible="1"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="balance_mhr"/>
+                    <field name="balance_qty"/>
+                    <field name="analytic_wbs_uom"/>
+                    <field name="balance"/>
+                    <field name="is_active"/>
+                    <field name="account_type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_wbs_account_search" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.account.search</field>
+            <field name="model">account.analytic_wbs.account</field>
+            <field name="arch" type="xml">
+                <search string="wbs Account">
+                    <field name="name" filter_domain="['|', ('name','ilike',self), ('code','ilike',self)]" string="wbs Account"/>
+                    <field name="tag_ids"/>
+                    <field name="partner_id"/>
+                    <filter string="Active" domain="[('account_type','=','active')]" name="active"/>
+                    <filter string="Archived" domain="[('account_type','=','archived')]" name="archived"/>
+                    <group expand="0" string="Group By...">
+                        <!--
+                        <filter string="wbs Type" name="wbs_type" context="{'group_by':'account_type'}"/>
+                        <filter string="Associated Partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                        -->
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_wbs_infocode_tag_tree" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.infocode_tag.tree</field>
+            <field name="model">account.analytic_wbs.infocode_tag</field>
+            <field name="arch" type="xml">
+                <tree string="Infocode Tag">
+                    <field name="name"/>
+                    <field name="short_descr"/>
+                </tree>
+            </field>
+        </record>
+
+
+     </data>
+</openerp>

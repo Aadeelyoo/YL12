@@ -1,0 +1,73 @@
+<odoo>
+    <data noupdate="0">
+        <record id="mail_activity_data_rate_approval" model="mail.activity.type">
+            <field name="name">Rate Approval</field>
+            <field name="summary">Rate validation</field>
+            <field name="icon">fa-money</field>
+            <field name="sequence">1</field>
+            <field name="category">approval</field>
+        </record>
+        <record id="mail_activity_data_quantity_approval" model="mail.activity.type">
+            <field name="name">Quantity Approval</field>
+            <field name="icon">fa-check-circle-o</field>
+            <field name="summary">Quantity validation</field>
+            <field name="sequence">2</field>
+            <field name="category">approval</field>
+        </record>
+        <record id="mail_activity_data_supervision_approval" model="mail.activity.type">
+            <field name="name">Supervision Approval</field>
+            <field name="icon">fa-eye</field>
+            <field name="summary">Site lead aproval</field>
+            <field name="sequence">3</field>
+            <field name="category">approval</field>
+        </record>
+    </data>
+
+
+    <data>
+        <!-- Template On Accept Button -->
+        <template id="activity_approver_msg_done">
+            <div>
+                <p>
+                    <strong><span t-attf-class="fa #{activity.activity_type_id.icon}"/></strong>
+                    <span t-field="activity.activity_type_id.name"/> approved by <span t-field="activity.env.user.name"/><span t-if="activity.summary">:</span>
+                    <span t-if="activity.summary" t-field="activity.summary"/>
+                </p>
+                <div t-field="activity.note" style="margin-left: 8px;"/>
+                <div t-if="activity.feedback" style="margin-top: 8px;">
+                    <strong> Feedback</strong>
+                    <div t-field="activity.feedback" style="margin-left: 8px;"></div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Template On Hold Button -->
+        <template id="activity_approver_msg_hold">
+            <div>
+                <p>
+                    <strong><span t-attf-class="fa #{activity.activity_type_id.icon}"/></strong>
+                    <span t-field="activity.activity_type_id.name"/> hold by <span t-field="activity.env.user.name"/><span t-if="activity.summary">:</span>
+                    <span t-if="activity.summary" t-field="activity.summary"/>
+                </p>
+            </div>
+        </template>
+
+        <!-- Template On Reject Button -->
+        <template id="activity_approver_msg_reject">
+            <div>
+                <p>
+                    <strong><span t-attf-class="fa #{activity.activity_type_id.icon}"/></strong>
+                    <span t-field="activity.activity_type_id.name"/> rejected by <span t-field="activity.env.user.name"/><span t-if="activity.summary">:</span>
+                    <span t-if="activity.summary" t-field="activity.summary"/>
+                </p>
+                <div t-field="activity.note" style="margin-left: 8px;"/>
+                <div t-if="activity.feedback" style="margin-top: 8px;">
+                    <strong> Feedback</strong>
+                    <div t-field="activity.feedback" style="margin-left: 8px;"></div>
+                </div>
+            </div>
+        </template>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,9 @@
+<odoo>
+    <template id="dashboard_widget_card_cache" inherit_id="dashboard_widgets.dashboard_widget_notes">
+        <xpath expr="//div[hasclass('note')]" position="after">
+            <div t-if="record.use_cache" style="color: gray; font-size: smaller;text-align: center">
+                (Cached result last updated <span t-field="record.last_cache_updated_datetime"/>)
+            </div>
+        </xpath>
+    </template>
+</odoo>

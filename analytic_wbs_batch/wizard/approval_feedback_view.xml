@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="batch_approval_feedback_form">
+            <field name="name">batch_approval_feedback_form.form</field>
+            <field name="model">batch_approval_feedback</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Approval Feedback">
+                    <group name="top" string="Vendor Feedback">
+                        <field name="batch_id" invisible="1" readonly="1"/>
+                        <field name="action" invisible="1" readonly="1"/>
+                        <field name="approval_feedback" widget="html" nolabel="1" placeholder="Enter the reason for the rejection. This text will be sent to the vendor."/>
+                    </group>
+                    <footer>
+                        <button class="oe_highlight" type="object" name="confirm_reject" string="Confirm and Send Feedbacks" attrs="{'invisible': [('action', '=', 'approved')]}"/>
+                        <button class="oe_highlight" type="object" name="confirm_approve" string="Confirm Approval" attrs="{'invisible': [('action', '=', 'rejected')]}"/>
+                        <button special="cancel" name="cancel" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="approval_feedback_action" model="ir.actions.act_window">
+            <field name="name">Approval Feedback</field>
+            <field name="res_model">batch_approval_feedback</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="batch_approval_feedback_form"/>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

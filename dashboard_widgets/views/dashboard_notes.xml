@@ -1,0 +1,26 @@
+<odoo>
+    <record model="ir.ui.view" id="view_is_dashboard_form_notes">
+        <field name="name">view_is_dashboard_form_notes</field>
+        <field name="model">is.dashboard.widget</field>
+        <field name="inherit_id" ref="view_is_dashboard_form"/>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="notes" string="Notes">
+                    <label for="note"/>
+                    <field name="note"/>
+                    <label for="note_kanban"/>
+                    <field name="note_kanban"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <template id="dashboard_widget_notes" inherit_id="dashboard_widgets.dashboard_widget">
+        <xpath expr="." position="inside">
+            <div class="note" style="text-align: center;">
+                <t t-raw="record.note_kanban"/>
+            </div>
+        </xpath>
+    </template>
+</odoo>

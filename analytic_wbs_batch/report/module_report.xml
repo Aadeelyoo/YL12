@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>   
+        <!-- Main template -->
+        <template id="tci_batch_lem_report_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <!-- Layout template -->
+                    <t t-call="analytic_wbs_batch.tci_batch_report_layout">
+                        <div class="page" >
+                            <style type="text/css">
+                                .clearfloat {
+                                    clear: both;
+                                    float: none;
+                                    width: 100%;
+                                    height: 1px;
+                                    display: block;
+                                }
+                                .report-wrapper {
+                                    width: 1000px;
+                                    margin: 0px auto;
+                                    font-size: 13px;
+                                }
+                                table {
+                                    width: 100%;
+                                    border-spacing: 0px;
+                                }
+                                table tr td, table tr th {
+                                    text-align: left;
+                                    padding: 5px 0px 0px 5px;
+                                    border-bottom: 1px solid #eee;
+                                    border-right: none;
+                                    border-left: none;
+
+                                }
+                                table tr td:last-child, 
+                                table tr th:last-child {
+                                    border-right: none
+                                }
+                                table tr:last-child td {
+                                    border-bottom: 1px solid #eee;
+                                }
+                                table tr th {
+                                    text-align: left;
+                                }
+                                .report-header {
+                                    width: 100%;
+                                    margin: 0px 0px 10px;
+                                    text-align: left;
+                                }
+                                .report-header p {
+                                    width: 50%;
+                                    float: left;
+                                    margin: 0px 0px 20px;
+                                }
+                                .report-header p .solid {
+                                    font-weight: bold;
+                                }
+                                h2 {
+                                    text-align: center;
+                                    font-size: 35px;
+                                    text-decoration: underline; 
+                                }
+                                .tile {
+                                    display: inline-block;
+                                    width: 100px;
+                                    text-align: center;
+                                    background: #a64f8e;
+                                    color: #fff;
+                                    padding: 2px 5px;
+                                }
+
+                                .header {
+                                    display : none !importnat;
+                                }
+                                .footer {
+                                    display : none !importnat;
+                                }
+
+                                tr { 
+                                    page-break-inside: avoid !important;
+                                }
+
+                                td { 
+                                    page-break-inside: avoid !important;
+                                }
+                            </style>
+                            <div class="report-wrapper" style="page-break-after:always">
+                                <br class="clearfloat" />
+                                <div style="float:left; width: 70%;text-align: left;margin-bottom:10px;">
+                                    <span class="solid" style="text-align:left;font-weight:bold;font-size:25px" >Batch Information</span>
+                                    <table style="margin-left: 30px">
+                                        <thead>
+                                            <tr style="text-align:left">
+                                                <th>
+                                                   <span>Vendor:</span>
+                                                </th>
+                                                <th>
+                                                   <span>Purchase Order:</span>
+                                                </th>
+                                                <th>
+                                                   <span>Document Date:</span>
+                                                </th>
+                                                <th>
+                                                   <span>External Ref.:</span>
+                                                </th>
+                                                <th>
+                                                   <span>Batch Status:</span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="text-align:left">
+                                                <td>
+                                                   <span t-esc="o.partner_id.name"></span>
+                                                </td>
+                                                <td>
+                                                   <span t-esc="o.po_id.internal_ref"></span>
+                                                </td>
+                                                <td>
+                                                   <span t-esc="o.create_date.strftime('%Y-%m-%d')"></span>
+                                                </td>
+                                                <td>
+                                                   <span t-esc="o.external_ref"></span>
+                                                </td>
+                                                <td>
+                                                   <span t-esc="o.state"></span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <br class="clearfloat" />
+                                <div style="float: left;width: 100%;margin-top: 15px;">
+                                    <span class="solid" style="text-align:left;font-weight:bold;font-size:25px" >Review Status</span>
+                                    <!-- Call approver_mixin table template -->
+                                    <t t-set="mail_apporvers" t-value="get_approval_ids(o)"/>
+                                    <t t-call="analytic_wbs.mail_approvers_custom_template_table"/>
+                                </div>
+
+                                <br class="clearfloat" />
+                                <div style="float: left;width: 100%;margin-top: 15px;">
+                                    <span class="solid" style="text-align:left;font-weight:bold;font-size:25px" >Documents Summary</span>
+                                    <!-- Call tci_batch_template_table template -->
+                                    <t t-set="tci_ids" t-value="get_tci_ids(o)"/>
+                                    <t t-call="analytic_wbs_batch.tci_batch_template_table"/>
+                                </div>
+                                <br class="clearfloat" />
+                                <div style="float: left;width: 100%;margin-top: 15px;">
+                                    <span class="solid" style="text-align:left;font-weight:bold;font-size:25px" >Account Assignation</span>
+                                    <!-- Call tci_batch_project_analytic_template_table template -->
+                                    <t t-set="project_analytic_ids" t-value="get_analytic_ids(o)"/>
+                                    <t t-call="analytic_wbs_batch.tci_batch_project_analytic_template_table"/>
+                                </div>
+                            </div><!--end of report wrapper-->
+                        </div><!--end of page --> 
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="tci_batch_invoicing_instruction">
+            <div style="float:left; width: 100%;">
+                <table width="100%" style="margin-bottom:20px">
+                    <thead>
+                        <tr>
+                            <th colspan="5" style="text-align:center">
+                                <span>Invoicing Instructions</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span>The current approval report must be used as back-up information for your invoicing</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </template>
+
+    </data>
+</odoo>

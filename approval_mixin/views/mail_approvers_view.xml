@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View Mail Approvers -->
+        <record id="view_mail_approvers_form" model="ir.ui.view">
+            <field name="name">mail.approvers.form</field>
+            <field name="model">mail.approvers</field>
+            <field name="arch" type="xml">
+                <form string="Mail Approvers">
+                    <sheet>
+                        <group string="Test functionnalities approval module">
+                            <field name="mail_is_approver" invisible="0"/>
+                            <field name="mail_approver_count" invisible="0"/>
+                            <field name="mail_approval_start_date" invisible="0"/>
+                            <field name="mail_approval_end_date" invisible="0"/>
+                            <field name="mail_approval_state" invisible="0"/>
+                            <field name="mail_approval_current_user_id" invisible="0"/>
+                            <field name="user_id" invisible="0"/>
+                            <field name="mail_approver_count_approved" invisible="0"/>
+                            <field name="mail_approver_count_rejected" invisible="0"/>
+                            <field name="res_id" />
+                            <field name="res_model"/>
+                            <field name="user_id"/>
+                            <field name="approval_type"/>
+                        </group>
+                        <notebook>
+                            <page string="Mail Approvers">
+                                <header>
+                                    <button name="action_mail_edit_approver" type="object" string="Edit Approvers"
+                                            class="oe_highlight oe_view_mode_only"/>
+                                </header>
+                                <group>
+                                    <field name="mail_approver_ids">
+                                        <tree editable="bottom">
+                                            <field name="res_id"/>
+                                            <field name="res_model"/>
+                                            <field name="user_id"/>
+                                            <field name="approval_type"/>
+                                            <field name="state"/>
+                                            <field name="state_date"/>
+                                            <button name="approver_approve" type="object" icon="fa-check-square-o"/>
+                                            <button name="approver_reject" type="object" icon="fa-times-circle"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Mail Users" invisible="1">
+                                <group>
+                                    <field name="mail_user_ids">
+                                        <tree>
+                                            <field name="name"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+<!--                             <page string="Activities" invisible="1">
+                                <group>
+                                    <field name="activity_ids"/>
+                                </group>
+                            </page> -->
+
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <!-- Tree View Of Mail Approvers-->
+        <record model="ir.ui.view" id="view_mail_approvers_tree">
+            <field name="name">mail.approvers.tree</field>
+            <field name="model">mail.approvers</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="sequence" widget="handle"/>
+                    <field name="res_id" invisible="1"/>
+                    <field name="res_model" invisible="1"/>
+                    <field name="user_id"/>
+                    <field name="approval_type"/>
+                    <field name="mail_approval_state" invisible="1"/>
+                    <field name="state"/>
+                    <field name="state_date"/>
+                </tree>
+            </field>
+        </record>
+
+
+    <!-- Action View of Mail Approvers -->
+    <record model="ir.actions.act_window" id="action_mail_approvers">
+        <field name="name">Mail Approvers</field>
+        <field name="res_model">mail.approvers</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>  
+
+
+    <!-- Menu Item of Mail Approvers -->
+    <menuitem name="Approvers" 
+        id="root_mail_approval" 
+        sequence="101" 
+        web_icon="approval_mixin,static/description/icon.png"
+        groups="approval_mixin.group_doc_approval_mixin_approver"
+        />
+
+    <menuitem name="Mail Approvers" 
+        id="menu_mail_approval" 
+        parent="root_mail_approval"
+        action="action_mail_approvers" 
+        sequence="1" 
+        />
+
+     </data>
+</odoo>

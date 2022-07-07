@@ -1,0 +1,117 @@
+<odoo>
+    <data>
+		<record id="email_template_tci_approved" model="mail.template">
+			<field name="name">TCI Approved Report</field>
+			<field name="model_id" ref="analytic_wbs.model_tci"></field>
+			<field name="subject">${object.po_id.internal_ref} - ${object.name} - Status Report - ${object.state}</field>
+            <field name="email_from">${('"%s" &lt;%s&gt;' % (object.company_id.name, object.company_id.email or user.email))|safe}</field>
+            <!--
+            <field name="email_to">${object.email_formatted | safe}</field>
+            -->
+            <field name="partner_to">${object.get_distribution_list()}</field>
+
+			<field name="reply_to"></field>
+            <field name="body_html" type="html">
+<table border="0" cellpadding="0" cellspacing="0" style="padding-top: 16px; background-color: #F1F1F1; font-family:Verdana, Arial,sans-serif; color: #454748; width: 100%; border-collapse:separate;"><tr><td align="center">
+<table border="0" cellpadding="0" cellspacing="0" width="590" style="padding: 16px; background-color: white; color: #454748; border-collapse:separate;">
+<tbody>
+    <!-- HEADER -->
+    <tr>
+        <td align="center" style="min-width: 590px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                <tr>
+                    <td valign="middle">
+                        <span style="font-size: 20px; font-weight: bold;">
+                            ${object.name}
+                        </span><br/>
+                        <span style="font-size: 10px;">Purchase Order #: ${object.po_id.internal_ref}</span><br/>
+                        <span style="font-size: 10px;">Document Type #: ${object.get_tci_type()}</span><br/>
+                        <span style="font-size: 10px;">Vendor Reference #: ${object.reference}</span><br/>
+                        <span style="font-size: 10px;">Document Status: ${object.state}</span><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align:center;">
+                      <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <!-- CONTENT -->
+    <tr>
+        <td align="center" style="min-width: 590px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                <tr><td valign="top" style="font-size: 13px;">
+                    <div>
+						Hi<br/><br/>
+
+                        The document listed in title is has been reviewed and <b>${object.state}</b>.<br/><br/>
+                        % if object.state == 'approved'
+                            <span>All approved Document Review Reports must be used as back-up information for your invoicing.</span><br/><br/>
+                        % endif
+
+                        % if object.state == 'rejected'
+                            <span>Your document has been rejected, please revise it's content and re-submit using a revised document number.</span><br/>
+                        <!--
+                        % for appr in object.mail_approver_ids:
+                                % if appr.mail_message_id
+                                    <li>
+                                        ${appr.mail_message_id.body}
+                                    </li>
+                                % endif
+                            % endfor
+                        % endif
+                        -->
+                        <br/>
+                        <span>The content of this communication is issued <b>FOR INFORMATION ONLY</b> and has no contractual value.<br/></span>
+                        <br/>
+                        Thanks,<br/>
+                    </div>
+                </td></tr>
+                <tr><td style="text-align:center;">
+                  <hr width="100%" style="background-color:rgb(204,204,204);border:medium none;clear:both;display:block;font-size:0px;min-height:1px;line-height:0; margin: 16px 0px 16px 0px;"/>
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+    <!-- FOOTER -->
+    <tr>
+        <td align="center" style="min-width: 590px;">
+            <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: white; font-size: 11px; padding: 0px 8px 0px 8px; border-collapse:separate;">
+                <tr><td valign="middle" align="left">
+                    ${object.company_id.name}
+                </td></tr>
+                <tr><td valign="middle" align="left" style="opacity: 0.7;">
+                    ${object.company_id.phone}
+                    % if object.company_id.email
+                        | <a href="'mailto:%s' % ${object.company_id.email}" style="text-decoration:none; color: #454748;">${object.company_id.email}</a>
+                    % endif
+                    % if object.company_id.website
+                        | <a href="'%s' % ${object.company_id.website}" style="text-decoration:none; color: #454748;">
+                        ${object.company_id.website}
+                    </a>
+                    % endif
+                </td></tr>
+            </table>
+        </td>
+    </tr>
+</tbody>
+</table>
+</td></tr>
+<!-- POWERED BY -->
+<tr><td align="center" style="min-width: 590px;">
+    <table border="0" cellpadding="0" cellspacing="0" width="590" style="min-width: 590px; background-color: #F1F1F1; color: #454748; padding: 8px; border-collapse:separate;">
+      <tr><td style="text-align: center; font-size: 13px;">
+        Project Solutions by <a target="_blank" href="https://www.evosoft.ca?utm_source=db&amp;utm_medium=auth" style="color: #446c82;">Evosoft</a>
+      </td></tr>
+    </table>
+</td></tr>
+</table>
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="user_signature" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

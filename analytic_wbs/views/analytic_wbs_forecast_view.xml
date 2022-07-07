@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+                <!-- Sequences for Forecast Transaction Number -->
+
+        <record id="seq_forecast_transaction_num" model="ir.sequence">
+            <field name="name">Forecast Transaction Number</field>
+            <field name="code">forecast.transaction.number</field>
+            <field name="prefix">BDG%(y)s-</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="view_account_analytic_wbs_forecast_transaction_type_tree" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.forecast_transaction_type.tree</field>
+            <field name="model">account.analytic_wbs.forecast_transaction_type</field>
+            <field name="arch" type="xml">
+                <tree string="Forecast Transaction Type">
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="order"/>
+                    <field name="is_active"/>
+                </tree>
+            </field>
+        </record>
+
+        # **************** wbs Forecast Transaction Lines ****************
+
+        <record id="view_forecast_transaction_line_search_form" model="ir.ui.view">
+            <field name="name">forecast.transaction.detail.search.form</field>
+            <field name="model">account.analytic_wbs.forecast_line</field>
+            <field name="arch" type="xml">
+                <search string="Forecast Transaction Detail">
+                    <field name="account_project_id"/>
+                    <field name="name" string="Claim"/>
+                    <field name="line_transaction_id"/>
+                    <field name="user_id"/>
+                    <field name="partner_id" string="Companie"/>
+                    <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
+                    <filter string="Active wbs" name="active_wbs" domain="[('wbs_state', '=', 'active')]"/>
+                    <filter string="Active Project wbs" name="active_project_wbs" domain="[('project_wbs_state', '=', 'active')]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="wbs" name="wbs" context="{'group_by':'account_project_id'}"/>
+                        <filter string="Forecast Transaction" name="forecast" context="{'group_by':'line_transaction_id'}"/>
+                        <filter string="Project" name="project" context="{'group_by':'project_id'}"/>
+                        <filter string="Created by" name="User" context="{'group_by':'user_id'}"/>
+                        <filter string="wbs State" name="wbs_state" context="{'group_by':'wbs_state'}"/>
+                        <filter string="Project wbs State" name="project_wbs_state" context="{'group_by':'project_wbs_state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_wbs_forecast_line_tree" model="ir.ui.view">
+            <field name="name">forecast.transaction.detail.tree</field>
+            <field name="model">account.analytic_wbs.forecast_line</field>
+            <field name="arch" type="xml">
+                <tree string="Forecast wbs Lines" editable="bottom">
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="qty_amount" sum="Quantity"/>
+                    <field name="unit_rate"/>
+                    <field name="amount" sum="Total"/>
+                    <!--
+                    <field name="account_project_id" options="{'no_create': True, 'no_open': True}" onchange="onchange_account_project(account_project_id)"/>
+                    <field name="line_transaction_id"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="mhr_amount" sum="Man Hours"/>
+                    -->
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_wbs_forecast_line_form" model="ir.ui.view">
+            <field name="name">forecast.transaction.detail.form</field>
+            <field name="model">account.analytic_wbs.forecast_line</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <form string="Forecast Detail">
+                    <sheet string="Forecast Detail">
+                        <group string="Forecast Line Detail">
+                            <group string="Line info">
+                                <field name="date"/>
+                                <field name="line_transaction_id"/>
+                                <field name="account_project_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="name"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                            <group string="Forecast Claim">
+                                <field name="qty_amount"/>
+                                <field name="mhr_amount" invisible="1"/>
+                                <field name="unit_rate"/>
+                                <field name="amount"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_wbs_forecast_line_graph" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.forecast_line.graph</field>
+            <field name="model">account.analytic_wbs.forecast_line</field>
+            <field name="arch" type="xml">
+                <graph string="wbs Entries">
+                    <field name="date" type="row" interval="month"/>
+                    <field name="account_project_id" type="row"/>
+                    <field name="amount" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_wbs_forecast_line_pivot" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.forecast_line.pivot</field>
+            <field name="model">account.analytic_wbs.forecast_line</field>
+            <field name="arch" type="xml">
+                <pivot string="wbs Entries" >
+                    <field name="account_project_id" type="row"/>
+                    <field name="date" type="col" interval="month"/>
+                    <field name="qty_amount" type="measure"/>
+                    <field name="amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+                # **************** Project Control - Forecast Transactions Views and Actions ****************
+
+        <record id="view_forecast_transaction_search_form" model="ir.ui.view">
+            <field name="name">forecast.transaction.search.form</field>
+            <field name="model">account.analytic_wbs.forecast_transaction</field>
+            <field name="arch" type="xml">
+                <search string="Forecast Transactions">
+                    <field name="name" string="Transaction"/>
+                    <field name="partner_id"/>
+                    <field name="project_id"/>
+                    <field name="user_id"/>
+                    <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Project" name="project" context="{'group_by':'project_id'}"/>
+                        <filter string="Created by" name="User" context="{'group_by':'user_id'}"/>
+                        <filter string="Status" name="Status" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="act_project_project_2_project_forecast_transaction_all" model="ir.actions.act_window">
+            <field name="name">Forecast</field>
+            <field name="res_model">account.analytic_wbs.forecast_transaction</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="context">{
+                'search_default_project_id': [active_id],
+                'default_project_id': active_id,
+            }</field>
+            <field name="search_view_id" ref="view_forecast_transaction_search_form"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast transactions
+                </p>
+                <p>
+                    Once your wbs and WBS is created, you can create Forecast Transaction to modify
+                    forecast quantities, forecast mhr and forecast amount.
+                </p>
+                <p>
+                    All transaction created will have to go thru the approval process before to be
+                    incorporated into the approved forecast and to show on forecast reports.
+                </p>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_wbs_forecast_transaction_tree" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.forecast_transaction.tree</field>
+            <field name="model">account.analytic_wbs.forecast_transaction</field>
+            <field name="arch" type="xml">
+                <tree string="Line Transaction">
+                    <field name="date"/>
+                    <field name="project_id"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="transaction_amt_balance" sum="Amount"/>
+                    <field name="transaction_mhr_balance" sum="Man Hours"/>
+                    <field name="project_id" readonly="True"/>
+                    <field name="state"/>
+                    <field name="partner_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_wbs_forecast_transaction_pivot" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.forecast_transaction.pivot</field>
+            <field name="model">account.analytic_wbs.forecast_transaction</field>
+            <field name="arch" type="xml">
+                <pivot string="Line Transaction" >
+                    <field name="project_id" type="row"/>
+                    <field name="date" type="row"/>
+                    <field name="name" type="row"/>
+                    <field name="state" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="act_project_forecast_transaction_detail_all" model="ir.actions.act_window">
+            <field name="name">forecast detail</field>
+            <field name="res_model">account.analytic_wbs.forecast_line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{
+                'search_default_line_transaction_id': [active_id],
+                'default_line_transaction_id': active_id,
+            }</field>
+            <field name="search_view_id" ref="view_forecast_transaction_line_search_form"/>
+        </record>
+
+        <record id="view_account_analytic_wbs_forecast_transaction_form" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.forecast_transaction.form</field>
+            <field name="model">account.analytic_wbs.forecast_transaction</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <form string="Forecast Transactions">
+                <header>
+                    <button name="button_forecasttrans_submitted" string="Submit" class="oe_highlight oe_view_mode_only"  states="draft" />
+                    <button name="button_forecasttrans_submitted" string="Re-Submit" class="oe_highlight oe_view_mode_only"  states="pending" />
+                    <button name="button_forecasttrans_pending" string="Pending" class="oe_highlight oe_view_mode_only"  states="submitted" />
+                    <button name="button_forecasttrans_approved" string="Approve" class="oe_highlight oe_view_mode_only"  states="submitted" />
+                    <button name="button_forecasttrans_rejected" string="Reject" class="oe_highlight oe_view_mode_only"  states="submitted" />
+                    <button name="button_forecasttrans_posted" string="Post" class="oe_highlight oe_view_mode_only"  states="approved" />
+                    <field name="state" widget="statusbar" readonly="True"
+                           statusbar_visible="draft,pending,submitted,approved,posted"/>
+                </header>
+                    <sheet string="Forecast Transaction">
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="action" name="%(act_project_forecast_transaction_detail_all)d"
+                        icon="fa-signal"  string="Forecast Detail" widget="statinfo"/>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" class="oe_inline" placeholder="e.g. Claiming Period 32"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group string="Project / Analytic Link">
+                                <field name="project_id" readonly="True" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="partner_id"/>
+                            </group>
+                            <group string="Other Info">
+                                <field name="description"/>
+                                <field name="date"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <field name="transaction_detail_ids" nolabel="1"  context="{'default_line_transaction_id':active_id}">
+                                <tree editable="bottom" string="Forecast Transactions" create="true">
+                                    <field name="date"/>
+                                    <field name="account_project_id" options="{'no_create': True, 'no_open': True}" onchange="onchange_account_project(account_project_id)"/>
+                                    <field name="name"/>
+                                    <field name="qty_amount"/>
+                                    <field name="unit_rate"/>
+                                    <field name="amount" sum="Amount"/>
+                                    <field name="mhr_amount" sum="Mhr" invisible="1"/>
+                                </tree>
+                            </field>
+                        </group>
+
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="account_analytic_wbs_forecast_line_action">
+            <field name="name">Forecast Entries</field>
+            <field name="res_model">account.analytic_wbs.forecast_line</field>
+            <field name="view_mode">tree,graph,pivot</field>
+            <field name="view_id" ref="view_account_analytic_wbs_forecast_line_tree"/>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+              <p>
+                No forecast entries recorded yet.
+              </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="account_analytic_wbs_forecast_transaction_action">
+            <field name="name">Forecast Transactions</field>
+            <field name="res_model">account.analytic_wbs.forecast_transaction</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
+            <field name="view_id" ref="view_account_analytic_wbs_forecast_transaction_tree"/>
+            <field name="view_type">form</field>
+            <field name="help" type="html">
+              <p>
+                No forecast transactions recorded yet.
+              </p>
+            </field>
+        </record>
+
+
+     </data>
+</openerp>

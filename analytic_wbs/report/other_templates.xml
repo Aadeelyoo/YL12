@@ -1,0 +1,58 @@
+<odoo>
+    <template id="mail_approvers_custom_template_table">
+        <div style="float:left; width: 100%;">
+
+            <table width="100%" style="margin-bottom:20px;margin-left: 30px;margin-right: 30px">
+                <tr>
+                    <th>Reviewer</th>
+                    <th>Review Type</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Note</th>
+                    <!--
+                    <th>test link</th>
+                    -->
+                </tr>
+                <t t-foreach="mail_apporvers" t-as="doc">
+                    <tr>
+                        <td>
+                            <span t-esc="doc.user_id.name"></span>
+                        </td>
+
+                        <td>
+                            <span t-esc="doc.approval_type.name"></span>
+                        </td>
+
+                        <td>
+                            <span t-esc="doc.state"></span>
+                        </td>
+
+                        <td>
+                            <t t-if="doc.state_date">
+                                <span t-esc="context_timestamp(doc.state_date).strftime('%Y-%m-%d %H:%M')"></span>
+                            </t>
+                        </td>
+                        <td>
+                            <t t-if="doc.mail_message_id">
+                                <span t-raw="doc.mail_message_id.body"></span>
+                            </t>
+                        </td>
+
+                        <!--
+                        <td>
+
+                            <a t-att-href="'/view_type=form&amp;model=%s&amp;res_id=%s' % (doc.user_id._name, doc.user_id.id)">
+                             View <t t-esc="doc.user_id.name or 'document'"/>
+                            </a>
+
+                        </td>
+                        -->
+                        
+                    </tr>
+                </t>
+
+            </table>
+        </div>
+    </template>
+
+</odoo>

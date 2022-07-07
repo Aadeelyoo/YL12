@@ -1,0 +1,48 @@
+<odoo>
+    <record id="view_is_dashboard_form_python" model="ir.ui.view">
+        <field name="name">view_is_dashboard_form_python</field>
+        <field name="model">is.dashboard.widget</field>
+        <field name="inherit_id" ref="view_is_dashboard_form_count"/>
+        <field name="arch" type="xml">
+                <xpath expr="//sheet" position="before">
+                    <div class="alert alert-warning" role="alert" attrs="{'invisible': [('datasource', '!=', 'python')]}">
+                        WARNING: Python datasource is experimental and should not be used in production environments.
+                        Features are limited with this option
+                    </div>
+                </xpath>
+            <page name="query_1" position="after">
+                <page name="query_1_python" string="Python" attrs="{'invisible': [('datasource', '!=', 'python')]}">
+                    <group>
+                        <div colspan="2" class="alert alert-info" role="alert" attrs="{'invisible': [('datasource', '!=', 'python')]}">
+                            <p>
+                                <strong>Locals:</strong> Use the following variables to retrieve data required to update the dashboard item
+                                <ul>
+                                    <li>dashboard</li>
+                                    <li>model</li>
+                                    <li>date_range_start</li>
+                                    <li>date_range_end</li>
+                                    <br/>
+                                    <li>dom1</li>
+                                    <li>dom2</li>
+                                    <br/>
+                                    <li>env</li>
+                                    <li>datetime</li>
+                                    <li>dateutil</li>
+                                </ul>
+                            </p>
+                            <p>
+                                <strong>Return:</strong> Write to the following variables to update the dashboard item
+                                <ul>
+                                    <li>count</li>
+                                    <li>total</li>
+                                </ul>
+                            </p>
+                        </div>
+                        <field name="query_1_config_python" attrs="{'invisible': [('datasource', '!=', 'python')]}" nolabel="1" widget="ace" options="{'mode': 'python'}" />
+                    </group>
+                </page>
+            </page>
+        </field>
+    </record>
+
+</odoo>

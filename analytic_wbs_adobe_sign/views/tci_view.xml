@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_tci_form_inherit_adobe_sign" model="ir.ui.view">
+            <field name="name">tci.form.inherit.adobe.sign</field>
+            <field name="model">tci</field>
+            <field name="inherit_id" ref="analytic_wbs.view_tci_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//button[@name='action_tci_approve']" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|' ,('controlled_by_adobe_sign', '=', True), ('current_user_approval_required', '=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//button[@name='action_tci_approve_with_feedback']" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|' ,('controlled_by_adobe_sign', '=', True), ('current_user_approval_required', '=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//button[@name='action_tci_reject_with_feedback']" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|' ,('controlled_by_adobe_sign', '=', True), ('current_user_approval_required', '=', False)]}</attribute>
+                </xpath>
+
+                <!-- Testing Buttons-->
+<!--                <xpath expr="//header" position="inside">-->
+<!--                    <button name="test_pdf_generation" class="oe_highlight btn-success" type="object" string="Test PDF"/>-->
+<!--                    <button name="send_rejection_email_to_distribution" class="oe_highlight btn-success" type="object" string="Test Cron"/>-->
+<!--                </xpath>-->
+                <xpath expr="//field[@name='approval_report_id']" position="after">
+                    <field name="adobe_control_flag" invisible="1" />
+                    <field name="controlled_by_adobe_sign" invisible="1" />
+                    <field name="adobe_agreement_status" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+

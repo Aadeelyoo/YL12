@@ -1,0 +1,27 @@
+<!-- <?xml version="1.0" encoding="utf-8"?> -->
+<odoo>
+    <data>
+        <!-- Report Action -->
+        <report
+            id="report_for_solevo_tci_reportt" 
+            model="tci"
+            name="analytic_wbs.solevo_tci_report_id"
+            file="analytic_wbs.solevo_tci_report_id"
+            report_type="qweb-html"
+            string="TCI Report"
+            menu="True"
+            paperformat="evosoft_report_template.paperformat_us_letter_sh"/>
+
+
+        <report
+            id="report_for_solevo_tci_header" 
+            model="tci"
+            name="analytic_wbs.analytic_wbs_report_layout_name"
+            file="analytic_wbs.analytic_wbs_report_layout_name"
+            report_type="qweb-html"
+            string="TCI Header Only"
+            menu="False"
+            paperformat="evosoft_report_template.paperformat_us_letter_sh"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="action_run_ir_action_create_batch" model="ir.actions.server">
+            <field name="name">Create Batch Summary</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_tci"/>
+            <field name="binding_model_id" ref="model_tci"/>
+            <field name="state">code</field>
+            <field name="code">records.ir_action_create_batch_summary()</field>
+        </record>
+
+        <record id="view_tci_wt_batch_tree" model="ir.ui.view">
+            <field name="name">tci_wt_batch_tree</field>
+            <field name="model">tci</field>
+            <field name="inherit_id" ref="analytic_wbs.view_tci_wt_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="before">
+                    <field name="batch_id"/>
+                    <field name="external_ref" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_tci_form_inherit_batch" model="ir.ui.view">
+            <field name="name">view_tci_form_batch_inherit</field>
+            <field name="model">tci</field>
+            <field name="inherit_id" ref="analytic_wbs.view_tci_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='approval_docs_gr']" position="after">
+                    <group name="batch" string="Batch Information">
+                        <field name="batch_id"/>
+                        <field name="external_ref"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_tci_batch_search" model="ir.ui.view">
+            <field name="name">tci_batch_search</field>
+            <field name="model">tci</field>
+            <field name="inherit_id" ref="analytic_wbs.view_tci_search_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='company_id']" position="before">
+                    <field name="batch_id"/>
+                </xpath>
+                <xpath expr="//filter[@name='outstanding']" position="before">
+                    <separator/>
+                        <filter string="Not Batched" name="not_batched" domain="[('batch_id', '=', False)]"/>
+                        <filter string="Batched" name="batched" domain="[('batch_id', '!=', False)]"/>
+                    <separator/>
+                </xpath>
+                <xpath expr="//filter[@name='group_po']" position="after">
+                    <separator/>
+                    <filter string="Batch" name="group_batch" context="{'group_by':'batch_id'}"/>
+                </xpath>
+
+            </field>
+        </record>
+
+     </data>
+</openerp>

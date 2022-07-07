@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <!--
+        <record id="project_dh1" model="project.project">
+            <field name="name">DH1</field>
+            <field name="project_code_id">C/17087</field>
+        </record>
+
+        <record id="project_dr12" model="project.project">
+            <field name="name">DR1/2</field>
+            <field name="project_code_id">C/17082</field>
+        </record>
+
+        <record id="project_ds12" model="project.project">
+            <field name="name">DS1/2</field>
+            <field name="project_code_id">C/17086</field>
+        </record>
+        -->
+
+        <record id="product_uom_categ_di" model="uom.category">
+            <field name="name">DI</field>
+        </record>
+
+        <record id="product_uom_diaminch" model="uom.uom">
+            <field name="category_id" ref="product_uom_categ_di"/>
+            <field name="name">Diameter Inch</field>
+            <field name="factor" eval="1.0"/>
+            <field name="rounding" eval="0.001"/>
+        </record>
+        <!--
+        <record id="analytic_wbs_account_10" model="account.analytic_wbs.account">
+            <field name="name">123-123</field>
+            <field name="analytic_wbs_uom" ref="product_uom_diaminch"/>
+            <field name="descr_short">wbs123-123</field>
+            <field name="account_type">active</field>
+        </record>
+
+        <record id="analytic_wbs_account_20" model="account.analytic_wbs.account">
+            <field name="name">123-456</field>
+            <field name="analytic_wbs_uom" ref="product_uom_diaminch"/>
+            <field name="descr_short">wbs123-153</field>
+            <field name="account_type">active</field>
+        </record>
+
+        <record id="analytic_wbs_account_30" model="account.analytic_wbs.account">
+            <field name="name">123-789</field>
+            <field name="analytic_wbs_uom" ref="product_uom_diaminch"/>
+            <field name="descr_short">wbs123-124</field>
+            <field name="account_type">active</field>
+        </record>
+
+        <record id="account_analytic_wbs_project_10" model="account.analytic_wbs.project">
+            <field name="name">GER-123-123</field>
+            <field name="account_id" ref="analytic_wbs_account_10"/>
+            <field name="project_id" ref="project_dh1"/>
+            <field name="descr_short">GER-123-123</field>
+            <field name="project_account_type">active</field>
+        </record>
+
+        <record id="account_analytic_wbs_project_20" model="account.analytic_wbs.project">
+            <field name="name">GER-123-456</field>
+            <field name="account_id" ref="analytic_wbs_account_20"/>
+            <field name="project_id" ref="project_dh1"/>
+            <field name="descr_short">GER-123-456</field>
+            <field name="project_account_type">active</field>
+        </record>
+
+        <record id="account_analytic_wbs_project_30" model="account.analytic_wbs.project">
+            <field name="name">GER-123-789</field>
+            <field name="account_id" ref="analytic_wbs_account_30"/>
+            <field name="project_id" ref="project_dh1"/>
+            <field name="descr_short">GER-123-789</field>
+            <field name="project_account_type">active</field>
+        </record>
+
+        <record id="account_analytic_wbs_project_40" model="account.analytic_wbs.project">
+            <field name="name">SAL-123-123</field>
+            <field name="account_id" ref="analytic_wbs_account_10"/>
+            <field name="project_id" ref="project_dr12"/>
+            <field name="descr_short">SAL-123-123</field>
+            <field name="project_account_type">active</field>
+        </record>
+
+        <record id="account_analytic_wbs_project_50" model="account.analytic_wbs.project">
+            <field name="name">SAL-123-456</field>
+            <field name="account_id" ref="analytic_wbs_account_20"/>
+            <field name="project_id" ref="project_dr12"/>
+            <field name="descr_short">SAL-123-456</field>
+            <field name="project_account_type">active</field>
+        </record>
+        -->
+
+    </data>
+</openerp>

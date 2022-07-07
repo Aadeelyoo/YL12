@@ -1,0 +1,203 @@
+.o_dashboard {
+    background-color: $o-view-background-color;
+    padding: 20px;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+    align-items: flex-start;
+    width: 100%;
+    height: auto;    
+    
+    .o_dashboard_view {
+        flex: 1 1 100%;
+        padding: 0px 0px 10px 0px;
+        
+        .o_graph .o_graph_container {
+            display: flex;
+        }
+    
+        .o_graph .o_graph_container .o_graph_svg_container {
+            -webkit-box-flex: 1;
+            -webkit-flex: 1 1 auto;
+            flex: 1 1 auto;
+            height: 280px;
+        }
+    }
+    
+    .o_graph_groupbys_menu {
+        padding-left: 4px;
+    }
+    
+    .o_dashboard_widget {
+        padding: 0px 20px 20px 10px;
+
+        label {
+            color: #212529;
+        }
+    }
+    
+    .o_dashboard_pie_chart {
+        width: 100%;
+        
+        .o_graph .o_graph_container {
+            display: flex;
+            -webkit-flex-flow: row wrap;
+            flex-flow: row wrap;
+            justify-content: space-between;
+        }
+        
+        .o_graph .o_graph_container .o_graph_svg_container {
+            min-width: 300px;
+            max-width: 400px;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1 1 auto;            
+            flex: 1 1 auto;
+            height: 280px;
+            
+            .nvd3-svg {
+                height: 90%;
+            }
+        }
+    
+    }
+    
+    .o_piecharts_group {
+        width: 50% !important;
+        display: flex;
+        -webkit-flex-flow: row wrap;
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 auto;
+    }
+    
+    .o_dashboard_aggregate, .o_dashboard_formula {
+        padding: 0px 0px 0px 10px;
+        
+        .aggregate-toggle {
+            cursor: pointer;
+        }
+        
+        .o_label {
+            color: #212529;
+        }
+        
+        .o_caret {
+            font-size: 27px;    
+        }        
+        
+        .o_positive {
+            color: rgb(0,144,66) !important;
+        }
+        
+        .o_negative {
+            color: rgba(214, 39, 40, 0.9) !important;
+        }        
+        
+        .o_value {
+            font-size: 1.6em;
+            color: #666666;
+        }
+        
+        .o_variation {
+            color: #666666;
+            font-size: 1em !important;
+        }
+        
+        .fa-search {
+            padding: 0px 0px 0px 4px;
+            font-size: 18px !important;
+        }
+        
+        .o_search {
+            color: #666666;
+            padding: 0px 0px 0px 4px;
+            font-size: 18px !important;
+        }
+    }
+    
+    > div {
+        
+        > .o_view_controller {
+            padding-top: 7px;
+            
+            > div > .o_view_nocontent {
+                    position: static;
+                    top: 20%;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                    pointer-events: none;
+                    z-index: 1;
+                    margin: auto;
+                }
+        }
+        
+        > .o_pivot table {
+            width: 100%;
+        }
+    }
+    
+    // Groups
+    .o_group {
+        justify-content: stretch;
+        display: flex;
+        -webkit-flex-flow: row wrap;
+        align-items: flex-start;
+        flex: 1 1 100%;
+        margin: 10px 0;
+
+        // o_group contains nested groups
+        @for $i from 1 through $o-form-group-cols {
+            .o_group_col_#{$i} {
+                width: auto;
+                flex: 1 1 min(100%, round(8.33% * 3 * $i));                
+                flex-flow: row wrap;
+            }
+            
+            .o_inner_group_col_#{$i} {
+                width: 229px;
+                padding: 0px 10px 20px 0px;
+                display: inline-block;
+                vertical-align: top;
+            }
+            
+            .o_piecharts_group_col_#{$i} {
+                width: max(25%, floor(100% / $i)) !important;
+                flex: 1 1 max(25%, floor(100% / $i));
+                flex-flow: row wrap;
+            }
+        }
+    }
+
+    // Separators
+    .o_horizontal_separator {
+        width: 100%;
+        font-size: $h2-font-size;
+        margin: $o-form-spacing-unit 0;
+        &:empty {
+            height: $o-form-spacing-unit * 2;
+        }
+    }
+    
+    // Font bold
+    .o_text_bold {
+        font-weight: bold;
+    }
+    
+    // Fullscreen
+    
+    .btn-fullscreen {
+        float: right;
+    }
+    
+}
+
+.o_pivot .o_pivot_cell_value {
+       
+    .o_variation.o_positive {
+        color: rgb(0,144,66) !important;
+    }
+
+    .o_variation.o_negative {
+        color: rgba(214, 39, 40, 0.9) !important;
+    }
+
+}

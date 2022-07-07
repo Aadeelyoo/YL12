@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template id="template" xml:space="preserve">
+    
+    <t t-name="dashboard_view.aggregate">
+        <div class="o_inner_box o_dashboard_aggregate">
+            <label class="o_label"/>
+            <div t-if="!clickable" class="o_value"/>
+            <div t-if="clickable" class="aggregate-toggle" t-att-data-name="widget.name"><span class="o_value"/><span class="o_search"><i class="fa fa-search" role="search" aria-label="Search" title="Search"/></span></div>
+            <div class="o_variation" t-if="compare"/>            
+        </div>
+    </t>
+    
+    <t t-name="dashboard_view.formula">
+        <div class="o_inner_box o_dashboard_formula">
+            <label class="o_label"/>            
+            <div class="o_value"/>
+            <div class="o_variation" t-if="compare"/>
+        </div>
+    </t>
+    
+</template>

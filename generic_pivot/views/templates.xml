@@ -1,0 +1,10 @@
+<odoo>
+    <template id="assets_backend" name="pivot assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" type="text/css" href="/generic_pivot/static/src/css/pivot_custom.css"/>
+            <script type="text/javascript" src="/generic_pivot/static/src/js/pivot_view.js"/>
+            <script type="text/javascript" src="/generic_pivot/static/src/js/pivot_controller.js"/>
+            <script type="text/javascript" src="/generic_pivot/static/src/js/pivot_renderer.js"/>
+        </xpath>
+    </template>
+</odoo>
