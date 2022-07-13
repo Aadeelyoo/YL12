@@ -556,6 +556,12 @@
                                 -->
                                 <div class="oe_button_box" name="button_box">
                                     <button class="oe_stat_button"
+                                            name="action_zero_out_qty"
+                                            type="object"
+                                            icon="fa-bullseye">
+                                        <span>Zero Out Quantity</span>
+                                    </button>
+                                    <button class="oe_stat_button"
                                             name="action_open_tci"
                                             type="object"
                                             icon="fa-ticket">

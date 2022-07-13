@@ -48,72 +48,72 @@ class TciBatch(models.Model):
         new_batch = self.env['tci.batch'].create(vals)
         new_batch.tci_ids = lem_ids
 
-    @api.depends('mail_approval_state', 'po_id', 'partner_id',
-                 'parent_invoice_act_rel_id', 'po_rev', 'parent_invoice_wt_rel_id',
-                 'mail_approval_start_date', 'is_void', 'tci_type', 'child_invoice_act_rel_ids',
-                 'batch_id.state')
-    def _compute_state(self):
-        for tci in self:
-            if tci.is_superuser_state:
-                state = 'superuser_overwrite'
-
-            else:
-                if tci.tci_type in ('wt', 'cr', 'estimate'):
-                    if tci.parent_invoice_wt_rel_id:
-                        state = 'invoiced'
-
-                    elif tci.batch_id.state in ('approved', 'posted'):
-                        state = 'completed'
-
-                    elif tci.is_void:
-                        state = 'void'
-
-                    elif tci.po_rev:
-                        state = 'released'
-
-                    elif not tci.po_id or not tci.partner_id:
-                        state = "new"
-
-                    elif tci.po_id and tci.partner_id and not tci.mail_approval_state:
-                        state = "draft"
-
-                    elif tci.po_id and tci.partner_id and tci.mail_approval_state in ('new', 'stop'):
-                        state = "draft"
-
-                    elif tci.mail_approval_state in ('review', 'hold'):
-                        state = 'review'
-
-                    elif tci.mail_approval_state in ('approved', 'rejected'):
-                        state = tci.mail_approval_state
-                    else:
-                        print('Need to update state function for this else never to happen')
-
-                elif tci.tci_type == 'maccr':
-                    if tci.is_void:
-                        state = 'void'
-                    else:
-                        state = 'new'
-
-                elif tci.tci_type == 'ocommit':
-                    state = 'new'
-
-                elif tci.tci_type == 'inv':
-                    if tci.invoice_id:
-                        state = 'invoiced'
-
-                    elif tci.is_void:
-                        state = 'void'
-
-                    elif tci.child_invoice_act_rel_ids:
-                        state = 'completed'
-                    else:
-                        state = 'new'
-
-                elif tci.tci_type == 'act':
-                    if tci.parent_invoice_act_rel_id_no_link or tci.parent_invoice_act_rel_id:
-                        state = 'mapped'
-                    else:
-                        state = 'new'
-
-            if not tci.state == state:
-                tci.state = state
+    # @api.depends('mail_approval_state', 'po_id', 'partner_id',
+    #              'parent_invoice_act_rel_id', 'po_rev', 'parent_invoice_wt_rel_id',
+    #              'mail_approval_start_date', 'is_void', 'tci_type', 'child_invoice_act_rel_ids',
+    #              'batch_id.state')
+    # def _compute_state(self):
+    #     for tci in self:
+    #         if tci.is_superuser_state:
+    #             state = 'superuser_overwrite'
+    #
+    #         else:
+    #             if tci.tci_type in ('wt', 'cr', 'estimate'):
+    #                 if tci.parent_invoice_wt_rel_id:
+    #                     state = 'invoiced'
+    #
+    #                 elif tci.batch_id.state in ('approved', 'posted'):
+    #                     state = 'completed'
+    #
+    #                 elif tci.is_void:
+    #                     state = 'void'
+    #
+    #                 elif tci.po_rev:
+    #                     state = 'released'
+    #
+    #                 elif not tci.po_id or not tci.partner_id:
+    #                     state = "new"
+    #
+    #                 elif tci.po_id and tci.partner_id and not tci.mail_approval_state:
+    #                     state = "draft"
+    #
+    #                 elif tci.po_id and tci.partner_id and tci.mail_approval_state in ('new', 'stop'):
+    #                     state = "draft"
+    #
+    #                 elif tci.mail_approval_state in ('review', 'hold'):
+    #                     state = 'review'
+    #
+    #                 elif tci.mail_approval_state in ('approved', 'rejected'):
+    #                     state = tci.mail_approval_state
+    #                 else:
+    #                     print('Need to update state function for this else never to happen')
+    #
+    #             elif tci.tci_type == 'maccr':
+    #                 if tci.is_void:
+    #                     state = 'void'
+    #                 else:
+    #                     state = 'new'
+    #
+    #             elif tci.tci_type == 'ocommit':
+    #                 state = 'new'
+    #
+    #             elif tci.tci_type == 'inv':
+    #                 if tci.invoice_id:
+    #                     state = 'invoiced'
+    #
+    #                 elif tci.is_void:
+    #                     state = 'void'
+    #
+    #                 elif tci.child_invoice_act_rel_ids:
+    #                     state = 'completed'
+    #                 else:
+    #                     state = 'new'
+    #
+    #             elif tci.tci_type == 'act':
+    #                 if tci.parent_invoice_act_rel_id_no_link or tci.parent_invoice_act_rel_id:
+    #                     state = 'mapped'
+    #                 else:
+    #                     state = 'new'
+    #
+    #         if not tci.state == state:
+    #             tci.state = state

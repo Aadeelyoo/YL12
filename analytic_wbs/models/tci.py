@@ -633,6 +633,11 @@ class Tci(models.Model):
         }
         return action
 
+
+    def action_zero_out_qty(self):
+        for rec in self.tci_line_ids:
+            rec.quantity = 0
+
     def _search_duplicate(self, operator, value):
         if operator == 'like':
             operator = 'ilike'
@@ -917,6 +922,7 @@ class Tci(models.Model):
             tci.tci_line_count = len(tci.tci_line_ids)
 
     # todo: Validate if the tci state needs to be propagated when the related task.id chances status (function below if from original code expense)
+    @api.multi
     @api.depends('mail_approval_state', 'po_id', 'partner_id',
                  'parent_invoice_act_rel_id', 'po_rev', 'parent_invoice_wt_rel_id',
                  'mail_approval_start_date', 'is_void', 'tci_type', 'child_invoice_act_rel_ids')
@@ -981,7 +987,11 @@ class Tci(models.Model):
                         state = 'new'
 
             if not tci.state == state:
-                tci.state = state
+                try:
+                    tci.state = state
+                except Exception as e:
+                    print("somethin went wrong: " + str(e))
+
 
     def _search_state(self, operator, value):
         if operator == 'like':
@@ -1442,7 +1452,7 @@ class Tci(models.Model):
             'is_void': False,
             'mail_approval_start_date': False,
             'mail_approval_end_date': False,
-            'mail_approval_state': False,
+            'mail_approval_state': 'new',
             'approval_report_id': False,
         })
         self.message_post(body="State reset to Draft")
@@ -1818,7 +1828,7 @@ class TciLine(models.Model):
     _description = "TCI Line"
     _order = "date desc, id desc"
 
-    name = fields.Char(string='Internal Name', readonly=False, required=True)
+    name = fields.Char(string='Internal Name', readonly=False)
     product_id = fields.Many2one('product.product', string='Product', readonly=True,
                                  states={'draft': [('readonly', False)],
                                          'void': [('readonly', False)],
