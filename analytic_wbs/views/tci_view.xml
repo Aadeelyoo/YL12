@@ -509,6 +509,7 @@
                                 <field name="is_outstanding" invisible="1"/>
                                 <field name="is_duplicate" invisible="0"/>
                                 <field name="current_user_approval_required" invisible="1"/>
+                                <field name="flag_rate_tci" invisible="1"/>
                                 <!--
                                 <button name="trigger_domain_compute" string="Compute Domains" type="object" class="btn-primary"/>
                                 -->
@@ -567,10 +568,17 @@
                                             icon="fa-ticket">
                                         <span>TCI Detail</span>
                                     </button>
+
+                                    <button class="oe_stat_button"
+                                            name="action_validate_rates"
+                                            type="object"
+                                            icon="fa-dollar">
+                                        <span>Validate Approved Rates</span>
+                                    </button>
                                 </div>
                                 <group name="wtdetails_group_center" string="TCI Details">
                                     <field name="tci_line_ids" nolabel="1" context="{'default_tci_id': active_id}">
-                                        <tree create="true" delete="true" string="Cost Item Details" editable="bottom">
+                                        <tree decoration-danger="flag_rate == True" create="true" delete="true" string="Cost Item Details" editable="bottom">
                                             <field name="sequence" widget="handle"/>
                                             <field name="po_id" invisible="1"/>
                                             <field name="tci_id" invisible="1"/>
@@ -594,6 +602,7 @@
                                             <field name="date" invisible="1"/>
                                             <field name="name" invisible="1"/>
                                             <field name="create_date" invisible="1"/>
+                                            <field name="flag_rate" invisible="1"/>
                                         </tree>
                                     </field>
                                 </group>

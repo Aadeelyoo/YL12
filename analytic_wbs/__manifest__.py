@@ -35,6 +35,7 @@
                 'approval_mixin',
                 'hr_timesheet',
                 'compoze_no_auto_subscribe',
+                'pikepdf_merge',
                 ],
     'description': """
 Module for defining analytic_wbs accounting object.
@@ -65,6 +66,7 @@ that have no counterpart in the general financial accounts.
         'views/hr_employee_view.xml',
         'views/analytic_wbs_menus.xml',
         'views/res_config_setting_view.xml',
+        'views/vendor_rates.xml',
         'data/wbs_data.xml',
         'data/analytic_wbs_datatest.xml',
         'report/other_templates.xml',

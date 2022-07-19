@@ -16,5 +16,6 @@ from . import tci_template
 from . import wbs_task
 from . import task_forecast
 from . import employee
+from . import vendor_rates
 
 

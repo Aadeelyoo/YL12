@@ -552,6 +552,8 @@ class Tci(models.Model):
         copy=False,
         string='Child Lems')
 
+    flag_rate_tci = fields.Boolean(copy=False)
+
     '''
     parent_cr_id = fields.Many2one(
         'tci',
@@ -633,6 +635,24 @@ class Tci(models.Model):
         }
         return action
 
+    def action_validate_rates(self):
+        self.flag_rate_tci = False
+
+        for line in self.tci_line_ids:
+            if line.po_line_id and line.po_line_id.product_id:
+                recs = self.env['product.supplierinfo'].sudo().search(
+                    [('product_id', '=', line.po_line_id.product_id.id),
+                     ('name', '=', line.po_line_id.order_id.partner_id.id)]
+                )
+                if not recs:
+                    line.flag_rate = True
+                else:
+                    line.flag_rate = False
+
+        if any(line.flag_rate for line in self.tci_line_ids):
+            self.flag_rate_tci = True
+        else:
+            self.flag_rate_tci = False
 
     def action_zero_out_qty(self):
         for rec in self.tci_line_ids:
@@ -1332,6 +1352,10 @@ class Tci(models.Model):
     def action_tci_submit(self):
         self.ensure_one()
         #print('action submit')
+
+        if self.flag_rate_tci:
+            raise UserError(
+                _('Please clear validation TCI Cost from Approved List.'))
         if not self.attachment_ids:
             raise UserError(
                 _('Please add the attachment file prior to submit the record for approval. Attachment must be in a .PDF format'))
@@ -1906,6 +1930,7 @@ class TciLine(models.Model):
 
     task_id = fields.Many2one(string="Task", readonly=True, related='tci_id.task_id', store=True, copy=False)
     po_id = fields.Many2one('purchase.order', related="tci_id.po_id", string='Purchase Order', readonly=True)
+    flag_rate = fields.Boolean(copy=False)
 
     # TODO: COMPLETE ON_CHANGE METHOD Below, project_was for the line should = the project wbs of the PO line selected
 
