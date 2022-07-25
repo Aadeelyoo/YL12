@@ -1,0 +1,372 @@
+<odoo>
+  <data>
+
+    <record id="view_analytic_wbs_cost_report_po_search" model="ir.ui.view">
+        <field name="name">po_analytic_wbs_cost_report_search</field>
+        <field name="model">analytic_wbs_cost_report</field>
+        <field name="arch" type="xml">
+            <search string="cost report">
+                <field name="rep_uid"/>
+                <field name="rep_name"/>
+                <field name="rep_uid_type"/>
+                <field name="employee_id"/>
+                <field name="po_id"/>
+                <field name="partner_id"/>
+                <field name="wbs_id"/>
+                <field name="project_wbs_id"/>
+                <field name="project_id"/>
+                <field name="data_col"/>
+                <field name="task_id"/>
+                <separator/>
+                <filter string="PO Items" name="po_id" domain="[('po_id', '!=', False)]"/>
+                <filter string="Employee Items" name="po_id" domain="[('employee_id', '!=', False)]"/>
+                <separator/>
+                <filter name="budget_filter" string="Budget" domain="[('data_col_group', 'like', '-Budget')]"/>
+                <filter name="work_budget_filter" string="Working Budget" domain="[('data_col_group', 'like', '-Working Budget')]"/>
+                <filter name="commitment_filter" string="Commitments" domain="[('data_col_group', 'like', 'Commitments')]"/>
+                <filter name="change_filter" string="Change Requests" domain="[('data_col_group', 'like', 'Change Request')]"/>
+                <filter name="accrual_filter" string="Accruals" domain="[('data_col_group', 'like', 'Accrual')]"/>
+                <filter name="incurred_filter" string="Incurred Total" domain="[('data_col_group', 'like', 'Incurred Total')]"/>
+                <filter name="incurred_current_filter" string="Incurred Current" domain="[('data_col_group', 'like', 'Incurred Current')]"/>
+                <filter name="past_incurred_filter" string="Incurred Past Periods" domain="[('data_col_group', 'like', 'Past Incurred')]"/>
+                <filter name="detail_forecast_filter" string="Detailled Forecast" domain="[('data_col_group', 'like', 'Forecast')]"/>
+                <filter name="total_forecast_filter" string="Forecast Total" domain="[('data_col_group', 'like', 'Forecast Total')]"/>
+                <filter name="eac_filter" string="EAC" domain="[('data_col_group', 'like', 'EAC')]"/>
+                <!--
+                <filter string="Commitment changes from Last Month" name="is_commitment_variant" domain="[('is_commitment_variant', '=', True)]"/>
+                <filter string="EAC Changes from Last Month" name="is_eac_variant" domain="[('is_eac_variant', '=', True)]"/>
+                -->
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="groupby_employee" domain="[]" context="{'group_by':'employee_id'}"/>
+                    <filter string="Purchase Order" name="groupby_po" domain="[]" context="{'group_by':'po_id'}"/>
+                    <filter string="Project" name="groupby_project" domain="[]" context="{'group_by':'project_id'}"/>
+                    <filter string="WBS" name="groupby_wbs" domain="[]" context="{'group_by':'wbs_id'}"/>
+                    <filter string="Project WBS" name="groupby_project_wbs" domain="[]" context="{'group_by':'project_wbs_id'}"/>
+                    <filter string="Task" name="groupby_task" domain="[]" context="{'group_by':'task_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTUAL TCI LINE DETAILS -->
+
+    <record id="view_analytic_wbs_cost_report_po_tree" model="ir.ui.view">
+        <field name="name">po_analytic_wbs_cost_report_tree</field>
+        <field name="model">analytic_wbs_cost_report</field>
+        <field name="arch" type="xml">
+            <tree string="analytic lines">
+                <field name="rep_uid"/>
+                <field name="rep_name"/>
+                <field name="rep_uid_type"/>
+                <field name="employee_id" invisible="0"/>
+                <field name="po_id" invisible="0"/>
+                <field name="partner_id" invisible="0"/>
+                <field name="amount"/>
+                <field name="past_amount"/>
+                <field name="variance"/>
+                <field name="task_id" invisible="0"/>
+                <field name="project_id"/>
+                <field name="wbs_id"/>
+                <field name="project_wbs_id"/>
+                <field name="data_col_group"/>
+                <field name="data_col"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_analytic_wbs_cost_report_po_graph" model="ir.ui.view">
+        <field name="name">po_analytic_wbs_cost_report_graph</field>
+        <field name="model">analytic_wbs_cost_report</field>
+        <field name="arch" type="xml">
+            <graph string="Employee Entries" stacked="True" type="bar">
+                <field name="data_col" type="col"/>
+                <field name="rep_uid" type="col"/>
+                <field name="po_id" type="row"/>
+                <field name="project_wbs_id" type="row"/>
+                <field name="amount" type="measure"/>
+                <field name="past_amount" type="measure"/>
+                <field name="variance" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_analytic_wbs_cost_report_po_pivot" model="ir.ui.view">
+        <field name="name">po_analytic_wbs_cost_report_pivot</field>
+        <field name="model">analytic_wbs_cost_report</field>
+        <field name="arch" type="xml">
+            <pivot string="wbs Entries">
+                <field name="data_col_group" type="col"/>
+                <field name="data_col" type="col"/>
+                <field name="project_id" type="row"/>
+                <field name="project_wbs_id" type="row"/>
+                <field name="rep_uid_type" type="row"/>
+                <field name="rep_name" type="row"/>
+                <field name="task_id" type="row"/>
+                <field name="amount" type="measure"/>
+                <field name="past_amount" type="measure"/>
+                <field name="variance" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    # Actions for all pos
+
+    <record id="act_analytic_wbs_cost_report_po" model="ir.actions.act_window">
+        <field name="name">All POs</field>
+        <field name="res_model">analytic_wbs_cost_report</field>
+        <field name="view_mode">tree,graph,pivot</field>
+        <field name="search_view_id" ref="view_analytic_wbs_cost_report_po_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_analytic_wbs_cost_report_po_pivot')}),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('view_analytic_wbs_cost_report_po_graph')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_analytic_wbs_cost_report_po_tree')})]"/>
+        <field name="domain">[]</field>
+    </record>
+
+    <record id="act_analytic_wbs_cost_report_by_wbs_other" model="ir.actions.act_window">
+        <field name="name">Other Summary</field>
+        <field name="res_model">analytic_wbs_cost_report</field>
+        <field name="view_mode">tree,graph,pivot</field>
+        <field name="search_view_id" ref="view_analytic_wbs_cost_report_po_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_analytic_wbs_cost_report_po_pivot')}),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('view_analytic_wbs_cost_report_po_graph')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_analytic_wbs_cost_report_po_tree')})]"/>
+        <field name="domain">[
+                ('project_wbs_id', '=', active_id),
+                ('po_id', '=', False),
+                ('employee_id', '=', False),
+                ]
+        </field>
+        <field name="context">{
+            'search_default_project_wbs_id': [active_id],
+            }
+        </field>
+    </record>
+
+    <record id="act_analytic_wbs_cost_report_by_wbs_employee" model="ir.actions.act_window">
+        <field name="name">Employee Summary</field>
+        <field name="res_model">analytic_wbs_cost_report</field>
+        <field name="view_mode">tree,graph,pivot</field>
+        <field name="search_view_id" ref="view_analytic_wbs_cost_report_po_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_analytic_wbs_cost_report_po_pivot')}),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('view_analytic_wbs_cost_report_po_graph')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_analytic_wbs_cost_report_po_tree')})]"/>
+        <field name="domain">[
+                ('project_wbs_id', '=', active_id),
+                ('employee_id', '!=', False),
+                ]
+        </field>
+        <field name="context">{
+            'search_default_project_wbs_id': [active_id],
+            }
+        </field>
+    </record>
+
+    <record id="act_analytic_wbs_cost_report_by_wbs_po" model="ir.actions.act_window">
+        <field name="name">PO Summary</field>
+        <field name="res_model">analytic_wbs_cost_report</field>
+        <field name="view_mode">tree,graph,pivot</field>
+        <field name="search_view_id" ref="view_analytic_wbs_cost_report_po_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_analytic_wbs_cost_report_po_pivot')}),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('view_analytic_wbs_cost_report_po_graph')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_analytic_wbs_cost_report_po_tree')})]"/>
+        <field name="domain">[
+                ('project_wbs_id', '=', active_id),
+                ('po_id', '!=', False),
+                ]
+        </field>
+        <field name="context">{
+            'search_default_project_wbs_id': [active_id],
+            }
+        </field>
+    </record>
+
+    <!--
+    <record id="view_project_control_project_form_inherit" model="ir.ui.view">
+        <field name="name">project_project_purchasing.inherit</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="analytic_wbs.view_project_control_project_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box_purchassing']" position="inside">
+                <button string="Test function" class="oe_stat_button" type="object" name="test_function" icon="fa-bug">
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="act_analytic_wbs_cost_report_by_po" model="ir.actions.act_window">
+        <field name="name">PO Summary</field>
+        <field name="res_model">analytic_wbs_cost_report</field>
+        <field name="view_mode">tree,graph,pivot</field>
+        <field name="search_view_id" ref="view_analytic_wbs_cost_report_po_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_analytic_wbs_cost_report_po_pivot')}),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('view_analytic_wbs_cost_report_po_graph')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_analytic_wbs_cost_report_po_tree')})]"/>
+        <field name="domain">[]</field>
+        <field name="context">{
+            'search_default_po_id': [active_id],
+            }
+        </field>
+    </record>
+
+    <record id="act_analytic_wbs_cost_report_by_employee" model="ir.actions.act_window">
+        <field name="name">PO Summary</field>
+        <field name="res_model">analytic_wbs_cost_report</field>
+        <field name="view_mode">tree,graph,pivot</field>
+        <field name="search_view_id" ref="view_analytic_wbs_cost_report_po_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_analytic_wbs_cost_report_po_pivot')}),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('view_analytic_wbs_cost_report_po_graph')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_analytic_wbs_cost_report_po_tree')})]"/>
+        <field name="domain">[]</field>
+        <field name="context">{
+            'search_default_employee_id': [active_id],
+            }
+        </field>
+    </record>
+
+
+
+    <record id="act_analytic_wbs_cost_report_by_project_wbs" model="ir.actions.act_window">
+        <field name="name">PO Summary</field>
+        <field name="res_model">analytic_wbs_cost_report</field>
+        <field name="view_mode">tree,graph,pivot</field>
+        <field name="search_view_id" ref="view_analytic_wbs_cost_report_po_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_analytic_wbs_cost_report_po_pivot')}),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('view_analytic_wbs_cost_report_po_graph')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_analytic_wbs_cost_report_po_tree')})]"/>
+        <field name="domain">[]</field>
+        <field name="context">{
+            'search_default_project_wbs_id': [active_id],
+            }
+        </field>
+    </record>
+
+    <record id="act_analytic_wbs_cost_report_by_task" model="ir.actions.act_window">
+        <field name="name">PO Summary</field>
+        <field name="res_model">analytic_wbs_cost_report</field>
+        <field name="view_mode">tree,graph,pivot</field>
+        <field name="search_view_id" ref="view_analytic_wbs_cost_report_po_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_analytic_wbs_cost_report_po_pivot')}),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('view_analytic_wbs_cost_report_po_graph')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_analytic_wbs_cost_report_po_tree')})]"/>
+        <field name="domain">[]</field>
+        <field name="context">{
+            'search_default_task_id': [active_id],
+            }
+        </field>
+    </record>
+
+    <record id="act_analytic_wbs_cost_report_by_vendor" model="ir.actions.act_window">
+        <field name="name">PO Summary</field>
+        <field name="res_model">analytic_wbs_cost_report</field>
+        <field name="view_mode">tree,graph,pivot</field>
+        <field name="search_view_id" ref="view_analytic_wbs_cost_report_po_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_analytic_wbs_cost_report_po_pivot')}),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('view_analytic_wbs_cost_report_po_graph')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_analytic_wbs_cost_report_po_tree')})]"/>
+        <field name="domain">[]</field>
+        <field name="context">{
+            'search_default_vendor_id': [active_id],
+            }
+        </field>
+    </record>
+
+    <record id="view_wbs_summary_purchase_order_form" model="ir.ui.view">
+        <field name="name">purchase.order.wbs.summary.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="action" name="%(act_analytic_wbs_cost_report_by_po)d"
+                    class="oe_stat_button"
+                    icon="fa-bar-chart-o" >
+                    <field name="wbs_summary_count" widget="statinfo" string="Summary"/>
+                    <field name="wbs_summary_ids" invisible="1"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_wbs_summary_employee_form" model="ir.ui.view">
+        <field name="name">hr.employee.wbs.summary.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="action" name="%(act_analytic_wbs_cost_report_by_employee)d"
+                    class="oe_stat_button"
+                    icon="fa-bar-chart-o" >
+                    <field name="wbs_summary_count" widget="statinfo" string="Summary"/>
+                    <field name="wbs_summary_ids" invisible="1"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_wbs_summary_vendor_form" model="ir.ui.view">
+        <field name="name">res.partner.wbs.summary.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="action" name="%(act_analytic_wbs_cost_report_by_vendor)d"
+                    class="oe_stat_button"
+                    icon="fa-bar-chart-o" >
+                    <field name="wbs_summary_count" widget="statinfo" string="Summary"/>
+                    <field name="wbs_summary_ids" invisible="1"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_wbs_summary_project_wbs_form" model="ir.ui.view">
+        <field name="name">analytic.wbs.project.wbs.summary.form</field>
+        <field name="model">account.analytic_wbs.project</field>
+        <field name="inherit_id" ref="analytic_wbs.view_account_analytic_wbs_project_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="action" name="%(act_analytic_wbs_cost_report_by_project_wbs)d"
+                    class="oe_stat_button"
+                    icon="fa-bar-chart-o" >
+                    <field name="wbs_summary_count" widget="statinfo" string="Summary"/>
+                    <field name="wbs_summary_ids" invisible="1"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+      
+    <record id="view_wbs_summary_wbs_form" model="ir.ui.view">
+        <field name="name">analytic.wbs.account.wbs.summary.form</field>
+        <field name="model">account.analytic_wbs.account</field>
+        <field name="inherit_id" ref="analytic_wbs.view_account_analytic_wbs_account_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button type="action" name="%(act_analytic_wbs_cost_report_by_wbs)d"
+                    class="oe_stat_button"
+                    icon="fa-bar-chart-o" >
+                    <field name="wbs_summary_count" widget="statinfo" string="Summary"/>
+                    <field name="wbs_summary_ids" invisible="1"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+    -->
+
+    <menuitem id="menu_pc_summary_main" name="Summary" parent="base.menu_main_pc" sequence="10"/>
+    <menuitem id="menu_pc_cost_report"
+              name="Cost Report"
+              action="act_analytic_wbs_cost_report_po"
+              parent="menu_pc_summary_main"
+              sequence="5"/>
+  </data>
+</odoo>

@@ -1,0 +1,159 @@
+<odoo>
+  <data>
+    <!-- DUMP list view definition -->
+
+    <record model="ir.ui.view" id="workflow_invoice_dump_list">
+      <field name="name">analytic_wbs_pembina_workflow_invoice_dump_list</field>
+      <field name="model">workflow.invoice_dump</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="mapped"/>
+          <field name="duplicate"/>
+          <field name="sort_order"/>
+          <field name="workflow_item"/>
+          <field name="current_step"/>
+          <field name="status"/>
+          <field name="current_user"/>
+          <field name="vendor_no"/>
+          <field name="vendor_name"/>
+          <field name="invoice_no"/>
+          <field name="invoice_amount"/>
+          <field name="invoice_date"/>
+          <field name="scan_date"/>
+          <field name="po_no"/>
+          <field name="invoice_url" widget="url" readonly="1" text="Invoice Image"/>
+          <field name="admin_url" widget="url" readonly="1" text="Workflow Item"/>
+          <field name="computed_uid"/>
+          <field name="duplicate"/>
+          <field name="mapped"/>
+          <field name="workflow_invoice_map_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="workflow_invoice_dump_action_window">
+      <field name="name">Workflow Data Import</field>
+      <field name="res_model">workflow.invoice_dump</field>
+      <field name="view_mode">tree</field>
+    </record>
+
+    <!-- Workflow Actuals list view definition -->
+
+    <record model="ir.ui.view" id="workflow_invoice_mapped_list">
+      <field name="name">analytic_wbs_pembina_workflow_invoice_mapped_list</field>
+      <field name="model">workflow.invoice_mapped</field>
+      <field name="arch" type="xml">
+        <tree>
+            <field name="sort_order"/>
+            <field name="workflow_item"/>
+            <field name="current_step"/>
+            <field name="status"/>
+            <field name="current_user"/>
+            <field name="vendor_no"/>
+            <field name="vendor_name"/>
+            <field name="invoice_no"/>
+            <field name="invoice_amount"/>
+            <field name="invoice_date"/>
+            <field name="scan_date"/>
+            <field name="po_no"/>
+            <field name="invoice_url" widget="url" readonly="1" text="Invoice Image"/>
+            <field name="admin_url" widget="url" readonly="1" text="Workflow Item"/>
+            <field name="computed_uid"/>
+            <field name="purchase_order_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="workflow_invoice_mapped_action_window">
+      <field name="name">Workflow Data Mapped</field>
+      <field name="res_model">workflow.invoice_mapped</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    # Workflow Mapping
+    <record id="view_workflow_import_form" model="ir.ui.view">
+        <field name="name">workflow_import_form</field>
+        <field name="model">workflow.import</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <form string="wbs Project">
+                <sheet string="WORKFLOW Import">
+                    <div class="oe_button_box" name="button_box_workflow_import" groups="base.group_user">
+                        <button type="object"  name="action_import_workflow_dump"
+                            class="oe_stat_button"
+                            icon="fa-file-text-o">
+                            <field name="workflow_count" widget="statinfo" string="Workflow Invoices"/>
+                            <field name='workflow_mapped_ids' invisible="1"/>
+                        </button>
+                        <button type="object"  name="action_map_workflow_import_content"
+                            class="oe_stat_button"
+                            icon="fa-cloud-download">
+                        </button>
+                    </div>
+                    <div>
+                        <group>
+                            <group>
+                                <field name="name" readonly="False"/>
+                                <field name="create_uid" readonly="True" options="{'no_open': True}"/>
+                                <field name="create_date" readonly="True"/>
+                            </group>
+                        </group>
+                    </div>
+                    <notebook>
+                        <page string="Workflow Invoices Mapped">
+                            <button type="object" name="action_map_workflow_invoice" class="oe_highlight"
+                                    string="Map Workflow Invoices"/>
+                            <field name="workflow_mapped_ids" context="{'default_workflow_import_id':'active_id'}">
+                                <tree create="false" string="Workflow Invoices">
+                                    <field name="sort_order"/>
+                                    <field name="workflow_item"/>
+                                    <field name="current_step"/>
+                                    <field name="status"/>
+                                    <field name="current_user"/>
+                                    <field name="vendor_no"/>
+                                    <field name="vendor_name"/>
+                                    <field name="invoice_no"/>
+                                    <field name="invoice_amount"/>
+                                    <field name="invoice_date"/>
+                                    <field name="scan_date"/>
+                                    <field name="po_no"/>
+                                    <field name="invoice_url" widget="url" readonly="1" text="Invoice Image"/>
+                                    <field name="admin_url" widget="url" readonly="1" text="Workflow Item"/>
+                                    <field name="computed_uid"/>
+                                    <field name="workflow_import_id"/>
+                                    <field name="purchase_order_id"/>
+                                    <field name="tci_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_workflow_import_tree" model="ir.ui.view">
+        <field name="name">workflow_import_tree</field>
+        <field name="model">workflow.import</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <tree string="Workflow imports">
+                <field name="name" readonly="True"/>
+                <field name="create_uid" readonly="True" options="{'no_open': True}"/>
+                <field name="create_date" readonly="True"/>
+                <field name="workflow_count" widget="statinfo" string="Workflow Invoices"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="workflow_mapping_action_window">
+      <field name="name">Workflow Mapping</field>
+      <field name="res_model">workflow.import</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+  </data>
+</odoo>

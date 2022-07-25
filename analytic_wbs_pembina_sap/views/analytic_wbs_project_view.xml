@@ -1,0 +1,32 @@
+<odoo>
+  <data>
+        <!--
+        <record id="sap_analytic_wbs_project_tree" model="ir.ui.view">
+            <field name="name">sap.purchase.order.pc.tree</field>
+            <field name="model">account.analytic_wbs.project</field>
+            <field name="inherit_id" ref="analytic_wbs.view_account_analytic_wbs_project_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='po_balance']" position="after">
+                    <field name="sap_amt_balance" sum="Total Actuals" widget="monetary" invisible="0"/>
+                </xpath>
+            </field>
+        </record>
+        -->
+        <record id="view_sap_analytic_wbs_project_form" model="ir.ui.view">
+            <field name="name">analytis_wbs_project.form</field>
+            <field name="model">account.analytic_wbs.project</field>
+            <field name="inherit_id" ref="analytic_wbs.view_account_analytic_wbs_project_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button type="object"  name="action_display_actuals"
+                        class="oe_stat_button"
+                        icon="fa-file-text-o">
+                        <field name="actual_count" widget="statinfo" string="SAP Actuals"/>
+                        <field name='sap_actuals_mapped_ids' invisible="1"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+  </data>
+</odoo>

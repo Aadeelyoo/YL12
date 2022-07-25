@@ -1,0 +1,40 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="analytic_wbs_pembina_sap.list">
+      <field name="name">SAP GR Data Dump</field>
+      <field name="model">sap.gr_line_dump</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="purchasing_doc"/>
+          <field name="sap_item"/>
+          <field name="material_document"/>
+          <field name="short_text"/>
+          <field name="reference"/>
+          <field name="amount_loc_crcy"/>
+          <field name="document_date"/>
+          <field name="posting_date"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="gr_dump_sap_action_window">
+      <field name="name">SAP GR Data Dump</field>
+      <field name="res_model">sap.gr_line_dump</field>
+      <field name="view_mode">tree</field>
+    </record>
+
+    <record id="ir_action_update_sap_mapped_invoice_no" model="ir.actions.server">
+        <field name="name">Update Mapped Actuals</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_sap_gr_line_dump"/>
+        <field name="binding_model_id" ref="model_sap_gr_line_dump"/>
+        <field name="state">code</field>
+        <field name="code">records.ir_action_update_sap_mapped_invoice_no()</field>
+    </record>
+
+  </data>
+</odoo>

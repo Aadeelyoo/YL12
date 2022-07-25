@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        # Actions for project related views
+
+        <record id="act_wbs_summary_by_project" model="ir.actions.act_window">
+            <field name="name">Project Summary</field>
+            <field name="res_model">analytic_wbs_cost_report</field>
+            <field name="view_mode">tree,pivot,graph</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('analytic_wbs_summary.view_analytic_wbs_cost_report_po_pivot')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('analytic_wbs_summary.view_analytic_wbs_cost_report_po_tree')}),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('analytic_wbs_summary.view_analytic_wbs_cost_report_po_graph')})
+                ]"/>
+            <field name="search_view_id" ref="analytic_wbs_summary.view_analytic_wbs_cost_report_po_search"/>
+            <field name="domain">[('project_id', '=', active_id)]</field>
+            <field name="context">{
+                'search_default_project_id': [active_id],
+                'default_project_id': active_id,
+                'search_default_budget_filter': 0,
+                'search_default_work_budget_filter': 1,
+                'search_default_commitment_filter': 1,
+                'search_default_change_filter': 1,
+                'search_default_accrual_filter': 1,
+                'search_default_incurred_filter': 1,
+                'search_default_past_incurred_filter': 0,
+                'search_default_detail_forecast_filter': 0,
+                'search_default_total_forecast_filter': 1,
+                'search_default_eac_filter': 1,
+                }</field>
+        </record>
+
+        <record id="project_dashboard1_view" model="ir.ui.view">
+            <field name="name">Report Dashboard</field>
+            <field name="model">analytic_wbs_cost_report</field>
+            <field name="arch" type="xml">
+                <dashboard>
+                    <group string="Test main group">
+                        <group string="Current Period" col="6">
+                            <aggregate name="incurred_cur" string="Incurred Current Period" group_operator="sum" field="variance" domain="[('data_col_group', '=', '40-Incurred Total')]"/>
+                            <aggregate name="accrual_cur" string="Accruals" group_operator="sum" field="amount" domain="[('data_col_group', '=', '35-Accruals')]"/>
+                            <aggregate name="total_incurred_cur" string="Total Incurred" group_operator="sum" field="amount" domain="[('data_col_group', '=', '40-Incurred Total')]"/>
+                            <formula name="pcent_spent" string="Spent %" value="(record.total_incurred / record.eac_cur) * 100" widget="progressbar"/>
+                            <aggregate name="etc_cur" string="ETC" group_operator="sum" field="amount" domain="[('data_col_group', '=', '61-Forecast Total')]"/>
+                            <aggregate name="eac_cur" string="EAC" group_operator="sum" field="amount" domain="[('data_col_group', '=', '65-EAC Total')]"/>
+                            <!--
+                            <widget name="pie_chart" title="EAC Segregation" attrs="{'measure': 'amount', 'groupby': 'data_col_group', 'domain': [('data_col_group', 'in', ['50-Incurred Current', '42-Past Incurred'])]}"/>
+                            -->
+                        </group>
+                        <group string="Past Period" col="6">
+                            <aggregate name="etc" string="ETC" group_operator="sum" field="amount" domain="[('data_col_group', '=', '60-Forecast')]"/>
+                            <aggregate name="eac" string="EAC" group_operator="sum" field="amount" domain="[('data_col_group', 'in', ['42-Past Incurred', '60-Forecast', '50-Incurred Current'])]"/>
+                            <!--
+                            <widget name="pie_chart" title="EAC Segregation" attrs="{'measure': 'amount', 'groupby': 'data_col_group'}"/>
+                            -->
+                        </group>
+                    </group>
+
+                    <group string="Commitments" col="12">
+                        <group string="Current Values" colspan="4" col="3">
+                            <aggregate name="commit_cur" string="Total Committed" group_operator="sum" field="amount" domain="[('data_col_group', '=', '30-Commitments'), ('data_col', '=', 'Total')]"/>
+                            <aggregate name="act_cur" string="Actuals (SAP)" group_operator="sum" field="amount" domain="[('data_col_group', '=', '30-Commitments'), ('data_col', '=', 'Actuals')]"/>
+                            <aggregate name="open_cur" string="Open (SAP)" group_operator="sum" field="amount" domain="[('data_col_group', '=', '30-Commitments'), ('data_col', '=', 'Open Commitments')]"/>
+
+                            <!--
+                            <formula name="d" string="Spent %" value="(record.total_incurred / record.eac) * 100" widget="progressbar"/>
+                            <widget name="pie_chart" title="EAC Segregation" attrs="{'measure': 'amount', 'groupby': 'data_col_group', 'domain': [('data_col_group', 'in', ['50-Incurred Current', '42-Past Incurred'])]}"/>
+                            -->
+                        </group>
+                        <group string="Accruals" colspan="4" col="3">
+                            <aggregate name="inv_out" string="Outstanding Invoices" group_operator="sum" field="amount" domain="[('data_col_group', '=', '35-Accruals')]"/>
+                            <aggregate name="lem_out" string="Outstanding LEMs" group_operator="sum" field="amount" domain="[('data_col_group', '=', '35-Accruals')]"/>
+                            <aggregate name="other_out" string="Manual Accruals" group_operator="sum" field="amount" domain="[('data_col_group', '=', '35-Accruals')]"/>
+                        </group>
+                    </group>
+                </dashboard>
+            </field>
+        </record>
+
+        <record id="act_wbs_dashboard1_by_project" model="ir.actions.act_window">
+            <field name="name">Project Summary</field>
+            <field name="res_model">analytic_wbs_cost_report</field>
+            <field name="view_mode">dashboard,tree,graph</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'dashboard', 'view_id': ref('analytic_wbs_summary.project_dashboard1_view')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('analytic_wbs_summary.view_analytic_wbs_cost_report_po_tree')}),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('analytic_wbs_summary.view_analytic_wbs_cost_report_po_graph')})
+                ]"/>
+            <field name="search_view_id" ref="analytic_wbs_summary.view_analytic_wbs_cost_report_po_search"/>
+            <field name="domain">[('project_id', '=', active_id)]</field>
+            <field name="context">{
+                'search_default_project_id': [active_id],
+                'default_project_id': active_id,
+                }</field>
+        </record>
+
+
+        <record id="view_project_control_summary_form" model="ir.ui.view">
+            <field name="name">project_control_wbs_summary_form</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="analytic_wbs.view_project_control_project_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_stat_button" name="%(act_wbs_summary_by_project)d" type="action" icon="fa-table" string="Summary"/>
+                    <button class="oe_stat_button" name="%(act_wbs_dashboard1_by_project)d" type="action" icon="fa-dashboard" string="Dashboard"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--
+        <record id="open_view_all_task_plan_pc_list" model="ir.actions.act_window">
+            <field name="name">All Planned Values</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,grid,pivot</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'grid', 'view_id': ref('task_forecast_view_grid_all')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('forecast_view_pivot_pc')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_task_forecast_tree_pc')})]"/>
+            <field name="search_view_id" ref="analytic_wbs.view_task_forecast_search_form"/>
+            <field name="domain">[('forecast_type', '=', 'plan')]</field>
+            <field name="context">{'default_forecast_type': 'plan',}
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="open_view_all_task_pc_list">
+            <field name="name">All Tasks</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="search_view_id" ref="project.view_task_search_form"/>
+            <field name="domain">[]</field>
+            <field name="context">{}
+            </field>
+            <field name="help" type="html">
+              <p>
+                Click ont the 'Create' button to create a new task.
+              </p>
+            </field>
+        </record>
+        -->
+
+     </data>
+</openerp>

@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.actions.act_window" id="act_pc_wbs_task">
+            <field name="name">Tasks</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="search_view_id" ref="project.view_task_search_form"/>
+            <field name="domain">[
+                ('analytic_project_id', '=', active_id)
+                ]
+            </field>
+            <field name="context">{
+                'default_analytic_project_id': [active_id],
+                }
+            </field>
+            <field name="help" type="html">
+              <p>
+                Click ont the 'Create' button to create a new task.
+              </p>
+            </field>
+        </record>
+
+        # Actions for all pc_wbss
+
+        <record id="open_view_all_task_forecast_pc_wbs_list" model="ir.actions.act_window">
+            <field name="name">All Forecast</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,grid,pivot</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'grid', 'view_id': ref('task_forecast_view_grid_all')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('forecast_view_pivot_pc')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_task_forecast_tree_pc')})]"/>
+            <field name="search_view_id" ref="analytic_wbs.view_task_forecast_search_form"/>
+            <field name="domain">[
+                ('forecast_type', '=', 'forecast'),
+                ('analytic_project_id', '=', active_id)
+                ]
+            </field>
+            <field name="context">{
+                'default_forecast_type': 'forecast',
+                'default_analytic_project_id': [active_id],
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+        <record id="open_view_all_task_plan_pc_wbs_list" model="ir.actions.act_window">
+            <field name="name">All Planned Values</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,grid,pivot</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'grid', 'view_id': ref('task_forecast_view_grid_all')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('forecast_view_pivot_pc')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_task_forecast_tree_pc')})]"/>
+            <field name="search_view_id" ref="analytic_wbs.view_task_forecast_search_form"/>
+            <field name="domain">[
+                ('forecast_type', '=', 'plan'),
+                ('analytic_project_id', '=', active_id)
+                ]
+            </field>
+            <field name="context">{
+                'default_forecast_type': 'plan',
+                'default_analytic_project_id': [active_id],
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+        <!-- Other Tasks -->
+
+        <record model="ir.actions.act_window" id="act_pc_wbs_task_other">
+            <field name="name">Tasks</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="search_view_id" ref="project.view_task_search_form"/>
+            <field name="domain">[
+                ('account_project_id', '=', active_id),
+                ('employee_id', '=', False),
+                ('partner_id', '=', False),
+                ]
+            </field>
+            <field name="context">{
+                'default_account_project_id': [active_id],
+
+                }
+            </field>
+            <field name="help" type="html">
+              <p>
+                Click ont the 'Create' button to create a new task.
+              </p>
+            </field>
+        </record>
+
+        # Actions for all pc_wbss
+
+        <record id="open_view_all_task_other_forecast_pc_wbs_list" model="ir.actions.act_window">
+            <field name="name">All Forecast</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,grid,pivot</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'grid', 'view_id': ref('task_forecast_view_grid_all')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('forecast_view_pivot_pc')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_task_forecast_tree_pc')})]"/>
+            <field name="search_view_id" ref="analytic_wbs.view_task_forecast_search_form"/>
+            <field name="domain">[
+                ('forecast_type', '=', 'forecast'),
+                ('analytic_project_id', '=', active_id),
+                ('employee_id', '=', False),
+                ('partner_id', '=', False),
+                ]
+            </field>
+            <field name="context">{
+                'default_forecast_type': 'forecast',
+                'default_analytic_project_id': [active_id],
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+        <record id="open_view_all_task_plan_pc_wbs_list" model="ir.actions.act_window">
+            <field name="name">All Planned Values</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,grid,pivot</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'grid', 'view_id': ref('task_forecast_view_grid_all')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('forecast_view_pivot_pc')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_task_forecast_tree_pc')})]"/>
+            <field name="search_view_id" ref="analytic_wbs.view_task_forecast_search_form"/>
+            <field name="domain">[
+                ('forecast_type', '=', 'plan'),
+                ('analytic_project_id', '=', active_id),
+                ('employee_id', '=', False),
+                ('partner_id', '=', False),
+                ]
+            </field>
+            <field name="context">{
+                'default_forecast_type': 'plan',
+                'default_analytic_project_id': [active_id],
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+    <!-- Employee Tasks -->
+
+        <record model="ir.actions.act_window" id="act_pc_wbs_task_employee">
+            <field name="name">Tasks</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="search_view_id" ref="project.view_task_search_form"/>
+            <field name="domain">[
+                ('account_project_id', '=', active_id),
+                ('employee_id', '!=', False),
+                ]
+            </field>
+            <field name="context">{
+                'default_account_project_id': [active_id],
+                }
+            </field>
+            <field name="help" type="html">
+              <p>
+                Click ont the 'Create' button to create a new task.
+              </p>
+            </field>
+        </record>
+
+        <!-- Actions for all pc_wbs -->
+
+        <record id="open_view_all_task_employee_forecast_pc_wbs_list" model="ir.actions.act_window">
+            <field name="name">All Forecast</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,grid,pivot</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'grid', 'view_id': ref('task_forecast_view_grid_all')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('forecast_view_pivot_pc')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_task_forecast_tree_pc')})]"/>
+            <field name="search_view_id" ref="analytic_wbs.view_task_forecast_search_form"/>
+            <field name="domain">[
+                ('forecast_type', '=', 'forecast'),
+                ('analytic_project_id', '=', active_id),
+                ('employee_id', '!=', False),
+                ]
+            </field>
+            <field name="context">{
+                'default_forecast_type': 'forecast',
+                'default_analytic_project_id': [active_id],
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+        <record id="open_view_all_task_employee_plan_pc_wbs_list" model="ir.actions.act_window">
+            <field name="name">All Planned Values</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,grid,pivot</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'grid', 'view_id': ref('task_forecast_view_grid_all')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('forecast_view_pivot_pc')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_task_forecast_tree_pc')})]"/>
+            <field name="search_view_id" ref="analytic_wbs.view_task_forecast_search_form"/>
+            <field name="domain">[
+                ('forecast_type', '=', 'plan'),
+                ('analytic_project_id', '=', active_id),
+                ('employee_id', '!=', False),
+                ]
+            </field>
+            <field name="context">{
+                'default_forecast_type': 'plan',
+                'default_analytic_project_id': [active_id],
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+<!-- PO Tasks -->
+
+        <record model="ir.actions.act_window" id="act_pc_wbs_task_po">
+            <field name="name">Tasks</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="search_view_id" ref="project.view_task_search_form"/>
+            <field name="domain">[
+                ('account_project_id', '=', active_id),
+                ('po_id', '!=', False),
+                ]
+            </field>
+            <field name="context">{
+                'default_account_project_id': [active_id],
+                }
+            </field>
+            <field name="help" type="html">
+              <p>
+                Click ont the 'Create' button to create a new task.
+              </p>
+            </field>
+        </record>
+
+        <!-- Actions for all pc_wbs -->
+
+        <record id="open_view_all_task_po_forecast_pc_wbs_list" model="ir.actions.act_window">
+            <field name="name">All Forecast</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,grid,pivot</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'grid', 'view_id': ref('task_forecast_view_grid_all')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('forecast_view_pivot_pc')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_task_forecast_tree_pc')})]"/>
+            <field name="search_view_id" ref="analytic_wbs.view_task_forecast_search_form"/>
+            <field name="domain">[
+                ('forecast_type', '=', 'forecast'),
+                ('analytic_project_id', '=', active_id),
+                ('po_id', '!=', False),
+                ]
+            </field>
+            <field name="context">{
+                'default_forecast_type': 'forecast',
+                'default_analytic_project_id': [active_id],
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+        <record id="open_view_all_task_po_plan_pc_wbs_list" model="ir.actions.act_window">
+            <field name="name">All Planned Values</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,grid,pivot</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'grid', 'view_id': ref('task_forecast_view_grid_all')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('forecast_view_pivot_pc')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_task_forecast_tree_pc')})]"/>
+            <field name="search_view_id" ref="analytic_wbs.view_task_forecast_search_form"/>
+            <field name="domain">[
+                ('forecast_type', '=', 'plan'),
+                ('analytic_project_id', '=', active_id),
+                ('po_id', '!=', False),
+                ]
+            </field>
+            <field name="context">{
+                'default_forecast_type': 'plan',
+                'default_analytic_project_id': [active_id],
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+        <record id="project_wbs_task_other_inherit" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.prject.form.inherit</field>
+            <field name="model">account.analytic_wbs.project</field>
+            <field name="priority" eval="55"/>
+            <field name="inherit_id" ref="analytic_wbs.view_account_analytic_wbs_project_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box_other']" position="inside">
+                    <button class="oe_stat_button"
+                            name="%(act_pc_wbs_task_other)d"
+                            type="action" icon="fa-tasks"
+                            string="Other Tasks List">
+                    </button>
+                    <button class="oe_stat_button"
+                            name="%(open_view_all_task_other_forecast_pc_wbs_list)d"
+                            type="action" icon="fa-file-text-o"
+                            string="Other Tasks Forecast">
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="project_wbs_task_employee_inherit" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.prject.form.inherit</field>
+            <field name="model">account.analytic_wbs.project</field>
+            <field name="priority" eval="55"/>
+            <field name="inherit_id" ref="analytic_wbs.view_account_analytic_wbs_project_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box_employee']" position="inside">
+                    <button class="oe_stat_button"
+                            name="%(act_pc_wbs_task_employee)d"
+                            type="action" icon="fa-tasks"
+                            string="Employee Tasks List">
+                    </button>
+                    <button class="oe_stat_button"
+                            name="%(open_view_all_task_employee_forecast_pc_wbs_list)d"
+                            type="action" icon="fa-file-text-o"
+                            string="Employee Tasks Forecast">
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="project_wbs_task_po_inherit" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.prject.form.inherit</field>
+            <field name="model">account.analytic_wbs.project</field>
+            <field name="priority" eval="55"/>
+            <field name="inherit_id" ref="analytic_wbs.view_account_analytic_wbs_project_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box_po']" position="inside">
+                    <button class="oe_stat_button"
+                            name="%(act_pc_wbs_task_po)d"
+                            type="action" icon="fa-tasks"
+                            string="PO Tasks List">
+                    </button>
+                    <button class="oe_stat_button"
+                            name="%(open_view_all_task_po_forecast_pc_wbs_list)d"
+                            type="action" icon="fa-file-text-o"
+                            string="PO Tasks Forecast">
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+
+
+     </data>
+</openerp>

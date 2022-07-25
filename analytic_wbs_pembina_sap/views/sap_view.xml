@@ -1,0 +1,175 @@
+<odoo>
+  <data>
+    <!-- DUMP list view definition -->
+
+    <record id="view_sap_import_form" model="ir.ui.view">
+        <field name="name">sap_import_form</field>
+        <field name="model">sap.import</field>
+        <field name="priority">0</field>
+        <field name="arch" type="xml">
+            <form string="wbs Project">
+                <sheet string="SAP Import">
+                    <div class="oe_button_box" name="button_box_sap_import" groups="base.group_user">
+                        <button type="object"  name="action_import_sap_dump"
+                            class="oe_stat_button"
+                            icon="fa-file-text-o">
+                            <field name="sap_actuals_count" widget="statinfo" string="SAP Actuals Lines"/>
+                            <field name='sap_actuals_ids' invisible="1"/>
+                        </button>
+                        <button type="object"  name="action_import_sap_dump"
+                            class="oe_stat_button"
+                            icon="fa-file-text-o">
+                            <field name="sap_po_line_count" widget="statinfo" string="SAP PO Lines"/>
+                            <field name='sap_po_line_ids' invisible="1"/>
+                        </button>
+
+                        <button type="object"  name="action_map_sap_import_content"
+                            class="oe_stat_button"
+                            icon="fa-cloud-download">
+                        </button>
+
+                    </div>
+                    <div>
+                        <group>
+                            <group>
+                                <field name="name" readonly="False"/>
+                                <field name="create_uid" readonly="True" options="{'no_open': True}"/>
+                                <field name="create_date" readonly="True"/>
+                            </group>
+                        </group>
+                    </div>
+                    <notebook>
+                        <page string="SAP Actuals Mapped">
+                            <button type="object" name="action_map_po" class="oe_highlight" string="Test Function"/>
+                            <field name="sap_actuals_ids" context="{'default_sap_import_id':'active_id'}">
+                                <tree create="false" string="SAP Lines">
+                                    <field name="computed_uid"/>
+                                    <field name="document_number"/>
+                                    <field name="purchasing_document"/>
+                                    <field name="document_date"/>
+                                    <field name="posting_date"/>
+                                    <field name="ref_document_number"/>
+                                    <field name="object"/>
+                                    <field name="sap_item"/>
+                                    <field name="vendor_name"/>
+                                    <field name="name_of_employee_or_applicant"/>
+                                    <field name="cost_element_descr"/>
+                                    <field name="project_definition"/>
+                                    <field name="wbs_element"/>
+                                    <field name="sap_import_id"/>
+                                    <field name="account_project_id"/>
+                                    <field name="project_id"/>
+                                    <field name="purchase_order_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="New Mapped Po Lines">
+                            <button type="object" name="action_test_button" class="oe_highlight" string="action_test_button"/>
+                            <field name="sap_po_line_ids" context="{'default_sap_import_id':'active_id'}">
+                                <tree create="false" string="SAP Lines">
+                                    <field name="computed_uid"/>
+                                    <field name="document_date"/>
+                                    <field name="purchasing_doc"/>
+                                    <field name="vendor"/>
+                                    <field name="sap_item"/>
+                                    <field name="short_text"/>
+                                    <field name="wbs_element"/>
+                                    <field name="deletion_indicator"/>
+                                    <field name="order_quantity"/>
+                                    <field name="net_price"/>
+                                    <field name="net_order_value"/>
+                                    <field name="qty_to_deliver"/>
+                                    <field name="value_to_deliver"/>
+                                    <field name="qty_to_invoice"/>
+                                    <field name="value_to_invoice"/>
+                                    <field name="seq_no_of_account_assgt"/>
+                                    <field name="sap_import_id"/>
+                                    <field name="account_id"/>
+                                    <field name="account_project_id"/>
+                                    <field name="project_id" invisible="0"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Changed Mapped Po Lines">
+                            <field name="changed_sap_po_line_ids" context="{'default_sap_import_id':'active_id'}">
+                                <tree create="false" string="Changed PO Lines">
+                                    <field name="computed_uid"/>
+                                    <field name="document_date"/>
+                                    <field name="purchasing_doc"/>
+                                    <field name="vendor"/>
+                                    <field name="sap_item"/>
+                                    <field name="short_text"/>
+                                    <field name="wbs_element"/>
+                                    <field name="deletion_indicator"/>
+                                    <field name="order_quantity"/>
+                                    <field name="net_price"/>
+                                    <field name="net_order_value"/>
+                                    <field name="qty_to_deliver"/>
+                                    <field name="value_to_deliver"/>
+                                    <field name="qty_to_invoice"/>
+                                    <field name="value_to_invoice"/>
+                                    <field name="seq_no_of_account_assgt"/>
+                                    <field name="sap_import_id"/>
+                                    <field name="account_id"/>
+                                    <field name="account_project_id"/>
+                                    <field name="project_id" invisible="0"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Mapped Open Po Lines">
+                            <field name="sap_open_po_ids" context="{'default_sap_import_id':'active_id'}">
+                                <tree create="false" string="Open PO Lines">
+                                    <field name="computed_uid"/>
+                                    <field name="ref_document_number"/>
+                                    <field name="document_date"/>
+                                    <field name="reference_item"/>
+                                    <field name="sap_name"/>
+                                    <field name="val_ca_area_crcy"/>
+                                    <field name="project_definition"/>
+                                    <field name="deletion_indicator"/>
+                                    <field name="vendor_no"/>
+                                    <field name="deadline_item"/>
+                                    <field name="debit_date"/>
+                                    <field name="sap_import_id" invisible="1"/>
+                                    <field name="account_id"/>
+                                    <field name="account_project_id"/>
+                                    <field name="project_id"/>
+                                    <field name="purchase_order_id"/>
+                                    <field name="tci_id"/>
+                                    <field name="tci_line_id"/>
+                                </tree>
+                            </field>
+                        </page>
+
+
+
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sap_import_tree" model="ir.ui.view">
+        <field name="name">sap_import_tree</field>
+        <field name="model">sap.import</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <tree string="SAP imports">
+                <field name="name" readonly="True"/>
+                <field name="create_uid" readonly="True" options="{'no_open': True}"/>
+                <field name="create_date" readonly="True"/>
+                <field name="sap_actuals_count" widget="statinfo" string="SAP Lines"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="sap_import_action_window">
+      <field name="name">sap_import_act_window</field>
+      <field name="res_model">sap.import</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+  </data>
+</odoo>

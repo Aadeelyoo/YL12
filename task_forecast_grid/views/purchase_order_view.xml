@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="act_po_task_forecast" model="ir.actions.act_window">
+            <field name="name">Forecast</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,grid,pivot</field>
+            <field name="search_view_id" ref="analytic_wbs.view_task_forecast_search_form"/>
+            <field name="domain">[('po_id', '=', active_id), ('forecast_type', '=', 'forecast')]</field>
+            <field name="context">{
+                'default_forecast_type': 'forecast',
+                'search_default_po_id': [active_id],
+                'default_po_id': active_id
+                }
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_po_task">
+            <field name="name">Tasks</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="search_view_id" ref="project.view_task_search_form"/>
+            <field name="domain">[('po_id', '=', active_id)]</field>
+            <field name="context">{
+                'search_default_po_id': [active_id],
+                'default_po_id': active_id
+                }
+            </field>
+            <field name="help" type="html">
+              <p>
+                Click ont the 'Create' button to create a new task for this po.
+              </p>
+            </field>
+        </record>
+
+        <!--
+        <record id="view_pc_employee_form" model="ir.ui.view">
+            <field name="name">pc_employee_form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='toggle_active']" position="before">
+                    <button type="action" name="%(act_employee_task)d"
+                        class="oe_stat_button"
+                        icon="fa-file-text-o" >
+                        <field name="task_count" widget="statinfo" string="Tasks"/>
+                        <field name="task_ids" invisible="1"/>
+                    </button>
+                    <button type="action" name="%(act_employee_task_forecast)d"
+                        class="oe_stat_button"
+                        icon="fa-list" >
+                        <field name="task_forecast_quantity" widget="statinfo" string="Forecast mhr"/>
+                        <field name="task_forecast_ids" invisible="1"/>
+                    </button>
+                </xpath>
+                <xpath expr="//notebook/page[last()]" position="before">
+                    <page string="Tasks">
+                        <div class="oe_button_box" name="btn_box_task">
+                        </div>
+                        <group string="Tasks">
+                            <field name="task_ids" nolabel="1">
+                                <tree edit="false" create="false" delete="false" string="Forecast Transactions">
+                                    <field name="name"/>
+                                    <field name="account_project_id"/>
+                                    <field name="employee_id" invisible="1"/>
+                                    <field name="etc_amount_calc_type"/>
+                                    <field name="incurred_amount_compute"/>
+                                    <field name="etc_amount" string="Computed ETC"/>
+                                    <field name="forecast_amount" string="Forecast Amount"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+        -->
+
+        # Actions for all pos
+
+        <record id="open_view_all_task_forecast_po_list" model="ir.actions.act_window">
+            <field name="name">All Forecast</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,grid,pivot</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('task_forecast_view_grid_by_po')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('forecast_view_pivot_po')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_task_forecast_tree_po')})]"/>
+            <field name="search_view_id" ref="analytic_wbs.view_task_forecast_search_form"/>
+            <field name="domain">[('po_id', '!=', False), ('forecast_type', '=', 'forecast')]</field>
+            <field name="context">{'default_forecast_type': 'forecast',}
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="open_view_all_task_po_list">
+            <field name="name">po Tasks</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="search_view_id" ref="project.view_task_search_form"/>
+            <field name="domain">[('po_id', '!=', False)]</field>
+            <field name="context">{}
+            </field>
+            <field name="help" type="html">
+              <p>
+                Click ont the 'Create' button to create a new task for this po.
+              </p>
+            </field>
+        </record>
+
+        # Actions for all others
+
+        <record id="open_view_all_task_forecast_other_list" model="ir.actions.act_window">
+            <field name="name">All Other Forecast</field>
+            <field name="res_model">project.task.forecast</field>
+            <field name="view_mode">tree,grid,pivot</field>
+            <field name="view_type">form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'graph', 'view_id': ref('task_forecast_view_grid_by_po')}),
+                (0, 0, {'view_mode': 'pivot', 'view_id': ref('forecast_view_pivot_po')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_task_forecast_tree_po')})]"/>
+            <field name="search_view_id" ref="analytic_wbs.view_task_forecast_search_form"/>
+            <field name="domain">[('po_id', '=', False), ('employee_id', '=', False), ('forecast_type', '=', 'forecast')]</field>
+            <field name="context">{'default_forecast_type': 'forecast',}
+            </field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Here, you can create forecast on all tasks
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="open_view_all_task_other_list">
+            <field name="name">Other Tasks</field>
+            <field name="res_model">project.task</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="search_view_id" ref="project.view_task_search_form"/>
+            <field name="domain">[('po_id', '=', False), ('employee_id', '=', False)]</field>
+            <field name="context">{}
+            </field>
+            <field name="help" type="html">
+              <p>
+                Click ont the 'Create' button to create a new task for this po.
+              </p>
+            </field>
+        </record>
+
+        <menuitem id="menu_po_tasks_main"
+            name="Tasks"
+            parent="purchase.menu_purchase_root"
+            sequence="70"/>
+
+        <menuitem id="menu_po_open_view_all_tasks"
+                  name="All Tasks"
+                  action="open_view_all_task_po_list"
+                  parent="menu_po_tasks_main"
+                  sequence="5"/>
+
+        <menuitem id="menu_po_open_view_all_tasks_forecast"
+                  name="All Forecast"
+                  action="open_view_all_task_forecast_po_list"
+                  parent="menu_po_tasks_main"
+                  sequence="10"/>
+
+
+
+
+     </data>
+</openerp>

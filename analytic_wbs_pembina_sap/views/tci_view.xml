@@ -1,0 +1,27 @@
+<odoo>
+  <data>
+    <!-- DUMP list view definition -->
+        <record id="view_sap_tci_form" model="ir.ui.view">
+            <field name="name">tci.sap.form</field>
+            <field name="model">tci</field>
+            <field name="inherit_id" ref="analytic_wbs.view_tci_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='tci_type']" position="after">
+                    <field name="actual_mapped_id"/>
+                    <field name="workflow_mapped_id"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="action_run_ir_action_link_actuals_to_invoice" model="ir.actions.server">
+            <field name="name">Link to Invoices</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_tci"/>
+            <field name="binding_model_id" ref="model_tci"/>
+            <field name="state">code</field>
+            <field name="code">records.ir_action_link_actuals_to_invoice()</field>
+        </record>
+
+  </data>
+</odoo>

@@ -1,0 +1,33 @@
+<!-- <?xml version="1.0" encoding="utf-8"?> -->
+<odoo>
+    <data>
+
+        <record id="paperformat_project_cost_template" model="report.paperformat">
+            <field name="name">European A3 low margin</field>
+            <field name="default" eval="True" />
+            <field name="format">A3</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">4</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">10</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <report
+
+            id="report_for_project_cost" 
+            model="analytic.wbs.record"
+            name="project_cost_report.project_cost_temp_id"
+            file="project_cost_report.project_cost_temp_id"
+            report_type="qweb-html"
+            string="Project Cost Report"
+            menu="False"
+            paperformat="paperformat_project_cost_template"
+            print_report_name ="'%s Cost Report' % (object.name)" />
+
+        
+    </data>
+</odoo>

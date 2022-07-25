@@ -1,0 +1,1653 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>   
+
+        <template id="project_cost_temp_id">
+
+            <t t-call="web.html_container">
+
+                <t t-call="web.internal_layout">
+
+                    <div class="page">
+
+                        <style type="text/css">
+
+                            @media (min-width: 1200px) {
+                                .report-wrapper {
+                                   width: 100%;
+                                }
+                            }
+                            @media (min-width: 992px) {
+                                .report-wrapper {
+                                   width: 100%;
+                                }
+                            }
+                            @media (min-width: 768px) {
+                                .report-wrapper {
+                                   width: 100%;
+                                }
+                            }
+
+                            .clearfloat {
+                                clear: both;
+                                float: none;
+                                width: 100%;
+                                height: 1px;
+                                display: block;
+                            }
+                            .report-wrapper {
+                                width: 100%;
+                                font-size: 12px;
+                            }
+                            table {
+                                width: 100%;
+                                border-spacing: 0px;
+                                border: 2px solid #CCC;
+                                vertical-align: middle;
+                            }
+                            table tr td, table tr th {
+                                text-align: center;
+                                padding: 3px 0px 0px 3px;
+                                border-right: 2px solid #CCC;
+                                border-bottom: 1px solid #eee;
+                                vertical-align: middle;
+                            }
+                            table tr td:last-child, 
+                            table tr th:last-child {
+                                border-right: none
+                            }
+                            table tr:last-child td {
+                                border-bottom: none
+                            }
+                            table tr th {
+                                text-align: center;
+                            }
+                            
+                            .report-header {
+                                width: 100%;
+                                margin: 0px auto;
+                                text-align: center;
+                            }
+
+                            .report-header p {
+                                width: 50%;
+                                float: left;
+                                margin: 0px 0px 20px;
+                            }
+                            .report-header p .solid {
+                                font-weight: bold;
+                            }
+                            h2 {
+                                text-align: center;
+                                font-size: 35px;
+                                text-decoration: underline; 
+                            }
+                            .tile {
+                                display: inline-block;
+                                width: 100px;
+                                text-align: center;
+                                background: #a64f8e;
+                                color: #fff;
+                                padding: 2px 5px;
+                            }
+
+                            .header {
+                                display : none !importnat;
+                            }
+                            .footer {
+                                display : none !importnat;
+                            }
+
+                            .header{display:none;}
+                            .footer{display:none;}
+
+                            .space {
+                                min-width: 100px;
+                                max-width: 100px;
+                                width: 100px;
+                            }
+
+                        </style>
+
+                        <div class="report-wrapper">
+
+                            <div style="width:100%;float:left;background:#ACB5D1;margin-bottom:20px">
+
+                                <div style="width:25%;float:left;text-align:left">
+                                    <h5 style="margin-top:7px;text-align:left;padding:8px"> 
+                                        <span class="solid" style="text-align:left">
+                                            Report Name :
+                                        </span>
+                                        <span class="solid" style="text-align:right" t-esc="project_name">
+                                        </span>
+                                    </h5>
+                                </div>
+
+                                <div style="width:50%;float:left;text-align:center">
+                                    <h5 style="margin-top:7px;padding:8px"> 
+                                        <span class="solid" style="text-align:center">
+                                            Project Cost Report :
+                                        </span>
+                                        <span class="solid" style="text-align:center" t-esc="project_id_name">
+                                        </span>
+                                    </h5>
+                                </div>
+
+                                <div style="width:25%;float:left;text-align:right">
+                                    <h5 style="margin-top:7px;padding:8px"> 
+                                        <span class="solid" style="text-align:right">
+                                            Date : 
+                                        </span>
+                                        <span class="solid" style="text-align:right" t-esc="date">
+                                        </span>
+                                    </h5>
+                                </div>
+                                
+                            </div>
+
+                            <br class="clearfloat" />
+
+                            <div style="float:left; width: 100%;margin-bottom:10px">
+
+                                <table>
+
+                                    <t t-foreach="main_data" t-as="line">
+
+                                        <tr t-attf-style="background:#B6BABD;border:hidden">
+                                            <th style="text-align:center;padding:3px;border:hidden"></th>
+
+                                            <th colspan="5" style="text-align:left;padding:3px;border:hidden">
+
+                                                <a t-att-href="get_wbs_url(line['project_wbs_id'])" t-att-title="line['project_wbs']" target="_blank">
+                                                    <span t-esc="line['project_wbs']"/>
+                                                </a>
+                                                <br></br>
+                                                <span t-esc="line['descr_short']"></span>
+                                            </th>
+
+                                            <!-- <th colspan="5" style="text-align:left;padding:3px;border:hidden">
+                                            </th> -->
+
+                                            <th t-att-colspan="4" style="text-align:center;padding:3px;border:hidden;font-size:11px">
+                                                <span>Baseline Budget</span>
+                                                <br></br>
+                                                <span t-esc="'{:0,.0f}'.format(float(line['budget_total']))"></span>
+                                            </th>
+
+                                            <th t-att-colspan="4" style="text-align:center;padding:3px;border:hidden;font-size:11px">
+                                                <span>Cont. Trend Changes</span>
+                                                <br></br>
+                                                <span t-esc="'{:0,.0f}'.format(float(line['cont_trend_total']))"></span>
+                                            </th>
+
+                                            <th t-att-colspan="4" style="text-align:center;padding:3px;border:hidden;font-size:11px">
+                                                <span>Scope Changes</span>
+                                                <br></br>
+                                                <span t-esc="'{:0,.0f}'.format(float(line['scope_total']))"></span>
+                                            </th>
+
+                                            <th t-att-colspan="4" style="text-align:center;padding:3px;border:hidden;font-size:11px">
+                                                <span>Budget Transfer</span>
+                                                <br></br>
+                                                <span t-esc="'{:0,.0f}'.format(float(line['transfer_total']))"></span>
+                                            </th>
+
+                                            <th t-att-colspan="4" style="text-align:center;padding:3px;border:hidden;font-size:11px">
+                                                <span>Cont. Allocation</span>
+                                                <br></br>
+                                                <span t-esc="'{:0,.0f}'.format(float(line['allocated_total']))"></span>
+                                            </th>
+
+                                            <th t-att-colspan="4" style="text-align:center;padding:3px;border:hidden;font-size:11px">
+                                                <span>Working Bdgt No Count.</span>
+                                                <br></br>
+                                                <span t-esc="'{:0,.0f}'.format(float(line['working_bdgt_total']))"></span>
+                                            </th>
+
+                                            <th t-att-colspan="col_size" style="text-align:center;padding:3px;border:hidden;font-size:15px">
+                                                <span>Working Budget</span>
+                                                <br></br>
+                                                <span t-esc="'{:0,.0f}'.format(float(line['working_total']))"></span>
+                                            </th>
+
+
+                                        </tr>
+
+                                        <tr t-attf-style="border:hidden">
+                                            <th colspan="5" style="text-align:center;padding:3px;border:hidden"></th>
+
+                                            <th colspan="7" style="text-align:center;padding:3px;border:hidden;background:#F3D7BE">Commitments</th>
+
+                                            <th colspan="3" style="text-align:center;padding:3px;border:hidden;background:#BCD4DE">Analysis</th>
+
+                                            <th colspan="3" style="text-align:center;padding:3px;border:hidden;background:#ACB5D1">Incured by Period</th>
+
+                                            <th t-att-colspan="col_size + 2" style="text-align:center;padding:3px;border:hidden;background:#C7DCD6">ETC Forecast</th>
+
+                                            <th colspan="3" style="text-align:center;padding:3px;border:hidden;background:#F0F2F6"> Variance</th>
+
+                                            <th colspan="2" style="text-align:center;padding:3px;border:hidden;background:#CBCFD0"> Past Period Reporting</th>
+                                        </tr>
+
+                                        <tr>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-top:hidden">Reporting Item</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">Vendor Name</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">SOW Description</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;">Working Budget</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;">Allocated Contingency</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#F3D7BE">Total</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#F3D7BE">Actuals (SAP)</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#F3D7BE">Open (SAP)</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">CR Out</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">Accruals</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">Total Incurred</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">EAC</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#BCD4DE">PO + CR Out</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#BCD4DE">EAC - (PO + CR)</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#BCD4DE">EAC - Bdgt. Work</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#ACB5D1">
+                                                <span t-esc="fst_past_month"></span>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#ACB5D1">
+                                                <span t-esc="snd_past_month"></span>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#DFEEEC">Current Period</th>
+
+                                            <t t-foreach="data_type" t-as="month">
+                                                <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#C7DCD6">
+                                                    <span t-esc="month"/>
+                                                </th>
+                                            </t>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#9ACCD0">Total ETC</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#9ACCD0">ETC Conting</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">EAC</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">ETC</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden"> Total Commitment</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#CBCFD0">Total Incurred</th>
+
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#CBCFD0">EAC</th>
+                                        </tr>
+
+                                        <t t-foreach="line['rep_rec']" t-as="rep">
+
+                                            <tr>
+    
+                                                <th colspan="5" style="text-align:center;padding:3px;background:#F0F2F6">
+                                                    <span t-esc="rep['rep_name']"/>
+                                                </th>
+
+                                                <th colspan="30" style="text-align:center;padding:3px;;border-right:hidden"></th>
+                                            </tr>
+
+                                            <t t-foreach="rep['line_data']" t-as="data">
+
+                                                <tr>
+
+                                                    <td style="text-align:center;padding:3px;background:#C7DCD6">
+
+                                                        <t t-if="data['rep_uid_type'] == '03-Purchase Orders'">
+
+                                                            <a t-att-href="get_po_url(data['rep_name'])" t-att-title="data['rep_name']" target="_blank">
+                                                                <span t-esc="data['rep_name']"/>
+                                                            </a>
+
+                                                        </t>
+
+                                                        <t t-if="data['rep_uid_type'] == '02-Employees'">
+
+                                                            <a t-att-href="get_emp_url(data['employee_id'])" t-att-title="data['rep_name']" target="_blank">
+                                                                <span t-esc="data['rep_name']"/>
+                                                            </a>
+
+                                                        </t>
+
+                                                        <t t-if="data['rep_uid_type'] == '01-Others'">
+
+                                                            <span t-esc="data['rep_name']"/>
+                                                            <!-- <a t-att-href="get_po_url(data['rep_name'])" t-att-title="data['rep_name']" target="_blank">
+                                                            </a> -->
+
+                                                        </t>
+
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;background:#C7DCD6">
+                                                        <span t-esc="data['vendor']"/>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;background:#C7DCD6">
+                                                        <span t-esc="data['descp']"/>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;">
+                                                        <t t-if="data['working_tot'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['working_tot']))"></span>
+                                                        </t>
+                                                        <t t-if="data['working_tot'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['working_tot'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['working_tot']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;">
+                                                        <t t-if="data['allocated_tot'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['allocated_tot']))"></span>
+                                                        </t>
+                                                        <t t-if="data['allocated_tot'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['allocated_tot'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['allocated_tot']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;background:#F3D7BE">
+                                                        <t t-if="data['tot_comm'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['tot_comm']))"></span>
+                                                        </t>
+                                                        <t t-if="data['tot_comm'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['tot_comm'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['tot_comm']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;background:#F3D7BE">
+                                                        <t t-if="data['act_comm'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['act_comm']))"></span>
+                                                        </t>
+                                                        <t t-if="data['act_comm'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['act_comm'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['act_comm']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;background:#F3D7BE">
+                                                        <t t-if="data['open_comm'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['open_comm']))"></span>
+                                                        </t>
+                                                        <t t-if="data['open_comm'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['open_comm'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['open_comm']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;">
+                                                        <t t-if="data['crout_tot'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['crout_tot']))"></span>
+                                                        </t>
+                                                        <t t-if="data['crout_tot'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['crout_tot'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['crout_tot']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;">
+                                                        <t t-if="data['accurals_tot'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['accurals_tot']))"></span>
+                                                        </t>
+                                                        <t t-if="data['accurals_tot'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['accurals_tot'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['accurals_tot']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;">
+                                                        <t t-if="data['incured_tot'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['incured_tot']))"></span>
+                                                        </t>
+                                                        <t t-if="data['incured_tot'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['incured_tot'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['incured_tot']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;">
+                                                        <t t-if="data['eac_tot'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['eac_tot']))"></span>
+                                                        </t>
+                                                        <t t-if="data['eac_tot'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['eac_tot'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['eac_tot']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;background:#BCD4DE">
+                                                        <t t-if="data['po_crout'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['po_crout']))"></span>
+                                                        </t>
+                                                        <t t-if="data['po_crout'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['po_crout'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['po_crout']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;background:#BCD4DE">
+                                                        <t t-if="data['po_cr'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['po_cr']))"></span>
+                                                        </t>
+                                                        <t t-if="data['po_cr'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['po_cr'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['po_cr']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;background:#BCD4DE">
+                                                        <t t-if="data['po_eac'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['po_eac']))"></span>
+                                                        </t>
+                                                        <t t-if="data['po_eac'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['po_eac'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['po_eac']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;background:#ACB5D1">
+                                                        <t t-if="data['fst_month'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['fst_month']))"></span>
+                                                        </t>
+                                                        <t t-if="data['fst_month'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['fst_month'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['fst_month']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;background:#ACB5D1">
+                                                        <t t-if="data['snd_month'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['snd_month']))"></span>
+                                                        </t>
+                                                        <t t-if="data['snd_month'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['snd_month'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['snd_month']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;background:#DFEEEC">
+                                                        <t t-if="data['incured_var'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['incured_var']))"></span>
+                                                        </t>
+                                                        <t t-if="data['incured_var'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['incured_var'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['incured_var']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <t t-foreach="data['data_type_rec']" t-as="month_rec">
+                                                        <td style="text-align:center;padding:3px;background:#C7DCD6">
+                                                            <t t-if="month_rec > 0">
+                                                                <span t-esc="'{:0,.0f}'.format(float(month_rec))"></span>
+                                                            </t>
+                                                            <t t-if="month_rec == 0">
+                                                                <span></span>
+                                                            </t>
+                                                            <t t-if="month_rec &lt; 0">
+                                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(month_rec))"></span>
+                                                            </t>
+                                                        </td>
+                                                    </t>
+
+                                                    <td style="text-align:center;padding:3px;background:#9ACCD0">
+
+                                                        <t t-if="data['rep_uid_type'] == '02-Employees'">
+
+                                                            <t t-if="data['etc_tot'] > 0">
+                                                                <a t-att-href="get_emp_wbs_url(data['employee_id'],data['project_wbs_id'])" t-att-title="data['etc_tot']" target="_blank">
+                                                                    <span style="color:black" t-esc="'{:0,.0f}'.format(float(data['etc_tot']))"></span>
+                                                                </a>
+                                                            </t>
+                                                            <t t-if="data['etc_tot'] == 0">
+                                                                <span></span>
+                                                            </t>
+                                                            <t t-if="data['etc_tot'] &lt; 0">
+                                                                <a t-att-href="get_emp_wbs_url(data['employee_id'],data['project_wbs_id'])" t-att-title="data['etc_tot']" target="_blank">
+                                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['etc_tot']))"></span>
+                                                                </a>
+
+                                                            </t>
+                                                        </t>
+
+                                                        <t t-if="data['rep_uid_type'] == '04-Task'">
+
+                                                            <t t-if="data['etc_tot'] > 0">
+                                                                <a t-att-href="get_task_wbs_url(data['task_id'],data['project_wbs_id'])" t-att-title="data['etc_tot']" target="_blank">
+                                                                    <span style="color:black" t-esc="'{:0,.0f}'.format(float(data['etc_tot']))"></span>
+                                                                </a>
+                                                            </t>
+                                                            <t t-if="data['etc_tot'] == 0">
+                                                                <span></span>
+                                                            </t>
+                                                            <t t-if="data['etc_tot'] &lt; 0">
+                                                                <a t-att-href="get_task_wbs_url(data['task_id'],data['project_wbs_id'])" t-att-title="data['etc_tot']" target="_blank">
+                                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['etc_tot']))"></span>
+                                                                </a>
+
+                                                            </t>
+                                                        </t>
+
+                                                        <t t-if="data['rep_uid_type'] == '03-Purchase Orders'">
+
+                                                            <t t-if="data['etc_tot'] > 0">
+                                                                <a t-att-href="get_po_wbs_url(data['po_id'],data['project_wbs_id'])" t-att-title="data['etc_tot']" target="_blank">
+                                                                    <span style="color:black" t-esc="'{:0,.0f}'.format(float(data['etc_tot']))"></span>
+                                                                </a>
+                                                            </t>
+                                                            <t t-if="data['etc_tot'] == 0">
+                                                                <span></span>
+                                                            </t>
+                                                            <t t-if="data['etc_tot'] &lt; 0">
+                                                                <a t-att-href="get_po_wbs_url(data['po_id'],data['project_wbs_id'])" t-att-title="data['etc_tot']" target="_blank">
+                                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['etc_tot']))"></span>
+                                                                </a>
+
+                                                            </t>
+                                                        </t>
+
+                                                        <t t-if="data['rep_uid_type'] != '03-Purchase Orders'">
+
+                                                            <t t-if="data['rep_uid_type'] != '02-Employees'">
+
+                                                                <t t-if="data['rep_uid_type'] != '04-Task'">
+
+                                                                    <t t-if="data['etc_tot'] > 0">
+                                                                        <span style="color:black" t-esc="'{:0,.0f}'.format(float(data['etc_tot']))"></span>
+                                                                    </t>
+                                                                    <t t-if="data['etc_tot'] == 0">
+                                                                        <span></span>
+                                                                    </t>
+                                                                    <t t-if="data['etc_tot'] &lt; 0">
+                                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['etc_tot']))"></span>
+                                                                    </t>
+
+                                                                </t>
+
+                                                            </t>
+
+                                                        </t>
+
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;background:#9ACCD0">
+                                                        <t t-if="data['etc_count'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['etc_count']))"></span>
+                                                        </t>
+                                                        <t t-if="data['etc_count'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['etc_count'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['etc_count']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;">
+                                                        <t t-if="data['eac_var'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['eac_var']))"></span>
+                                                        </t>
+                                                        <t t-if="data['eac_var'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['eac_var'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['eac_var']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;">
+                                                        <t t-if="data['etc_var'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['etc_var']))"></span>
+                                                        </t>
+                                                        <t t-if="data['etc_var'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['etc_var'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['etc_var']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;">
+                                                        <t t-if="data['var_comm'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['var_comm']))"></span>
+                                                        </t>
+                                                        <t t-if="data['var_comm'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['var_comm'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['var_comm']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;background:#CBCFD0">
+                                                        <t t-if="data['incured_past'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['incured_past']))"></span>
+                                                        </t>
+                                                        <t t-if="data['incured_past'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['incured_past'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['incured_past']))"></span>
+                                                        </t>
+                                                    </td>
+
+                                                    <td style="text-align:center;padding:3px;background:#CBCFD0">
+                                                        <t t-if="data['eac_past'] > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(data['eac_past']))"></span>
+                                                        </t>
+                                                        <t t-if="data['eac_past'] == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="data['eac_past'] &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(data['eac_past']))"></span>
+                                                        </t>
+                                                    </td>
+                                                </tr>
+
+                                            </t>
+
+                                            <tr>
+                                                <th colspan="3" style="text-align:center;padding:3px;text-align:right;padding-right;3px;border-left:hidden;border-bottom:hidden">Total :</th>
+
+                                                <th style="text-align:center;padding:3px;">
+                                                    <t t-if="rep['working_tot_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['working_tot_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['working_tot_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['working_tot_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['working_tot_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px;">
+                                                    <t t-if="rep['allocated_tot_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['allocated_tot_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['allocated_tot_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['allocated_tot_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['allocated_tot_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px;">
+                                                    <t t-if="rep['tot_comm_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['tot_comm_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['tot_comm_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['tot_comm_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['tot_comm_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px;">
+                                                    <t t-if="rep['act_comm_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['act_comm_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['act_comm_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['act_comm_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['act_comm_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px;">
+                                                    <t t-if="rep['open_comm_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['open_comm_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['open_comm_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['open_comm_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['open_comm_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px;">
+                                                    <t t-if="rep['crout_tot_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['crout_tot_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['crout_tot_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['crout_tot_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['crout_tot_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px;">
+                                                    <t t-if="rep['accurals_tot_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['accurals_tot_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['accurals_tot_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['accurals_tot_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['accurals_tot_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px;">
+                                                    <t t-if="rep['incured_tot_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['incured_tot_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['incured_tot_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['incured_tot_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['incured_tot_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px;">
+                                                    <t t-if="rep['eac_tot_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['eac_tot_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['eac_tot_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['eac_tot_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['eac_tot_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px;background:#BCD4DE">
+                                                    <t t-if="rep['po_crout_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['po_crout_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['po_crout_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['po_crout_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['po_crout_name']))"></span>
+                                                    </t>
+                                                </th>
+                                                <th style="text-align:center;padding:3px;background:#BCD4DE">
+                                                    <t t-if="rep['po_cr_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['po_cr_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['po_cr_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['po_cr_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['po_cr_name']))"></span>
+                                                    </t>
+                                                </th>
+                                                <th style="text-align:center;padding:3px;background:#BCD4DE">
+                                                    <t t-if="rep['po_eac_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['po_eac_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['po_eac_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['po_eac_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['po_eac_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px;background:#ACB5D1">
+                                                    <t t-if="rep['fst_month_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['fst_month_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['fst_month_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['fst_month_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['fst_month_name']))"></span>
+                                                    </t>
+                                                </th>
+                                                <th style="text-align:center;padding:3px;background:#ACB5D1">
+                                                    <t t-if="rep['snd_month_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['snd_month_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['snd_month_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['snd_month_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['snd_month_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px;background:#DFEEEC">
+                                                    <t t-if="rep['incured_var_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['incured_var_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['incured_var_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['incured_var_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['incured_var_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <t t-foreach="rep['summing_month_name']" t-as="month_rec_name">
+                                                    <th style="text-align:center;padding:3px;background:#C7DCD6">
+                                                        <t t-if="month_rec_name > 0">
+                                                            <span t-esc="'{:0,.0f}'.format(float(month_rec_name))"></span>
+                                                        </t>
+                                                        <t t-if="month_rec_name == 0">
+                                                            <span></span>
+                                                        </t>
+                                                        <t t-if="month_rec_name &lt; 0">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(month_rec_name))"></span>
+                                                        </t>
+                                                    </th>
+                                                </t>
+
+                                                <th style="text-align:center;padding:3px;background:#9ACCD0">
+
+                                                    <t t-if="rep['etc_tot_name'] > 0">
+                                                        <a t-att-href="get_tot_wbs_url(line['project_wbs_id'])" t-att-title="rep['etc_tot_name']" target="_blank">
+                                                            <span style="color:black" t-esc="'{:0,.0f}'.format(float(rep['etc_tot_name']))"></span>
+                                                        </a>
+                                                    </t>
+                                                    <t t-if="rep['etc_tot_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['etc_tot_name'] &lt; 0">
+                                                        <a t-att-href="get_tot_wbs_url(line['project_wbs_id'])" t-att-title="rep['etc_tot_name']" target="_blank">
+                                                            <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['etc_tot_name']))"></span>
+                                                        </a>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px;background:#9ACCD0">
+                                                    <t t-if="rep['etc_count_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['etc_count_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['etc_count_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['etc_count_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['etc_count_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px;background:#F0F2F6">
+                                                    <t t-if="rep['eac_var_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['eac_var_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['eac_var_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['eac_var_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['eac_var_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px;background:#F0F2F6">
+                                                    <t t-if="rep['etc_var_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['etc_var_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['etc_var_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['etc_var_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['etc_var_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px;background:#F0F2F6">
+                                                    <t t-if="rep['var_comm_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['var_comm_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['var_comm_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['var_comm_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['var_comm_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px">
+                                                    <t t-if="rep['incured_past_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['incured_past_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['incured_past_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['incured_past_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['incured_past_name']))"></span>
+                                                    </t>
+                                                </th>
+
+                                                <th style="text-align:center;padding:3px">
+                                                    <t t-if="rep['eac_past_name'] > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(rep['eac_past_name']))"></span>
+                                                    </t>
+                                                    <t t-if="rep['eac_past_name'] == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="rep['eac_past_name'] &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(rep['eac_past_name']))"></span>
+                                                    </t>
+                                                </th>
+                                            </tr>
+
+                                        </t>
+
+                                        <tr>
+                                            <th colspan="3" style="text-align:center;padding:3px;text-align:right;padding-right;3px;border-left:hidden;border-bottom:hidden">Project WBS Total:</th>
+
+                                            <th style="text-align:center;padding:3px;">
+                                                <t t-if="line['working_tot_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['working_tot_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['working_tot_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['working_tot_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['working_tot_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;">
+                                                <t t-if="line['allocated_tot_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['allocated_tot_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['allocated_tot_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['allocated_tot_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['allocated_tot_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;">
+                                                <t t-if="line['tot_comm_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['tot_comm_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['tot_comm_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['tot_comm_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['tot_comm_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;">
+                                                <t t-if="line['act_comm_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['act_comm_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['act_comm_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['act_comm_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['act_comm_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;">
+                                                <t t-if="line['open_comm_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['open_comm_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['open_comm_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['open_comm_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['open_comm_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;">
+                                                <t t-if="line['crout_tot_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['crout_tot_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['crout_tot_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['crout_tot_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['crout_tot_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;">
+                                                <t t-if="line['accurals_tot_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['accurals_tot_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['accurals_tot_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['accurals_tot_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['accurals_tot_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;">
+                                                <t t-if="line['incured_tot_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['incured_tot_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['incured_tot_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['incured_tot_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['incured_tot_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;">
+                                                <t t-if="line['eac_tot_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['eac_tot_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['eac_tot_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['eac_tot_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['eac_tot_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;background:#BCD4DE">
+                                                 <t t-if="line['po_crout_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['po_crout_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['po_crout_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['po_crout_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['po_crout_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;background:#BCD4DE">
+                                                <t t-if="line['po_cr_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['po_cr_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['po_cr_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['po_cr_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['po_cr_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;background:#BCD4DE">
+                                                 <t t-if="line['po_eac_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['po_eac_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['po_eac_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['po_eac_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['po_eac_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            
+
+                                            <th style="text-align:center;padding:3px;background:#ACB5D1">
+                                                <t t-if="line['fst_month_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['fst_month_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['fst_month_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['fst_month_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['fst_month_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;background:#ACB5D1">
+                                                <t t-if="line['snd_month_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['snd_month_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['snd_month_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['snd_month_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['snd_month_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;background:#DFEEEC">
+                                                <t t-if="line['incured_var_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['incured_var_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['incured_var_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['incured_var_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['incured_var_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <t t-foreach="line['summing_month_wbs']" t-as="month_rec_wbs">
+                                                <th style="text-align:center;padding:3px;background:#C7DCD6">
+                                                    <t t-if="month_rec_wbs > 0">
+                                                        <span t-esc="'{:0,.0f}'.format(float(month_rec_wbs))"></span>
+                                                    </t>
+                                                    <t t-if="month_rec_wbs == 0">
+                                                        <span></span>
+                                                    </t>
+                                                    <t t-if="month_rec_wbs &lt; 0">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(month_rec_wbs))"></span>
+                                                    </t>
+                                                </th>
+                                            </t>
+
+                                            <th style="text-align:center;padding:3px;background:#9ACCD0">
+                                                <t t-if="line['etc_tot_wbs'] > 0">
+                                                    <a t-att-href="get_total_wbs_url(line['project_wbs_id'])" t-att-title="line['etc_tot_wbs']" target="_blank">
+                                                        <span style="color:black" t-esc="'{:0,.0f}'.format(float(line['etc_tot_wbs']))"></span>
+                                                    </a>
+                                                </t>
+                                                <t t-if="line['etc_tot_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['etc_tot_wbs'] &lt; 0">
+                                                    <a t-att-href="get_total_wbs_url(line['project_wbs_id'])" t-att-title="line['etc_tot_wbs']" target="_blank">
+                                                        <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['etc_tot_wbs']))"></span>
+                                                    </a>
+
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;background:#9ACCD0">
+                                                <t t-if="line['etc_count_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['etc_count_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['etc_count_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['etc_count_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['etc_count_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;background:#F0F2F6">
+                                                <t t-if="line['eac_var_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['eac_var_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['eac_var_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['eac_var_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['eac_var_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;background:#F0F2F6">
+                                                <t t-if="line['etc_var_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['etc_var_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['etc_var_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['etc_var_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['etc_var_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px;background:#F0F2F6">
+                                                <t t-if="line['var_comm_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['var_comm_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['var_comm_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['var_comm_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['var_comm_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px">
+                                                <t t-if="line['incured_past_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['incured_past_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['incured_past_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['incured_past_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['incured_past_wbs']))"></span>
+                                                </t>
+                                            </th>
+
+                                            <th style="text-align:center;padding:3px">
+                                                <t t-if="line['eac_past_wbs'] > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(line['eac_past_wbs']))"></span>
+                                                </t>
+                                                <t t-if="line['eac_past_wbs'] == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="line['eac_past_wbs'] &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(line['eac_past_wbs']))"></span>
+                                                </t>
+                                            </th>
+                                        </tr>
+
+                                    </t>
+
+                                    <tr t-attf-style="border:hidden">
+                                        <th colspan="5" style="text-align:center;padding:3px;border:hidden"></th>
+
+                                        <th colspan="7" style="text-align:center;padding:3px;border:hidden;background:#F3D7BE">Commitments</th>
+
+                                        <th colspan="3" style="text-align:center;padding:3px;border:hidden;background:#BCD4DE">Analysis</th>
+
+                                        <th colspan="3" style="text-align:center;padding:3px;border:hidden;background:#ACB5D1">Incured by Period</th>
+
+                                        <th t-att-colspan="col_size + 2" style="text-align:center;padding:3px;border:hidden;background:#C7DCD6">ETC Forecast</th>
+
+                                        <th colspan="3" style="text-align:center;padding:3px;border:hidden;background:#F0F2F6"> Variance</th>
+
+                                        <th colspan="2" style="text-align:center;padding:3px;border:hidden;background:#CBCFD0"> Past Period Reporting</th>
+                                    </tr>
+
+                                    <tr>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-top:hidden">Reporting Item</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">Vendor Name</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">SOW Description</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;">Working Budget</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;">Allocated Contingency</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#F3D7BE">Total</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#F3D7BE">Actuals (SAP)</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#F3D7BE">Open (SAP)</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">CR Out</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">Accruals</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">Total Incurred</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">EAC</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#BCD4DE">PO + CR Out</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#BCD4DE">EAC - (PO + CR)</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#BCD4DE">EAC - Bdgt. Work</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#ACB5D1">
+                                            <span t-esc="fst_past_month"></span>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#ACB5D1">
+                                            <span t-esc="snd_past_month"></span>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#DFEEEC">Current Period</th>
+
+                                        <t t-foreach="data_type" t-as="month">
+                                            <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#C7DCD6">
+                                                <span t-esc="month"/>
+                                            </th>
+                                        </t>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#9ACCD0">Total ETC</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#9ACCD0">ETC Conting</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">EAC</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden">ETC</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden"> Total Commitment</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#CBCFD0">Total Incurred</th>
+
+                                        <th style="text-align:center;padding:3px;border-right:hidden;border-left:hidden;border-bottom:hidden;border-top:hidden;background:#CBCFD0">EAC</th>
+                                    </tr>
+
+                                    <tr>
+                                        <th colspan="3" style="text-align:center;padding:3px;padding-right;3px;border-left:hidden;border-bottom:hidden">Project Total :</th>
+
+                                        <th style="text-align:center;padding:3px;">
+                                            <t t-if="working_tot_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(working_tot_tot))"></span>
+                                            </t>
+                                            <t t-if="working_tot_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="working_tot_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(working_tot_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;">
+                                            <t t-if="allocated_tot_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(allocated_tot_tot))"></span>
+                                            </t>
+                                            <t t-if="allocated_tot_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="allocated_tot_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(allocated_tot_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;">
+                                            <t t-if="tot_comm_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(tot_comm_tot))"></span>
+                                            </t>
+                                            <t t-if="tot_comm_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="tot_comm_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(tot_comm_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;">
+                                            <t t-if="act_comm_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(act_comm_tot))"></span>
+                                            </t>
+                                            <t t-if="act_comm_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="act_comm_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(act_comm_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;">
+                                            <t t-if="open_comm_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(open_comm_tot))"></span>
+                                            </t>
+                                            <t t-if="open_comm_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="open_comm_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(open_comm_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;">
+                                            <t t-if="crout_tot_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(crout_tot_tot))"></span>
+                                            </t>
+                                            <t t-if="crout_tot_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="crout_tot_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(crout_tot_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;">
+                                            <t t-if="accurals_tot_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(accurals_tot_tot))"></span>
+                                            </t>
+                                            <t t-if="accurals_tot_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="accurals_tot_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(accurals_tot_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;">
+                                            <t t-if="incured_tot_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(incured_tot_tot))"></span>
+                                            </t>
+                                            <t t-if="incured_tot_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="incured_tot_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(incured_tot_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;">
+                                            <t t-if="eac_tot_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(eac_tot_tot))"></span>
+                                            </t>
+                                            <t t-if="eac_tot_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="eac_tot_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(eac_tot_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;background:#BCD4DE">
+                                            <t t-if="po_crout_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(po_crout_tot))"></span>
+                                            </t>
+                                            <t t-if="po_crout_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="po_crout_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(po_crout_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;background:#BCD4DE">
+                                            <t t-if="po_cr_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(po_cr_tot))"></span>
+                                            </t>
+                                            <t t-if="po_cr_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="po_cr_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(po_cr_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;background:#BCD4DE">
+                                            <t t-if="po_eac_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(po_eac_tot))"></span>
+                                            </t>
+                                            <t t-if="po_eac_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="po_eac_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(po_eac_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;background:#ACB5D1">
+                                            <t t-if="fst_month_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(fst_month_tot))"></span>
+                                            </t>
+                                            <t t-if="fst_month_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="fst_month_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(fst_month_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;background:#ACB5D1">
+                                            <t t-if="snd_month_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(snd_month_tot))"></span>
+                                            </t>
+                                            <t t-if="snd_month_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="snd_month_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(snd_month_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;background:#DFEEEC">
+                                            <t t-if="incured_var_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(incured_var_tot))"></span>
+                                            </t>
+                                            <t t-if="incured_var_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="incured_var_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(incured_var_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <t t-foreach="summing_month_tot" t-as="month_rec_tot">
+                                            <th style="text-align:center;padding:3px;background:#C7DCD6">
+                                                <t t-if="month_rec_tot > 0">
+                                                    <span t-esc="'{:0,.0f}'.format(float(month_rec_tot))"></span>
+                                                </t>
+                                                <t t-if="month_rec_tot == 0">
+                                                    <span></span>
+                                                </t>
+                                                <t t-if="month_rec_tot &lt; 0">
+                                                    <span style="color:red" t-esc="'{:0,.0f}'.format(float(month_rec_tot))"></span>
+                                                </t>
+                                            </th>
+                                        </t>
+
+                                        <th style="text-align:center;padding:3px;background:#9ACCD0">
+                                            <t t-if="etc_tot_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(etc_tot_tot))"></span>
+                                            </t>
+                                            <t t-if="etc_tot_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="etc_tot_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(etc_tot_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;background:#9ACCD0">
+                                            <t t-if="etc_count_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(etc_count_tot))"></span>
+                                            </t>
+                                            <t t-if="etc_count_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="etc_count_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(etc_count_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;background:#F0F2F6">
+                                            <t t-if="eac_var_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(eac_var_tot))"></span>
+                                            </t>
+                                            <t t-if="eac_var_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="eac_var_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(eac_var_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;background:#F0F2F6">
+                                            <t t-if="etc_var_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(etc_var_tot))"></span>
+                                            </t>
+                                            <t t-if="etc_var_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="etc_var_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(etc_var_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;background:#F0F2F6">
+                                            <t t-if="var_comm_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(var_comm_tot))"></span>
+                                            </t>
+                                            <t t-if="var_comm_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="var_comm_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(var_comm_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;">
+                                            <t t-if="incured_past_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(incured_past_tot))"></span>
+                                            </t>
+                                            <t t-if="incured_past_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="incured_past_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(incured_past_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                        <th style="text-align:center;padding:3px;">
+                                            <t t-if="eac_past_tot > 0">
+                                                <span t-esc="'{:0,.0f}'.format(float(eac_past_tot))"></span>
+                                            </t>
+                                            <t t-if="eac_past_tot == 0">
+                                                <span></span>
+                                            </t>
+                                            <t t-if="eac_past_tot &lt; 0">
+                                                <span style="color:red" t-esc="'{:0,.0f}'.format(float(eac_past_tot))"></span>
+                                            </t>
+                                        </th>
+
+                                    </tr>
+
+                                </table>
+
+                            </div>
+
+                        </div><!--end of report wrapper-->
+
+
+                    </div><!--end of page -->
+
+
+                </t>
+                
+            </t>
+
+        </template>
+
+    </data>
+
+</odoo>

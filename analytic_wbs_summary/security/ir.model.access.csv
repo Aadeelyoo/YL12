@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_analytic_wbs_summary_all,analytic_wbs_summary.analytic_wbs_summary,model_analytic_wbs_summary,,1,0,0,0
+access_analytic_wbs_cost_report_all,analytic_wbs_cost_report.analytic_wbs_cost_report,model_analytic_wbs_cost_report,,1,0,0,0
+access_analytic_wbs_record_all,analytic_wbs_summary.analytic_wbs_record,model_analytic_wbs_record,,1,1,1,1
+access_analytic_wbs_record_line_all,analytic_wbs_summary.analytic_wbs_record_line,model_analytic_wbs_record_line,,1,1,1,1

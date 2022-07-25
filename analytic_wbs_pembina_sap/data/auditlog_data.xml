@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Create Default Auditlog Rules -->
+        <record id="auditlog_sap_actual_line_map" model="auditlog.rule">
+            <field name="name">Actuals Lines Mapped</field>
+            <field name="model_id" ref="model_sap_actuals_line_mapped"/>
+            <field name="log_read" eval="False"/>
+            <field name="log_write" eval="True"/>
+            <field name="log_unlink" eval="True"/>
+            <field name="log_create" eval="False"/>
+            <field name="log_type">fast</field>
+        </record>
+
+        <record id="auditlog_sap_open_po_line_map" model="auditlog.rule">
+            <field name="name">Open PO Lines Mapped</field>
+            <field name="model_id" ref="model_sap_open_po_line_mapped"/>
+            <field name="log_read" eval="False"/>
+            <field name="log_write" eval="True"/>
+            <field name="log_unlink" eval="True"/>
+            <field name="log_create" eval="False"/>
+            <field name="log_type">fast</field>
+        </record>
+
+        <record id="auditlog_sap_po_line_map" model="auditlog.rule">
+            <field name="name">PO Lines Mapped</field>
+            <field name="model_id" ref="model_sap_po_line_mapped"/>
+            <field name="log_read" eval="False"/>
+            <field name="log_write" eval="True"/>
+            <field name="log_unlink" eval="True"/>
+            <field name="log_create" eval="False"/>
+            <field name="log_type">fast</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,68 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="analytic_wbs_pembina_sap.list">
+      <field name="name">analytic_wbs_pembina_sap list</field>
+      <field name="model">sap.po_line_dump</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="document_date"/>
+          <field name="purchasing_doc"/>
+          <field name="sap_item"/>
+          <field name="vendor"/>
+          <field name="short_text"/>
+          <field name="wbs_element"/>
+          <field name="deletion_indicator"/>
+          <field name="seq_no_of_account_assgt"/>
+          <field name="computed_uid"/>
+          <field name="mapped"/>
+          <field name="duplicate"/>
+          <field name="po_line_map_id"/>
+        </tree>
+      </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="analytic_wbs_pembina_sap.action_window">
+      <field name="name">SAP PO Lines Data Dump</field>
+      <field name="res_model">sap.po_line_dump</field>
+      <field name="view_mode">tree</field>
+    </record>
+
+
+    <record model="ir.ui.view" id="sap_po_line_mapped_list">
+      <field name="name">SAP Mapped PO Lines</field>
+      <field name="model">sap.po_line_mapped</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="sap_import_id"/>
+          <field name="document_date"/>
+          <field name="purchasing_doc"/>
+          <field name="sap_item"/>
+          <field name="vendor"/>
+          <field name="short_text"/>
+          <field name="wbs_element"/>
+          <field name="deletion_indicator"/>
+          <field name="seq_no_of_account_assgt"/>
+          <field name="computed_uid"/>
+          <field name="account_id"/>
+          <field name="account_project_id"/>
+          <field name="project_id"/>
+          <field name="vendor_id"/>
+          <field name="purchase_order_id"/>
+          <field name="purchase_order_line_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="sap_po_line_mapped_action_window">
+      <field name="name">SAP PO Lines Mapped</field>
+      <field name="res_model">sap.po_line_mapped</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+  </data>
+</odoo>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="project_wbs_task_other_cost_report_inherit" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.prject.form.inherit</field>
+            <field name="model">account.analytic_wbs.project</field>
+            <field name="priority" eval="55"/>
+            <field name="inherit_id" ref="analytic_wbs.view_account_analytic_wbs_project_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box_other']" position="inside">
+                    <button class="oe_stat_button"
+                            name="%(analytic_wbs_summary.act_analytic_wbs_cost_report_by_wbs_other)d"
+                            type="action" icon="fa-tasks"
+                            string="Cost Summary">
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="project_wbs_task_employee_cost_report_inherit" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.prject.form.inherit</field>
+            <field name="model">account.analytic_wbs.project</field>
+            <field name="priority" eval="55"/>
+            <field name="inherit_id" ref="analytic_wbs.view_account_analytic_wbs_project_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box_employee']" position="inside">
+                    <button class="oe_stat_button"
+                            name="%(analytic_wbs_summary.act_analytic_wbs_cost_report_by_wbs_employee)d"
+                            type="action" icon="fa-tasks"
+                            string="Employee Cost Summary">
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="project_wbs_task_po_cost_report_inherit" model="ir.ui.view">
+            <field name="name">account.analytic_wbs.prject.form.inherit</field>
+            <field name="model">account.analytic_wbs.project</field>
+            <field name="priority" eval="55"/>
+            <field name="inherit_id" ref="analytic_wbs.view_account_analytic_wbs_project_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box_po']" position="inside">
+                    <button class="oe_stat_button"
+                            name="%(analytic_wbs_summary.act_analytic_wbs_cost_report_by_wbs_po)d"
+                            type="action" icon="fa-tasks"
+                            string="PO Cost Summary">
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+     </data>
+</openerp>

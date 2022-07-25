@@ -1,0 +1,47 @@
+<odoo>
+  <data>
+     <!-- Top menu item SAP-->
+
+    <menuitem name="External Data" id="analytic_wbs_pembina_sap.external_data" parent="base.menu_main_pc" sequence="89"  groups="analytic_wbs.group_pc_manager"/>
+
+    <!-- menu categories SAP-->
+    <menuitem name="Data Dump" id="analytic_wbs_pembina_sap.menu_1" parent="analytic_wbs_pembina_sap.external_data" sequence="10"/>
+    <menuitem name="Data Mapped" id="analytic_wbs_pembina_sap.menu_2" parent="analytic_wbs_pembina_sap.external_data" sequence="20"/>
+
+    <!-- actions SAP-->
+    <menuitem name="Vendor List Dump" id="analytic_wbs_pembina_sap.menu_1_list" parent="analytic_wbs_pembina_sap.menu_1"
+      action="analytic_wbs_pembina_sap.action_window"/>
+    <menuitem name="Actuals List Dump" id="analytic_wbs_pembina_sap.menu_2_list" parent="analytic_wbs_pembina_sap.menu_1"
+      action="sap_actual_dump_action_window"/>
+    <menuitem name="Open Commitment List Dump" id="analytic_wbs_pembina_sap.menu_3_list" parent="analytic_wbs_pembina_sap.menu_1"
+      action="sap_open_po_dump_action_window"/>
+    <menuitem name="GR List Dump" id="analytic_wbs_pembina_sap.menu_4_list" parent="analytic_wbs_pembina_sap.menu_1"
+      action="gr_dump_sap_action_window"/>
+
+    <menuitem name="Po Lines List Mapped" id="analytic_wbs_pembina_sap.po_line_mapped_list" parent="analytic_wbs_pembina_sap.menu_2"
+      action="sap_po_line_mapped_action_window" sequence="10"/>
+    <menuitem name="Actuals List Mapped" id="analytic_wbs_pembina_sap.actuals_mapped_list" parent="analytic_wbs_pembina_sap.menu_2"
+      action="sap_actual_mapped_action_window" sequence="20"/>
+    <menuitem name="Open Commitments List Mapped" id="analytic_wbs_pembina_sap.open_po_mapped_list" parent="analytic_wbs_pembina_sap.menu_2"
+      action="sap_open_po_mapped_action_window" sequence="20"/>
+
+
+    <menuitem name="SAP Import" id="sap_import_menu" parent="analytic_wbs_pembina_sap.menu_2" action="sap_import_action_window" sequence="4"/>
+
+    <!-- Top menu item WORKFLOW-->
+    <menuitem name="Workflow" id="analytic_wbs_pembina_sap.workflow" parent="base.menu_main_pc" sequence="88"  groups="analytic_wbs.group_pc_manager"/>
+
+    <!-- menu categories WORKFLOW-->
+    <menuitem name="Data Dump" id="analytic_wbs_pembina_sap.workflow_menu_1" parent="analytic_wbs_pembina_sap.workflow" sequence="10"/>
+    <menuitem name="Data Mapping" id="analytic_wbs_pembina_sap.workflow_menu_2" parent="analytic_wbs_pembina_sap.workflow" sequence="30"/>
+
+    <!-- actions WORKFLOW-->
+    <menuitem name="Workflow Invoice Dump" id="analytic_wbs_pembina_sap.workflow_dump_list" parent="analytic_wbs_pembina_sap.workflow_menu_1"
+      action="analytic_wbs_pembina_sap.workflow_invoice_dump_action_window"/>
+    <menuitem name="Workflow Invoice Mapped" id="analytic_wbs_pembina_sap.workflow_mapped_list" parent="analytic_wbs_pembina_sap.workflow_menu_2"
+      action="analytic_wbs_pembina_sap.workflow_invoice_mapped_action_window" sequence="5"/>
+    <menuitem name="Workflow Mapping" id="analytic_wbs_pembina_sap.workflow_mapping" parent="analytic_wbs_pembina_sap.workflow_menu_2"
+      action="analytic_wbs_pembina_sap.workflow_mapping_action_window" sequence="1"/>
+
+  </data>
+</odoo>

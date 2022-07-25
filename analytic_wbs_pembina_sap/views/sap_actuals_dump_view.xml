@@ -1,0 +1,88 @@
+<odoo>
+  <data>
+    <!-- DUMP list view definition -->
+
+    <record model="ir.ui.view" id="sap_actuals_dump_list">
+      <field name="name">analytic_wbs_pembina_sap_actuals list</field>
+      <field name="model">sap.actuals_line_dump</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="mapped"/>
+          <field name="duplicate"/>
+          <field name="document_date"/>
+          <field name="posting_date"/>
+          <field name="document_number"/>
+          <field name="ref_document_number"/>
+          <field name="object"/>
+          <field name="purchasing_document"/>
+          <field name="sap_item"/>
+          <field name="vendor_name"/>
+          <field name="name_of_employee_or_applicant"/>
+          <field name="cost_element_descr"/>
+          <field name="name_of_offseting_account"/>
+          <field name="val_ca_area_crcy"/>
+          <field name="transaction_currency"/>
+          <field name="total_quantity"/>
+          <field name="document_header_text"/>
+          <field name="project_definition"/>
+          <field name="fi_posting_item"/>
+          <field name="recovery_indicator"/>
+          <field name="wbs_element"/>
+          <field name="posting_now"/>
+          <field name="computed_uid"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="sap_actual_dump_action_window">
+      <field name="name">sap_dump_actuals window</field>
+      <field name="res_model">sap.actuals_line_dump</field>
+      <field name="view_mode">tree</field>
+    </record>
+
+    <!-- SAP Actuals list view definition -->
+
+    <record model="ir.ui.view" id="sap_actuals_mapped_list">
+      <field name="name">analytic_wbs_pembina_sap_actuals list</field>
+      <field name="model">sap.actuals_line_mapped</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="document_date"/>
+          <field name="posting_date"/>
+          <field name="document_number"/>
+          <field name="ref_document_number"/>
+          <field name="object"/>
+          <field name="purchasing_document"/>
+          <field name="sap_item"/>
+          <field name="vendor_name"/>
+          <field name="name_of_employee_or_applicant"/>
+          <field name="cost_element_descr"/>
+          <field name="name_of_offseting_account"/>
+          <field name="val_ca_area_crcy" sum="Total Actuals" widget="monetary"/>
+          <field name="transaction_currency"/>
+          <field name="total_quantity"/>
+          <field name="document_header_text"/>
+          <field name="project_definition"/>
+          <field name="fi_posting_item"/>
+          <field name="wbs_element"/>
+          <field name="posting_now"/>
+          <field name="recovery_indicator"/>
+          <field name="computed_uid"/>
+          <field name="project_id"/>
+          <field name="account_id"/>
+          <field name="account_project_id"/>
+          <field name="purchase_order_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="sap_actual_mapped_action_window">
+      <field name="name">sap_mapped_actuals window</field>
+      <field name="res_model">sap.actuals_line_mapped</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+  </data>
+</odoo>

@@ -1,0 +1,22 @@
+<!-- <?xml version="1.0" encoding="utf-8"?> -->
+<odoo>
+    
+     <record id="AnalyticsWbsRecordExtend" model="ir.ui.view">
+        <field name="name">AnalyticsWbsRecordExtend</field>
+        <field name="model">analytic.wbs.record</field>
+        <field name="inherit_id" ref="analytic_wbs_summary.view_analytic_wbs_cost_report_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//form//sheet" position="before">
+                <header>
+
+                    <button name="generate_report" type="object" string="Project Cost Report" class="oe_highlight" />
+
+                </header>
+
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

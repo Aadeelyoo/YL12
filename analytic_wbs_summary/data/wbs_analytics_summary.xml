@@ -1,0 +1,22 @@
+<odoo>
+  <data>
+    <!-- SQL view definition -->
+
+    <record model="bi.sql.view" id="sql_view_analytic_wbs_summary">
+      <field name="name">analytic_wbs_summary</field>
+      <field name="technical_name">analytic_wbs_summary</field>
+      <field name="is_materialized">analytic_wbs_summary</field>
+      <field name="query">analytic_wbs_summary</field>
+      <field name="name">analytic_wbs_summary</field>
+      <field name="name">analytic_wbs_summary</field>
+      <field name="name">analytic_wbs_summary</field>
+      <field name="name">analytic_wbs_summary</field>
+      <field name="name">analytic_wbs_summary</field>
+      <field name="name">analytic_wbs_summary</field>
+      <field name="name">analytic_wbs_summary</field>
+      <field name="name">analytic_wbs_summary</field>
+      <field name="name">analytic_wbs_summary</field>
+    </record>
+
+  </data>
+</odoo>

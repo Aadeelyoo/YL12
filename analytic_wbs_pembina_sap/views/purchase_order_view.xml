@@ -1,0 +1,58 @@
+<odoo>
+  <data>
+    <!-- DUMP list view definition -->
+        <record id="view_sap_purchase_order_search_form" model="ir.ui.view">
+            <field name="name">purchase.order.sap.search.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_id']" position="after">
+                    <field name="internal_ref"/>
+                </xpath>
+                <!--
+                <xpath expr="//search/group" position="inside">
+                    <filter string="Project" name="project" context="{'group_by':'project_id'}"/>
+                    <filter string="Main PO" name="main_po" context="{'group_by':'parent_po_id'}"/>
+                </xpath>
+                -->
+            </field>
+        </record>
+
+        <record id="view_sap_purchase_order_form" model="ir.ui.view">
+            <field name="name">purchase.order.sap.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button type="object"  name="action_display_actuals"
+                        class="oe_stat_button"
+                        icon="fa-file-text-o" attrs="{'invisible':[('state', 'in', ('draft','sent','to approve'))]}">
+                        <field name="actual_count" widget="statinfo" string="SAP Actuals"/>
+                        <field name='sap_actuals_mapped_ids' invisible="1"/>
+                    </button>
+                </xpath>
+
+                <!--
+                <xpath expr="//search/group" position="inside">
+                    <filter string="Project" name="project" context="{'group_by':'project_id'}"/>
+                    <filter string="Main PO" name="main_po" context="{'group_by':'parent_po_id'}"/>
+                </xpath>
+                -->
+            </field>
+        </record>
+
+        <!--
+        <record id="sap_pc_purchase_order_tree" model="ir.ui.view">
+            <field name="name">sap.purchase.order.pc.tree</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="analytic_wbs.pc_purchase_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <field name="sap_amt_balance" sum="Total Actuals" widget="monetary" invisible="0"/>
+                </xpath>
+            </field>
+        </record>
+        -->
+
+  </data>
+</odoo>
