@@ -66,11 +66,11 @@
                     <field name="unit_amount" sum="Total"/>
                     <field name="quantity" sum="Quantity"/>
                     <field name="untaxed_amount" sum="Amount"/>
-                    <field name="create_date" readonly="True"/>
-                    <field name="tci_type"/>
-                    <field name="state"/>
+                    <field name="create_date" readonly="True" invisible="1"/>
+                    <field name="tci_type" invisible="1"/>
+                    <field name="state" invisible="1"/>
                     <field name="analytic_project_id"/>
-                    <field name="control_account_id"/>
+                    <field name="control_account_id" invisible="1"/>
                 </tree>
             </field>
         </record>
@@ -156,9 +156,9 @@
             <field name="view_id" ref="view_tci_line_tree"/>
             <field name="view_type">form</field>
             <field name="domain">[('tci_type', '=', 'act')]</field>
-            <field name="context">{
-                'default_tci_type':'act',
-                }</field>
+<!--            <field name="context">{-->
+<!--                'default_tci_type':'act',-->
+<!--                }</field>-->
             <field name="help" type="html">
               <p>
                 No TCI lines recorded yet.

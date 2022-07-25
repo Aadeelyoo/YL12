@@ -24,8 +24,8 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-        'views/purchase_order_views.xml',
         'views/cost_control_views.xml',
+        'views/purchase_order_views.xml',
         'views/analytic_project_wbs_view.xml',
         'views/templates.xml',
         'wizards/report_record_wizard_view.xml',

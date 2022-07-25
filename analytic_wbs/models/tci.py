@@ -615,7 +615,7 @@ class Tci(models.Model):
         return dup_list
 
     def action_open_tci(self):
-        view_tree_id = self.env.ref('analytic_wbs.view_tci_line_search_form').id
+        view_tree_id = self.env.ref('analytic_wbs.view_tci_line_tree').id
         view_id = self.env.ref('analytic_wbs.view_tci_line_form').id
         context = self._context.copy()
 
