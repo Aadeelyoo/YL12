@@ -1480,6 +1480,10 @@ class ResConfigSettingsAnalyticWbs(models.TransientModel):
         for rec in tci_id:
             rec.update_analytic_project_line_ids()
 
+    def delete_all_actuals(self):
+        tci_act_ids = self.env['tci'].search([('tci_type', '=', 'act')], limit=2000)
+        tci_act_ids.unlink()
+
     def generate_project_wbs(self):
         company_wbs = self.env['account.analytic_wbs.account'].search([('is_active', '=', True)])
         projects = self.env['project.project'].search([('active', '=', True)])

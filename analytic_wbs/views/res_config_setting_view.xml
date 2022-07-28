@@ -79,6 +79,12 @@
                             <button string="Generate Project WBS" type="object" name="generate_project_wbs" class="btn-primary" />
                         </div>
                     </div>
+                    <h2>Actuals TCI</h2>
+                    <div name="actual_tci" class="row mt16 o_settings_container" title="Actual TCIs">
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <button string="Delete all TCI type Actuals" type="object" name="delete_all_actuals" class="btn" />
+                        </div>
+                    </div>
                 </div>
             </xpath>
         </field>
