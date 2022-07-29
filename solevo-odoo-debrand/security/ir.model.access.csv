@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_solevo-odoo-debrand_solevo_odoo-debrand,solevo-odoo-debrand.solevo-odoo-debrand,model_solevo-odoo-debrand_solevo-odoo-debrand,,1,1,1,1

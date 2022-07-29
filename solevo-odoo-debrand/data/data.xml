@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="base.partner_root" model="res.partner">
+            <field name="name">EvosoftBot</field>
+            <field name="email">info@solevo.ca</field>
+            <field name="image" type="base64" file="solevo-odoo-debrand/static/description/solevoserver.png"/>
+        </record>
+
+        <record id="im_livechat_channel_data_website" model="im_livechat.channel">
+         <field name="name">Evosoft Web Channel</field>
+         <field name="default_message">Hello, how may I help you?</field>
+        </record>
+
+    </data>
+</odoo>

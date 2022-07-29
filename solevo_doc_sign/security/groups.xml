@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Create the configuration menu for user group selection -->
+    <record model="ir.module.category" id="doc_approval">
+        <field name="name">Document Approval</field>
+        <field name="description">User access for the Document Approval module</field>
+        <field name="sequence">6</field>
+    </record>
+
+    <record id="group_doc_approval_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        <field name="category_id" ref="solevo_doc_sign.doc_approval"/>
+    </record>
+
+    <record id="group_doc_approval_approver" model="res.groups">
+        <field name="name">Approver</field>
+        <field name="implied_ids" eval="[(4, ref('solevo_doc_sign.group_doc_approval_user'))]"/>
+        <field name="category_id" ref="solevo_doc_sign.doc_approval"/>
+    </record>
+
+    <record id="group_doc_approval_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="implied_ids" eval="[(4, ref('solevo_doc_sign.group_doc_approval_approver'))]"/>
+        <field name="category_id" ref="solevo_doc_sign.doc_approval"/>
+    </record>
+
+</odoo>

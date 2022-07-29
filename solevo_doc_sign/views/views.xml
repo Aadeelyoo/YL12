@@ -1,0 +1,89 @@
+<odoo>
+  <data>
+
+    <record id="init_res_users_form" model="ir.ui.view">
+        <field name="name">init.res.users.form</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='digital_signature']" position="after">
+                <label for="digital_initial" string="Initials" class="oe_edit_only" />
+                <h2>
+                    <field name="digital_initial" widget="signature" width="50" height="50"/>
+                </h2>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="init_res_users_preferences_form" model="ir.ui.view">
+        <field name="name">init.res.users.preferences.form</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form_simple_modif" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='digital_signature']" position="after">
+                <label for="digital_initial" string="Initials" class="oe_edit_only"/>
+                <h2>
+                    <field name="digital_initial" widget="signature" width="50" height="50"/>
+                </h2>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="/addons_custom/solevo_doc_sign.list">
+      <field name="name">/addons_custom/solevo_doc_sign list</field>
+      <field name="model">/addons_custom/solevo_doc_sign./addons_custom/solevo_doc_sign</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="/addons_custom/solevo_doc_sign.action_window">
+      <field name="name">/addons_custom/solevo_doc_sign window</field>
+      <field name="res_model">/addons_custom/solevo_doc_sign./addons_custom/solevo_doc_sign</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="/addons_custom/solevo_doc_sign.action_server">
+      <field name="name">/addons_custom/solevo_doc_sign server</field>
+      <field name="model_id" ref="model_/addons_custom/solevo_doc_sign_/addons_custom/solevo_doc_sign"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="/addons_custom/solevo_doc_sign" id="/addons_custom/solevo_doc_sign.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="/addons_custom/solevo_doc_sign.menu_1" parent="/addons_custom/solevo_doc_sign.menu_root"/>
+    <menuitem name="Menu 2" id="/addons_custom/solevo_doc_sign.menu_2" parent="/addons_custom/solevo_doc_sign.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="/addons_custom/solevo_doc_sign.menu_1_list" parent="/addons_custom/solevo_doc_sign.menu_1"
+              action="/addons_custom/solevo_doc_sign.action_window"/>
+    <menuitem name="Server to list" id="/addons_custom/solevo_doc_sign" parent="/addons_custom/solevo_doc_sign.menu_2"
+              action="/addons_custom/solevo_doc_sign.action_server"/>
+    -->
+  </data>
+</odoo>

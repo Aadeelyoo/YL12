@@ -1,0 +1,28 @@
+.app-sidebar-panel{
+    z-index: 110;
+}
+.freeze_row_blur{
+  border-right: 1.5px solid #212529;;
+  background: rgb(230, 229, 229) !important;
+}
+.o_pivot table tbody tr td:first-child{position: relative;}
+.o_pivot table tbody tr td:first-child:after{
+    content: '';
+    position: absolute;
+    height: 100%;
+    top: 0;
+    right: 0;
+    border-right: 1px solid #dee2e6;
+}
+.o_pivot table .o_pivot_header_cell_opened {
+	background: rgb(230, 229, 229) !important;
+}
+.o_pivot table .o_pivot_header_cell_closed {
+	background: rgb(230, 229, 229) !important;
+}
+.o_pivot table thead th:not(.o_pivot_header_cell_closed):not(.o_pivot_header_cell_opened) {
+    background: rgb(230, 229, 229) !important;
+}
+.table-bordered th, .table-bordered td {
+    border: 1px solid #212529 !important;
+}

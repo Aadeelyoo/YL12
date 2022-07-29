@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_backend" name="pivot_view_hearder" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" type="text/css" href="/pivot_view_freeze_header/static/src/css/pivot_view.css"/>
+            <script type="text/javascript" src="/pivot_view_freeze_header/static/src/js/pivotview_freeze_header.js"/>
+            <script type="text/javascript" src="/pivot_view_freeze_header/static/src/lib/headersfreeze/jquery.stickytableheaders.js"/>
+        </xpath>
+    </template>
+</odoo>
