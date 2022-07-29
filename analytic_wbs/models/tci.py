@@ -1932,6 +1932,21 @@ class TciLine(models.Model):
     po_id = fields.Many2one('purchase.order', related="tci_id.po_id", string='Purchase Order', readonly=True)
     flag_rate = fields.Boolean(copy=False)
 
+    # new fields added here
+    vendor_wbs = fields.Char("Vendor WBS")
+    employee_name = fields.Char("Employee name")
+    third_party_vendor = fields.Char("Third Party Vendor")
+    third_party_doc_num = fields.Char("Third Party Doc#")
+    line_percent_factor = fields.Float(default=100.0,string="Line Percent Factor")
+    markup_percent =  fields.Float(default=0.0,string="Markup %")
+    markup_value = fields.Float(string="Markup Value",compute='_compute_markup_value',store=False)
+
+    @api.depends('markup_percent','line_percent_factor','untaxed_amount')
+    def _compute_markup_value(self):
+        for rec in self:
+            rec.markup_value = (rec.untaxed_amount * rec.markup_percent) / 100
+
+
     # TODO: COMPLETE ON_CHANGE METHOD Below, project_was for the line should = the project wbs of the PO line selected
 
     @api.onchange('po_line_id')
@@ -1940,10 +1955,12 @@ class TciLine(models.Model):
             self.analytic_project_id = self.po_line_id.account_project_id.id
 
 
-    @api.depends('quantity', 'unit_amount', 'tci_line_tax_ids', 'currency_id')
+    @api.depends('quantity', 'unit_amount', 'tci_line_tax_ids', 'currency_id','markup_value','markup_percent','line_percent_factor')
     def _compute_amount(self):
         for tci in self:
-            tci.untaxed_amount = tci.unit_amount * tci.quantity
+            tci.untaxed_amount = (tci.unit_amount * tci.quantity) + (((tci.unit_amount * tci.quantity) * tci.markup_percent) / 100)
+            tci.total_amount = (tci.unit_amount * tci.quantity)+ (((tci.unit_amount * tci.quantity) * tci.markup_percent) / 100)
+            # tci.markup_value = (tci.untaxed_amount * tci.markup_percent) / 100
 
     @api.onchange('product_id')
     def _onchange_product_id(self):
