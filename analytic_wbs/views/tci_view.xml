@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-                <!-- Sequences for Cost Item Number -->
+        <!-- Sequences for Cost Item Number -->
 
 
         <record id="view_tci_type_tree" model="ir.ui.view">
@@ -143,9 +143,9 @@
             <field name="view_id" ref="view_tci_line_tree"/>
             <field name="view_type">form</field>
             <field name="help" type="html">
-              <p>
-                No TCI lines recorded yet.
-              </p>
+                <p>
+                    No TCI lines recorded yet.
+                </p>
             </field>
         </record>
 
@@ -156,25 +156,26 @@
             <field name="view_id" ref="view_tci_line_tree"/>
             <field name="view_type">form</field>
             <field name="domain">[('tci_type', '=', 'act')]</field>
-<!--            <field name="context">{-->
-<!--                'default_tci_type':'act',-->
-<!--                }</field>-->
+            <!--            <field name="context">{-->
+            <!--                'default_tci_type':'act',-->
+            <!--                }</field>-->
             <field name="help" type="html">
-              <p>
-                No TCI lines recorded yet.
-              </p>
+                <p>
+                    No TCI lines recorded yet.
+                </p>
             </field>
         </record>
 
 
-                # **************** Project Control - Cost Item Views and Actions ****************
+        # **************** Project Control - Cost Item Views and Actions ****************
 
         <record id="view_tci_search_form" model="ir.ui.view">
             <field name="name">tci.search.form</field>
             <field name="model">tci</field>
             <field name="arch" type="xml">
                 <search string="Cost Item">
-                    <field name="name" filter_domain="['|','|','|','|','|', ('name','ilike',self), ('reference','ilike',self), ('partner_id', 'ilike', self), ('employee', 'ilike', self), ('po_id', 'ilike', self), ('barcode', 'ilike', self)]"/>
+                    <field name="name"
+                           filter_domain="['|','|','|','|','|', ('name','ilike',self), ('reference','ilike',self), ('partner_id', 'ilike', self), ('employee', 'ilike', self), ('po_id', 'ilike', self), ('barcode', 'ilike', self)]"/>
                     <field name="reference"/>
                     <field name="partner_id"/>
                     <field name="employee"/>
@@ -185,17 +186,22 @@
                     <field name="is_outstanding"/>
                     <field name="current_user_approval_required" invisible="1"/>
                     <filter string="My Items" name="my_items" domain="[('user_id', '=', uid)]"/>
-                    <filter string="My Followed Items" name="my_followed_items" domain="[('message_is_follower', '=', True)]"/>
+                    <filter string="My Followed Items" name="my_followed_items"
+                            domain="[('message_is_follower', '=', True)]"/>
                     <filter string="Unassigned" name="unassigned" domain="[('user_id', '=', False)]"/>
                     <separator/>
-                    <filter string="Returned to Vendor" name="is_back_to_vendor" domain="[('is_back_to_vendor', '=', True)]"/>
-                    <filter string="Not Returned Back to Vendor" name="is_not_back_to_vendor" domain="[('is_back_to_vendor', '=', False)]"/>
+                    <filter string="Returned to Vendor" name="is_back_to_vendor"
+                            domain="[('is_back_to_vendor', '=', True)]"/>
+                    <filter string="Not Returned Back to Vendor" name="is_not_back_to_vendor"
+                            domain="[('is_back_to_vendor', '=', False)]"/>
                     <separator/>
-                    <filter string="Approval Required" name="requires_approval" domain="[('current_user_approval_required', '=', True)]"/>
+                    <filter string="Approval Required" name="requires_approval"
+                            domain="[('current_user_approval_required', '=', True)]"/>
                     <separator/>
                     <filter string="Outstanding" name="outstanding" domain="[('is_outstanding','=', True)]"/>
                     <filter string="To Review" name="to_review" domain="[('state', 'in', ('new','draft','review'))]"/>
-                    <filter string="Approved" name="approved" domain="[('state', 'in', ('approved','invoiced','completed'))]"/>
+                    <filter string="Approved" name="approved"
+                            domain="[('state', 'in', ('approved','invoiced','completed'))]"/>
                     <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
                     <separator/>
                     <filter string="Active" name="active" domain="[('state', '!=', 'void')]"/>
@@ -221,7 +227,8 @@
                         <filter string="Document Date" name="group_date" context="{'group_by':'date'}"/>
 
                         <filter string="Assigned To" name="User" context="{'group_by':'user_id'}"/>
-                        <filter string="Returned to Vendor" name="group_is_back_to_vendor" context="{'group_by':'is_back_to_vendor'}"/>
+                        <filter string="Returned to Vendor" name="group_is_back_to_vendor"
+                                context="{'group_by':'is_back_to_vendor'}"/>
                     </group>
                 </search>
             </field>
@@ -234,7 +241,8 @@
             <field name="context">{
                 'search_default_active': 1,
                 'search_default_my_items': 1,
-            }</field>
+                }
+            </field>
             <field name="search_view_id" ref="view_tci_search_form"/>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
@@ -360,7 +368,7 @@
             <field name="name">tci.pivot</field>
             <field name="model">tci</field>
             <field name="arch" type="xml">
-                <pivot string="Line Transaction" >
+                <pivot string="Line Transaction">
                     <field name="date" interval="year" type="col"/>
                     <field name="date" interval="month" type="col"/>
                     <field name="partner_id" type="row"/>
@@ -373,7 +381,7 @@
             <field name="name">tci.pivot</field>
             <field name="model">tci</field>
             <field name="arch" type="xml">
-                <pivot string="TCI by Status" >
+                <pivot string="TCI by Status">
                     <field name="state" type="col"/>
                     <field name="user_id" type="col"/>
                     <field name="partner_id" type="row"/>
@@ -413,7 +421,8 @@
             <field name="context">{
                 'search_default_tci_id': [active_id],
                 'default_tci_id': active_id,
-            }</field>
+                }
+            </field>
             <field name="search_view_id" ref="view_tci_line_search_form"/>
         </record>
 
@@ -422,60 +431,60 @@
             <field name="model">tci</field>
             <field name="arch" type="xml">
                 <form string="Cost Items">
-                <header>
+                    <header>
 
-                    <button name="create_merged_pdf" type="object" string="Create Status Report"
-                            class="oe_highlight oe_view_mode_only"
-                            states="approved,rejected"/>
-                    <button name="action_tci_submit" type="object" string="Submit for Approval"
-                            class="oe_highlight oe_view_mode_only"
-                            states="new,draft" />
+                        <button name="create_merged_pdf" type="object" string="Create Status Report"
+                                class="oe_highlight oe_view_mode_only"
+                                states="approved,rejected"/>
+                        <button name="action_tci_submit" type="object" string="Submit for Approval"
+                                class="oe_highlight oe_view_mode_only"
+                                states="new,draft"/>
 
-                    <button name="action_use_templ_wizard" type="object" string="Use Template"
-                            class="oe_view_mode_only" states="draft"/>
-                    <button name="action_tci_pending" type="object" string="Pending"
-                            class="oe_highlight oe_view_mode_only"
-                            states="submitted" />
-                    <button name="action_tci_approve" type="object" string="Approve"
-                            class="oe_highlight btn-success"
-                            attrs="{'invisible': [('current_user_approval_required', '=', False)]}"/>
-                    <button name="action_tci_approve_with_feedback" type="object" string="Approve with Feedback"
-                            class="btn-success"
-                            attrs="{'invisible': [('current_user_approval_required', '=', False)]}"/>
-                    <button name="action_tci_reject_with_feedback" type="object" string="Reject" class="btn-danger"
-                            attrs="{'invisible': [('current_user_approval_required', '=', False)]}"/>
-                    <button name="action_tci_void" type="object" string="Void"
-                            class="oe_view_mode_only"
-                            states="approved,rejected,released,invoiced,review,new,draft" />
-                    <button name="action_tci_reset_to_draft" type="object" string="Reset to Draft"
-                            class="oe_view_mode_only"
-                            states="approved,rejected,review,void" />
-                    <button name="action_mail_approval_stop" type="object" string="Stop Approval Process"
-                            class="oe_view_mode_only"
-                            states="review,superuser_overwrite"/>
-                    <!--
-                    <button name="action_superuser_test_function" type="object" string="Test Function To Remove"
-                            class="oe_edit_only" groups="analytic_wbs.group_tci_superuser"/>
-                    -->
-                    <button name="action_superuser_state_true" type="object" string="Enter Superuser Mode"
-                            groups="analytic_wbs.group_tci_superuser"
-                            states="approved,rejected,review" />
-                    <button name="action_superuser_state_false" type="object" string="Exit Superuser Mode"
-                            class="oe_highlight" groups="analytic_wbs.group_tci_superuser"
-                            states="superuser_overwrite" />
-                    <button name="send_by_email" type="object" string="Send By Email"
-                            class="oe_view_mode_only"
-                            states="approved,rejected"
-                            />
-                    <field name="state" widget="statusbar" readonly="True"
-                           statusbar_visible="draft,new,review,approved,invoiced,completed,void"/>
-                </header>
+                        <button name="action_use_templ_wizard" type="object" string="Use Template"
+                                class="oe_view_mode_only" states="draft"/>
+                        <button name="action_tci_pending" type="object" string="Pending"
+                                class="oe_highlight oe_view_mode_only"
+                                states="submitted"/>
+                        <button name="action_tci_approve" type="object" string="Approve"
+                                class="oe_highlight btn-success"
+                                attrs="{'invisible': [('current_user_approval_required', '=', False)]}"/>
+                        <button name="action_tci_approve_with_feedback" type="object" string="Approve with Feedback"
+                                class="btn-success"
+                                attrs="{'invisible': [('current_user_approval_required', '=', False)]}"/>
+                        <button name="action_tci_reject_with_feedback" type="object" string="Reject" class="btn-danger"
+                                attrs="{'invisible': [('current_user_approval_required', '=', False)]}"/>
+                        <button name="action_tci_void" type="object" string="Void"
+                                class="oe_view_mode_only"
+                                states="approved,rejected,released,invoiced,review,new,draft"/>
+                        <button name="action_tci_reset_to_draft" type="object" string="Reset to Draft"
+                                class="oe_view_mode_only"
+                                states="approved,rejected,review,void"/>
+                        <button name="action_mail_approval_stop" type="object" string="Stop Approval Process"
+                                class="oe_view_mode_only"
+                                states="review,superuser_overwrite"/>
+                        <!--
+                        <button name="action_superuser_test_function" type="object" string="Test Function To Remove"
+                                class="oe_edit_only" groups="analytic_wbs.group_tci_superuser"/>
+                        -->
+                        <button name="action_superuser_state_true" type="object" string="Enter Superuser Mode"
+                                groups="analytic_wbs.group_tci_superuser"
+                                states="approved,rejected,review"/>
+                        <button name="action_superuser_state_false" type="object" string="Exit Superuser Mode"
+                                class="oe_highlight" groups="analytic_wbs.group_tci_superuser"
+                                states="superuser_overwrite"/>
+                        <button name="send_by_email" type="object" string="Send By Email"
+                                class="oe_view_mode_only"
+                                states="approved,rejected"
+                        />
+                        <field name="state" widget="statusbar" readonly="True"
+                               statusbar_visible="draft,new,review,approved,invoiced,completed,void"/>
+                    </header>
                     <sheet string="Cost Item">
                         <div class="oe_button_box" name="button_box">
                             <button name="action_get_attachment_view"
-                                class="oe_stat_button"
-                                icon="fa-book"
-                                type="object">
+                                    class="oe_stat_button"
+                                    icon="fa-book"
+                                    type="object">
                                 <field name="attachment_number" widget="statinfo" string="Documents"/>
                             </button>
                         </div>
@@ -496,8 +505,8 @@
                                 <field name="po_rev" attrs="{'invisible':[('tci_type', '!=', 'wt')]}"/>
                                 <field name="name" placeholder="Auto-generated Document Number"/>
                                 <field name="employee" attrs="{'invisible':[('tci_type', '!=', 'act')]}"/>
-                                <field name="project_ids" widget="many2many_tags" />
-                                <field name="analytic_project_ids" widget="many2many_tags" />
+                                <field name="project_ids" widget="many2many_tags"/>
+                                <field name="analytic_project_ids" widget="many2many_tags"/>
                                 <field name="project_id_group" invisible="1" readonly="1"/>
                             </group>
                             <group string="Other Info">
@@ -516,19 +525,20 @@
                                 <field name="compute_domain_trigger" invisible="1"/>
                             </group>
 
-                            <group string="Approval Documents" attrs="{'invisible':[('tci_type', 'not in', ('wt','cr'))]}" name="approval_docs_gr">
+                            <group string="Approval Documents"
+                                   attrs="{'invisible':[('tci_type', 'not in', ('wt','cr'))]}" name="approval_docs_gr">
                                 <field name="approval_document_ids"
-                                    widget="many2many_tags" options="{'no_create': True}"
-                                    attrs="{'readonly':[('check_approval_process', '=', True),('state', '!=', 'superuser_overwrite'),('is_superuser_state', '!=', True)]}"
-                                    domain="[('res_model', '=', 'tci'), ('res_id', '=', context.get('active_id'))]"
-                                    />
+                                       widget="many2many_tags" options="{'no_create': True}"
+                                       attrs="{'readonly':[('check_approval_process', '=', True),('state', '!=', 'superuser_overwrite'),('is_superuser_state', '!=', True)]}"
+                                       domain="[('res_model', '=', 'tci'), ('res_id', '=', context.get('active_id'))]"
+                                />
                                 <field name="approval_report_name" invisible="1"/>
                                 <field name="approval_report_id"
                                        options="{'no_create': True}"
                                        attrs="{'readonly':[('check_approval_process', '=', True)]}"
                                        domain="[('res_model', '=', 'tci'), ('res_id', '=', context.get('active_id'))]"
                                        filename="approval_report_name"
-                                    />
+                                />
                             </group>
 
                             <group string="Actuals Mapping" attrs="{'invisible':[('tci_type', '!=', 'act')]}">
@@ -578,25 +588,45 @@
                                 </div>
                                 <group name="wtdetails_group_center" string="TCI Details">
                                     <field name="tci_line_ids" nolabel="1" context="{'default_tci_id': active_id}">
-                                        <tree decoration-danger="flag_rate == True" create="true" delete="true" string="Cost Item Details" editable="bottom">
+                                        <tree decoration-danger="flag_rate == True" create="true" delete="true"
+                                              string="Cost Item Details" editable="bottom">
                                             <field name="sequence" widget="handle"/>
                                             <field name="po_id" invisible="1"/>
                                             <field name="tci_id" invisible="1"/>
                                             <field name="product_id" invisible="1"/>
                                             <field name="name" invisible="1"/>
                                             <field name="description"/>
-                                            <field name="po_line_id" invisible="0" options="{'no_create': True, 'no_create_edit':True}"/>
+                                            <field name="po_line_id" invisible="0"
+                                                   options="{'no_create': True, 'no_create_edit':True}"/>
                                             <field name="tci_cr_id" invisible="0" string="Change Order"/>
-                                            <field name="analytic_project_id" attrs="{'column_invisible':[('parent.account_ass_method', '!=', 'line')]}" options="{'no_create': True, 'no_create_edit':True}"/>
-                                            <field name="control_account_id" options="{'no_create': True, 'no_create_edit':True}"/>
+                                            <field name="analytic_project_id"
+                                                   attrs="{'column_invisible':[('parent.account_ass_method', '!=', 'line')]}"
+                                                   options="{'no_create': True, 'no_create_edit':True}"/>
+                                            <field name="control_account_id"
+                                                   options="{'no_create': True, 'no_create_edit':True}"/>
                                             <field name="quantity"/>
                                             <field name="uom_id" widget="selection" groups="product.group_uom"/>
-                                            <field name="unit_amount" required="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            <field name="unit_amount" required="1" widget="monetary"
+                                                   options="{'currency_field': 'currency_id'}"/>
+                                            <!--                                             new fields added here-->
+
+                                            <field name="vendor_wbs"/>
+                                            <field name="employee_name"/>
+                                            <field name="third_party_vendor"/>
+                                            <field name="third_party_doc_num"/>
+                                            <field name="markup_percent"/>
+                                            <field name="markup_value"/>
+
+                                            <!--                                            end-->
+
+
                                             <field name="state" invisible="1"/>
-                                            <field name="tci_line_tax_ids" widget="many2many_tags" domain="[('type_tax_use', '=', 'purchase')]" invisible="1"/>
+                                            <field name="tci_line_tax_ids" widget="many2many_tags"
+                                                   domain="[('type_tax_use', '=', 'purchase')]" invisible="1"/>
                                             <field name="claim_qty" invisible="1"/>
                                             <field name="claim_qty_uom" invisible="1"/>
-                                            <field name="untaxed_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                            <field name="untaxed_amount" widget="monetary"
+                                                   options="{'currency_field': 'currency_id'}"/>
                                             <field name="company_id" invisible="1"/>
                                             <field name="currency_id" invisible="1"/>
                                             <field name="date" invisible="1"/>
@@ -612,35 +642,49 @@
                                     <group string="Account Assignation Details" class="oe_edit_only">
                                         <group>
                                             <field name="account_ass_method" widget="radio" nolabel="0"/>
-                                            <field name="by_tci_calc_method" widget="radio" nolabel="0" attrs="{'invisible':[('account_ass_method', '!=', 'tci')]}"/>
+                                            <field name="by_tci_calc_method" widget="radio" nolabel="0"
+                                                   attrs="{'invisible':[('account_ass_method', '!=', 'tci')]}"/>
                                         </group>
                                         <div attrs="{'invisible':[('account_ass_method', '!=', 'tci')]}">
-                                            <field name="tci_split_line_ids" nolabel="0" context="{'default_tci_id': active_id}">
-                                                <tree create="true" delete="true" string="TCI Wbs Split" editable="bottom">
+                                            <field name="tci_split_line_ids" nolabel="0"
+                                                   context="{'default_tci_id': active_id}">
+                                                <tree create="true" delete="true" string="TCI Wbs Split"
+                                                      editable="bottom">
                                                     <field name="tci_id" invisible="1"/>
                                                     <field name="analytic_project_id"/>
-                                                    <field name="percent_split" attrs="{'column_invisible':[('parent.by_tci_calc_method', '!=', 'percent')]}"/>
-                                                    <field name="amount" attrs="{'column_invisible':[('parent.by_tci_calc_method', '!=', 'amount')]}"/>
+                                                    <field name="percent_split"
+                                                           attrs="{'column_invisible':[('parent.by_tci_calc_method', '!=', 'percent')]}"/>
+                                                    <field name="amount"
+                                                           attrs="{'column_invisible':[('parent.by_tci_calc_method', '!=', 'amount')]}"/>
                                                     <field name="currency_id" invisible="1"/>
                                                 </tree>
                                             </field>
                                         </div>
                                     </group>
                                     <group class="oe_subtotal_footer oe_right" string="Total and Tax">
-                                        <field name="untaxed_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                                        <field name="tax_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                                        <field name="total_amount" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                        <field name="untaxed_amount" widget='monetary'
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="tax_amount" widget='monetary'
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="total_amount" class="oe_subtotal_footer_separator"
+                                               widget='monetary' options="{'currency_field': 'currency_id'}"/>
                                     </group>
-                                    <group class="oe_subtotal_footer oe_right" string="Wbs Validation" attrs="{'invisible':[('analytic_project_line_ids_difference', '=', 0)]}">
-                                        <field name="untaxed_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                                        <field name="analytic_project_line_ids_total" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                                        <field name="analytic_project_line_ids_difference" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                    <group class="oe_subtotal_footer oe_right" string="Wbs Validation"
+                                           attrs="{'invisible':[('analytic_project_line_ids_difference', '=', 0)]}">
+                                        <field name="untaxed_amount" widget='monetary'
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="analytic_project_line_ids_total" widget='monetary'
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="analytic_project_line_ids_difference"
+                                               class="oe_subtotal_footer_separator" widget='monetary'
+                                               options="{'currency_field': 'currency_id'}"/>
                                         <field name="analytic_project_line_ids_difference_pcent"/>
                                     </group>
 
                                 </group>
                             </page>
-                            <page name="tci_detail_description" string="Description" attrs="{'invisible':[('tci_type', '!=', 'wt')]}">
+                            <page name="tci_detail_description" string="Description"
+                                  attrs="{'invisible':[('tci_type', '!=', 'wt')]}">
                                 <group>
                                     <field name="detail_description" widget="html"/>
                                 </group>
@@ -648,7 +692,7 @@
                             <page name="account_assignation" string="Account Assignation">
                                 <group string="Account Assignation Calculated Values">
                                     <div class="oe_inline">
-                                        <field name="analytic_project_line_ids" > <!-- attrs="{'readonly':[('account_ass_method', '=', 'line')]}" --> 
+                                        <field name="analytic_project_line_ids"> <!-- attrs="{'readonly':[('account_ass_method', '=', 'line')]}" -->
                                             <tree editable="bottom" string="WBS">
                                                 <field name="sequence" invisible="1"/>
                                                 <!--Need invisible fields for on_change to create all necessary info -->
@@ -658,9 +702,9 @@
                                                 <field name="account_id" groups="account.group_account_invoice"/>
                                                 <field name="account_analytic_id"/>
                                                 -->
-                                                <field name="base" />
+                                                <field name="base"/>
                                                 <!-- attrs="{'readonly':[('parent.by_tci_calc_method', '!=', 'amount')]}" -->
-                                                <field name="base_allocation" />
+                                                <field name="base_allocation"/>
                                                 <!-- attrs="{'readonly':[('parent.by_tci_calc_method', '!=', 'percent')]}" -->
                                                 <field name="amount"/>
                                                 <field name="calc_tci_line_percent"/>
@@ -727,9 +771,12 @@
                                         </div>
                                     </group>
                                     <group class="oe_subtotal_footer oe_right">
-                                        <field name="untaxed_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                                        <field name="tax_amount" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                                        <field name="total_amount" class="oe_subtotal_footer_separator" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                        <field name="untaxed_amount" widget='monetary'
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="tax_amount" widget='monetary'
+                                               options="{'currency_field': 'currency_id'}"/>
+                                        <field name="total_amount" class="oe_subtotal_footer_separator"
+                                               widget='monetary' options="{'currency_field': 'currency_id'}"/>
                                     </group>
                                 </group>
                             </page>
@@ -745,13 +792,15 @@
                                         <group name="other">
                                             <field name="is_void" invisible="0"/>
                                             <field name="tci_type" readonly="1" invisible="0"/>
-                                            <field name="is_holdback" attrs="{'invisible':[('tci_type', '!=', 'inv')]}"/>
+                                            <field name="is_holdback"
+                                                   attrs="{'invisible':[('tci_type', '!=', 'inv')]}"/>
                                             <field name="barcode" invisible="0"/>
                                             <field name="external_soft_link" widget="url" text="External App"/>
                                             <field name="external_doc_link" widget="url" text="External Doc"/>
                                             <field name="is_superuser_state" invisible="1"/>
                                         </group>
-                                        <group string="Parent Info" attrs="{'invisible':['|', ('po_id', '=', False), ('tci_type', 'not in', ('wt','act'))]}">
+                                        <group string="Parent Info"
+                                               attrs="{'invisible':['|', ('po_id', '=', False), ('tci_type', 'not in', ('wt','act'))]}">
                                             <field name="parent_invoice_wt_rel_id"
                                                    attrs="{'invisible':[('tci_type', '!=', 'wt')]}"
                                                    options="{'no_create': True}"
@@ -770,10 +819,13 @@
                                     </group>
                                 </div>
                             </page>
-                            <page name="inv_wt_link" string="LEMS" attrs="{'invisible':['|', ('tci_type', '!=', 'inv'), ('po_id', '=', False)]}">
+                            <page name="inv_wt_link" string="LEMS"
+                                  attrs="{'invisible':['|', ('tci_type', '!=', 'inv'), ('po_id', '=', False)]}">
                                 <div>
                                     <group string="LEMs">
-                                        <field name="child_invoice_wt_rel_ids" domain="[('tci_type', '=', 'wt'), ('parent_invoice_wt_rel_id', '=', False)]" widget="many2many">
+                                        <field name="child_invoice_wt_rel_ids"
+                                               domain="[('tci_type', '=', 'wt'), ('parent_invoice_wt_rel_id', '=', False)]"
+                                               widget="many2many">
                                             <tree>
                                                 <field name="name"/>
                                                 <field name="reference"/>
@@ -810,10 +862,13 @@
                                 </div>
                             </page>
 
-                            <page name="actual_link" string="Actuals" attrs="{'invisible':['|',('tci_type', '!=', 'inv'), ('po_id', '=', False)]}">
+                            <page name="actual_link" string="Actuals"
+                                  attrs="{'invisible':['|',('tci_type', '!=', 'inv'), ('po_id', '=', False)]}">
                                 <div>
                                     <group string="SAP Actuals">
-                                        <field name="child_invoice_act_rel_ids" domain="[('tci_type', '=', 'act'), ('parent_invoice_act_rel_id', '=', False)]" widget="many2many">
+                                        <field name="child_invoice_act_rel_ids"
+                                               domain="[('tci_type', '=', 'act'), ('parent_invoice_act_rel_id', '=', False)]"
+                                               widget="many2many">
                                             <tree>
                                                 <field name="name"/>
                                                 <field name="reference"/>
@@ -826,11 +881,14 @@
                                 </div>
                             </page>
 
-                            <page name="cr_wt_link" string="LEMs" attrs="{'invisible':['|',('tci_type', '!=', 'cr',), ('po_id', '=', False)]}">
+                            <page name="cr_wt_link" string="LEMs"
+                                  attrs="{'invisible':['|',('tci_type', '!=', 'cr',), ('po_id', '=', False)]}">
                                 <div>
                                     <group>
                                         <group string="Child LEMs">
-                                            <field name="child_cr_wt_rel_ids" domain="[('tci_type', '=', 'wt'), ('parent_cr_wt_rel_id', '=', False)]" widget="many2many">
+                                            <field name="child_cr_wt_rel_ids"
+                                                   domain="[('tci_type', '=', 'wt'), ('parent_cr_wt_rel_id', '=', False)]"
+                                                   widget="many2many">
                                                 <tree>
                                                     <field name="name"/>
                                                     <field name="reference"/>
@@ -882,24 +940,32 @@
                                         <div class="o_kanban_primary_left">
                                             <div class="o_primary">
                                                 <span t-if="record.reference.value">
-                                                    <strong><t t-esc="record.reference.value"/></strong>
+                                                    <strong>
+                                                        <t t-esc="record.reference.value"/>
+                                                    </strong>
                                                 </span>
                                                 <span t-if="!record.reference.value">
-                                                    <strong><t t-esc="record.name.value"/></strong>
+                                                    <strong>
+                                                        <t t-esc="record.name.value"/>
+                                                    </strong>
                                                 </span>
                                                 <span t-if="record.partner_id.value">
-                                                    <strong><t t-esc="record.partner_id.value"/></strong>
+                                                    <strong>
+                                                        <t t-esc="record.partner_id.value"/>
+                                                    </strong>
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="o_kanban_card_manage_pane dropdown-menu" groups="analytic_wbs.group_tci_clerk" role="menu">
+                                    <div class="o_kanban_card_manage_pane dropdown-menu"
+                                         groups="analytic_wbs.group_tci_clerk" role="menu">
                                         <div class="o_kanban_card_manage_section o_kanban_manage_reports">
                                             <div role="menuitem">
                                                 <a type="edit">Edit</a>
                                             </div>
                                         </div>
-                                        <div role="menuitem" aria-haspopup="true" class="o_no_padding_kanban_colorpicker">
+                                        <div role="menuitem" aria-haspopup="true"
+                                             class="o_no_padding_kanban_colorpicker">
                                             <ul class="oe_kanban_colorpicker" data-field="color" role="popup"/>
                                         </div>
                                     </div>
@@ -909,23 +975,29 @@
                                     <t t-if="record.po_id">
                                         <t t-if="record.po_id.internal_ref">
                                             <div>
-                                                <span class="o_label">PO #: </span>
-                                                <span class="o_value"><t t-esc="record.po_id.internal_ref.value"/></span>
+                                                <span class="o_label">PO #:</span>
+                                                <span class="o_value">
+                                                    <t t-esc="record.po_id.internal_ref.value"/>
+                                                </span>
                                             </div>
                                         </t>
                                         <t t-if="!record.po_id.internal_ref">
                                             <div>
-                                                <span class="o_label">PO #: </span>
-                                                <span class="o_value"><t t-esc="record.po_id.value"/></span>
+                                                <span class="o_label">PO #:</span>
+                                                <span class="o_value">
+                                                    <t t-esc="record.po_id.value"/>
+                                                </span>
                                             </div>
                                         </t>
                                     </t>
                                     <div>
-                                        <span> </span>
+                                        <span></span>
                                     </div>
                                     <div>
-                                        <span class="o_label">Amount: </span>
-                                        <span class="o_value"><t t-esc="record.untaxed_amount.value"/></span>
+                                        <span class="o_label">Amount:</span>
+                                        <span class="o_value">
+                                            <t t-esc="record.untaxed_amount.value"/>
+                                        </span>
                                     </div>
 
                                 </div>
@@ -938,17 +1010,16 @@
         </record>
 
 
-
         <record id="view_task_tree2_inherited2" model="ir.ui.view">
             <field name="name">project.task.tree.inherited2</field>
             <field name="model">project.task</field>
-            <field name="inherit_id" ref="project.view_task_tree2" />
+            <field name="inherit_id" ref="project.view_task_tree2"/>
             <field eval="2" name="priority"/>
             <field name="arch" type="xml">
                 <field name="project_id" position="before">
-                    <field name="po_id" />
-                    <field name="etc_amount_calc_type" />
-                    <field name="etc_amount" />
+                    <field name="po_id"/>
+                    <field name="etc_amount_calc_type"/>
+                    <field name="etc_amount"/>
                     <field name="forecast_amount" sum="Total ETC"/>
                     <field name="eac" sum="Total EAC"/>
                 </field>
@@ -958,20 +1029,20 @@
         <record id="view_task_tci_form" model="ir.ui.view">
             <field name="name">task.tci.form</field>
             <field name="model">project.task</field>
-            <field name="inherit_id" ref="project.view_task_form2" />
+            <field name="inherit_id" ref="project.view_task_form2"/>
             <field name="groups_id" eval="[(6,0, (ref('analytic_wbs.group_tci_user'),))]"/>
             <field name="arch" type="xml">
                 <xpath expr="//button[@name='toggle_active']" position="before">
                     <button name="display_tci"
-                        class="oe_stat_button"
-                        type="object"
-                        icon="fa-dollar">
+                            class="oe_stat_button"
+                            type="object"
+                            icon="fa-dollar">
                         <field name="tci_number" widget="statinfo" string="Cost Items"/>
                     </button>
                     <button name="display_forecast"
-                        class="oe_stat_button"
-                        type="object"
-                        icon="fa-dollar">
+                            class="oe_stat_button"
+                            type="object"
+                            icon="fa-dollar">
                         <field name="forecast_amount" widget="statinfo" string="ETC Forecast"/>
                     </button>
                 </xpath>
@@ -1014,9 +1085,9 @@
                             </group>
                             <group name="etc_details_group_top_right" string="Forecast Configuration">
                                 <button string="All task - test" type="object"
-                                        name="test_all_tasks_update" class="btn-secondary" />
+                                        name="test_all_tasks_update" class="btn-secondary"/>
                                 <button string="Generate Forecast" type="object"
-                                        name="test_forecast_gen" class="btn-primary" />
+                                        name="test_forecast_gen" class="btn-primary"/>
                                 <field name="etc_distr_calc_type"/>
                                 <field name="etc_distr_date_start"/>
                                 <field name="etc_distr_date_end"/>
@@ -1036,7 +1107,7 @@
                                     <field name="comment"/>
                                     <field name="amount_etc_contingency"/>
                                     <button string="Incur Line" type="object"
-                                        name="incur_forecast_line" class="btn-secondary" />
+                                            name="incur_forecast_line" class="btn-secondary"/>
                                 </tree>
                             </field>
 
@@ -1054,7 +1125,8 @@
                 <dashboard>
                     <group>
                         <group string="All LEMs" col="6">
-                            <widget name="pie_chart" title="LEMs by Status" attrs="{'measure': 'untaxed_amount', 'groupby': 'state'}"/>
+                            <widget name="pie_chart" title="LEMs by Status"
+                                    attrs="{'measure': 'untaxed_amount', 'groupby': 'state'}"/>
                             <!--
                             <aggregate name="incurred_cur" string="Incurred Current Period" group_operator="sum" field="variance" domain="[('data_col_group', '=', '40-Incurred Total')]"/>
                             <aggregate name="accrual_cur" string="Accruals" group_operator="sum" field="amount" domain="[('data_col_group', '=', '35-Accruals')]"/>
@@ -1090,9 +1162,9 @@
             <field name="view_id" ref="view_tci_line_tree"/>
             <field name="view_type">form</field>
             <field name="help" type="html">
-              <p>
-                No budget entries recorded yet.
-              </p>
+                <p>
+                    No budget entries recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1103,9 +1175,9 @@
             <field name="view_id" ref="view_tci_tree"/>
             <field name="view_type">form</field>
             <field name="help" type="html">
-              <p>
-                There is no project control document recorded yet.
-              </p>
+                <p>
+                    There is no project control document recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1125,11 +1197,12 @@
                 'default_tci_type':'wt',
                 'search_default_active':1,
                 'search_default_group_vendor':1,
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No work ticket items recorded yet.
-              </p>
+                <p>
+                    No work ticket items recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1145,7 +1218,8 @@
             <field name="domain">[
                 ('tci_type', '=', 'wt'),
                 ('user_id', '=', uid)
-                ]</field>
+                ]
+            </field>
             <field name="context">{
                 'default_tci_type':'wt',
                 'search_default_outstanding':1,
@@ -1153,11 +1227,12 @@
                 'search_default_group_status':1,
                 'search_default_group_vendor':1,
                 'search_default_is_not_back_to_vendor': 1,
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                There is no LEM assigned to you at the moment.
-              </p>
+                <p>
+                    There is no LEM assigned to you at the moment.
+                </p>
             </field>
         </record>
 
@@ -1174,17 +1249,19 @@
             <field name="domain">[
                 ('tci_type', '=', 'wt'),
                 ('is_outstanding', '=', 1)
-                ]</field>
+                ]
+            </field>
             <field name="context">{
                 'default_tci_type':'wt',
                 'search_is_outstanding':1,
                 'search_default_group_status':1,
                 'search_default_group_vendor':1,
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                There is no Outsanding LEM logged at the moment.
-              </p>
+                <p>
+                    There is no Outsanding LEM logged at the moment.
+                </p>
             </field>
         </record>
 
@@ -1200,16 +1277,18 @@
             <field name="domain">[
                 ('tci_type', '=', 'wt'),
                 ('state', 'in', ('new','draft','review')),
-                ]</field>
+                ]
+            </field>
             <field name="context">{
                 'default_tci_type':'wt',
                 'search_is_to_review':1,
                 'search_default_group_vendor':1,
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                There is no LEMs to review at the moment.
-              </p>
+                <p>
+                    There is no LEMs to review at the moment.
+                </p>
             </field>
         </record>
 
@@ -1225,16 +1304,18 @@
             <field name="domain">[
                 ('tci_type', '=', 'wt'),
                 ('state', 'in', ('approved','rejected')),
-                ]</field>
+                ]
+            </field>
             <field name="context">{
                 'default_tci_type':'wt',
                 'search_default_is_not_back_to_vendor': 1,
                 'search_default_group_vendor':1,
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                There is no LEMs to return to the vendors at the moment.
-              </p>
+                <p>
+                    There is no LEMs to return to the vendors at the moment.
+                </p>
             </field>
         </record>
 
@@ -1250,15 +1331,17 @@
             <field name="domain">[
                 ('tci_type', '=', 'wt'),
                 ('state', 'in', ('approved','superuser_overwrite')),
-                ]</field>
+                ]
+            </field>
             <field name="context">{
                 'default_tci_type':'wt',
                 'search_default_group_vendor':1,
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                There is no LEMs to return to the vendors at the moment.
-              </p>
+                <p>
+                    There is no LEMs to return to the vendors at the moment.
+                </p>
             </field>
         </record>
 
@@ -1272,11 +1355,12 @@
             <field name="domain">[('tci_type', '=', 'cr')]</field>
             <field name="context">{
                 'default_tci_type':'cr',
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No Change Request items recorded yet.
-              </p>
+                <p>
+                    No Change Request items recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1289,16 +1373,18 @@
             <field name="domain">[
                 ('tci_type', '=', 'cr'),
                 ('user_id', '=', uid)
-                ]</field>
+                ]
+            </field>
             <field name="context">{
                 'default_tci_type':'cr',
                 'search_default_group_status':1,
                 'search_default_group_vendor':1,
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No Change Request items recorded yet.
-              </p>
+                <p>
+                    No Change Request items recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1312,11 +1398,12 @@
             <field name="context">{
                 'default_tci_type':'cr',
                 'search_default_outstanding':1,
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No outstanding change Requests to look at.
-              </p>
+                <p>
+                    No outstanding change Requests to look at.
+                </p>
             </field>
         </record>
 
@@ -1330,11 +1417,12 @@
             <field name="domain">[('tci_type', '=', 'cr')]</field>
             <field name="context">{
                 'default_tci_type':'cr',
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No external change Requests recorded yet.
-              </p>
+                <p>
+                    No external change Requests recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1347,11 +1435,12 @@
             <field name="domain">[('tci_type', '=', 'cr')]</field>
             <field name="context">{
                 'default_tci_type':'cr',
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No external change Requests recorded yet.
-              </p>
+                <p>
+                    No external change Requests recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1364,14 +1453,14 @@
             <field name="domain">[('tci_type', '=', 'cr')]</field>
             <field name="context">{
                 'default_tci_type':'cr',
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No external change Requests recorded yet.
-              </p>
+                <p>
+                    No external change Requests recorded yet.
+                </p>
             </field>
         </record>
-
 
 
         <record model="ir.actions.act_window" id="action_pc_tci_estimate">
@@ -1383,11 +1472,12 @@
             <field name="domain">[('tci_type', '=', 'estimate')]</field>
             <field name="context">{
                 'default_tci_type':'estimate',
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No estimates recorded yet.
-              </p>
+                <p>
+                    No estimates recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1400,17 +1490,19 @@
             <field name="view_type">form</field>
             <field name="domain">[
                 ('tci_type', '=', 'inv'),
-                ]</field>
+                ]
+            </field>
             <field name="context">{
                 'default_tci_type':'inv',
                 'search_default_my_items':1,
                 'search_default_group_status':1,
                 'search_default_group_vendor':1,
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No external invoices recorded yet.
-              </p>
+                <p>
+                    No external invoices recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1423,11 +1515,12 @@
             <field name="domain">[('tci_type', '=', 'inv')]</field>
             <field name="context">{
                 'default_tci_type':'inv',
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No external invoices recorded yet.
-              </p>
+                <p>
+                    No external invoices recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1442,11 +1535,12 @@
                 'default_tci_type':'inv',
                 'search_default_outstanding':1,
                 'search_default_group_vendor':1,
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No outstanding invoices to look at.
-              </p>
+                <p>
+                    No outstanding invoices to look at.
+                </p>
             </field>
         </record>
 
@@ -1460,11 +1554,12 @@
             <field name="domain">[('tci_type', '=', 'inv')]</field>
             <field name="context">{
                 'default_tci_type':'inv',
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No external invoices recorded yet.
-              </p>
+                <p>
+                    No external invoices recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1477,11 +1572,12 @@
             <field name="domain">[('tci_type', '=', 'inv')]</field>
             <field name="context">{
                 'default_tci_type':'inv',
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No external invoices recorded yet.
-              </p>
+                <p>
+                    No external invoices recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1494,11 +1590,12 @@
             <field name="domain">[('tci_type', '=', 'inv')]</field>
             <field name="context">{
                 'default_tci_type':'inv',
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No external invoices recorded yet.
-              </p>
+                <p>
+                    No external invoices recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1512,11 +1609,12 @@
             <field name="domain">[('tci_type', '=', 'act')]</field>
             <field name="context">{
                 'default_tci_type':'act',
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No actuals recorded yet.
-              </p>
+                <p>
+                    No actuals recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1531,16 +1629,18 @@
                 ('parent_invoice_act_rel_id', '=', False),
                 ('po_id', '!=', False),
                 ('parent_invoice_act_rel_id_no_link', '=', False)
-                ]</field>
+                ]
+            </field>
             <field name="context">{
                 'default_tci_type':'act',
                 'search_default_non_null':1,
                 'search_default_group_vendor':1,
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                There is no more Actuals to assign to outstanding invoices.
-              </p>
+                <p>
+                    There is no more Actuals to assign to outstanding invoices.
+                </p>
             </field>
         </record>
 
@@ -1554,11 +1654,12 @@
             <field name="context">{
                 'default_tci_type':'ocommit',
                 'search_default_non_null':1,
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No Open Commitments recorded yet.
-              </p>
+                <p>
+                    No Open Commitments recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1571,11 +1672,12 @@
             <field name="domain">[('tci_type', 'in', ('ocommit','act'))]</field>
             <field name="context">{
                 'search_default_non_null':1,
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                No Open Commitments recorded yet.
-              </p>
+                <p>
+                    No Open Commitments recorded yet.
+                </p>
             </field>
         </record>
 
@@ -1587,16 +1689,18 @@
             <field name="view_type">form</field>
             <field name="domain">[
                 ('tci_type', '=', 'maccr'),
-                ]</field>
+                ]
+            </field>
             <field name="context">{
                 'default_tci_type':'maccr',
                 'search_default_non_null':1,
                 'search_default_group_vendor':1,
-                }</field>
+                }
+            </field>
             <field name="help" type="html">
-              <p>
-                There is no more Actuals to assign to outstanding invoices.
-              </p>
+                <p>
+                    There is no more Actuals to assign to outstanding invoices.
+                </p>
             </field>
         </record>
 
@@ -1610,5 +1714,5 @@
         </record>
 
 
-     </data>
+    </data>
 </openerp>

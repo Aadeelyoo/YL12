@@ -109,6 +109,16 @@ class tci_line(models.Model):
     po_id = fields.Many2one(related="tci_id.po_id", string='Purchase Order', readonly=True)
     state = fields.Selection(related="tci_id.state", string="Transaction State", readonly=True, store=True)
 
+    # new fields added here
+    vendor_wbs = fields.Char("Vendor WBS")
+    employee_name = fields.Char("Employee name")
+    third_party_vendor = fields.Char("Third Party Vendor")
+    third_party_doc_num = fields.Char("Third Party Doc#")
+    line_percent_factor = fields.Float(default=100.0,string="Line Percent Factor")
+    markup_percent =  fields.Float(default=100.0,string="Markup %")
+    markup_value = fields.Float(string="Markup Value")
+
+
     @api.depends('qty', 'unit_rate', 'currency_id')
     def _compute_amount(self):
         for record in self:
