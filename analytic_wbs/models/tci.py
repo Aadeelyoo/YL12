@@ -757,7 +757,7 @@ class Tci(models.Model):
         self.tax_line_ids = tax_lines
         return
 
-    @api.depends('tci_line_ids', 'account_ass_method', 'tci_split_line_ids', 'tci_split_line_ids.amount',
+    @api.onchange('tci_line_ids', 'account_ass_method', 'tci_split_line_ids', 'tci_split_line_ids.amount',
                   'by_tci_calc_method', 'tci_line_ids.analytic_project_id', 'tci_split_line_ids.percent_split')
     def _onchange_tci_line_analytic_project_id(self):
         print('self tci = %s' % self)
